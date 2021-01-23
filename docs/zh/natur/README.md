@@ -16,7 +16,7 @@ sidebarDepth: 2
 ## 起步
 
 1. 打开你的react项目
-1. 安装**natur**
+1. 安装```natur```
   ```node
   yarn add natur
   // npm install natur -S
@@ -26,14 +26,14 @@ sidebarDepth: 2
 
 ### 模块流程
 
-![模块](./images/process.png)
+![模块](../../images/process.png)
 
 
 ### 模块管理
 
 **natur本身是一个模块管理器，外加发布订阅**
 
-![store](./images/natur.png)
+![store](../../images/natur.png)
 
 
 
@@ -168,7 +168,7 @@ const demo = {
 
 ### 创建 store 实例
 
-```js
+```tsx
 import { createStore, createInject } from "natur";
 
 // 这是natur内置常用的中间件, 推荐使用
@@ -278,8 +278,6 @@ const App = ({ app }: typeof injector.type) => {
 
 // 注入store中的app模块；
 export default injector(App);
- 
-
 ```  
 
 ---
@@ -327,7 +325,7 @@ const App = ({app}: typeof injector.type) => {
 
 ## 懒加载模块配置
 
-```js
+```ts
 /*
   module1.js
   export {
@@ -401,7 +399,7 @@ export default store;
 
 **在模块调用action或者store.dispatch时会先经过interceptor，因此拦截器可以应用于，控制action是否执行，以及action的入参控制等场景**
 
-```tsx
+```ts
 
 import {
   createStore,
@@ -421,7 +419,6 @@ const app = {
   },
 };
 
-/*
 
 type InterceptorActionRecord = {
   moduleName: String;
@@ -432,19 +429,19 @@ type InterceptorActionRecord = {
 
 type InterceptorNext = (record: InterceptorActionRecord) => ReturnType<Action>;
 
-InterceptorParams类型于MiddlewareParams类型相同
-
-InterceptorParams: {
+// InterceptorParams类型于MiddlewareParams类型相同
+type InterceptorParams = {
   setState: MiddlewareNext, 
   getState: () => State,
   getMaps: () => InjectMaps,
   dispatch: (action, ...arg: any[]) => ReturnType<Action>,
 };
 
-*/
-const LogInterceptor: Interceptor<typeof store.type> = (interceptorParams) => (next: InterceptorNext) => (record: InterceptorActionRecord) => {
-  console.log(`${record.moduleName}: ${record.actionName}`, record.actionArgs);
-  return next(record); // 你应该return, 只有这样你在页面调用action的时候才会有返回值
+const LogInterceptor: Interceptor<typeof store.type> = (interceptorParams) => 
+  (next: InterceptorNext) => 
+    (record: InterceptorActionRecord) => {
+      console.log(`${record.moduleName}: ${record.actionName}`, record.actionArgs);
+      return next(record); // 你应该return, 只有这样你在页面调用action的时候才会有返回值
 };
 const store = createStore(
   { app }, 
@@ -461,8 +458,13 @@ export default store;
 ## 中间件
 **中间件的执行发生在action执行之后，更新state之前。可以接收action的返回值，一般可以应用于action返回值的加工，state更新的控制等行为**
 ```tsx
+import {
+  createStore,
+  MiddleWare,
+  MiddlewareNext,
+  MiddlewareActionRecord
+} from 'natur';
 
-import { createStore, MiddleWare, MiddlewareNext, MiddlewareActionRecord } from 'natur';
 const app = {
   state: {
     name: 'tom',
@@ -472,7 +474,6 @@ const app = {
     asyncChangeName: newName => Promise.resolve({ name: newName }),
   },
 };
-/*
 
 type MiddlewareActionRecord = {
   moduleName: String,
@@ -482,18 +483,19 @@ type MiddlewareActionRecord = {
 
 type MiddlewareNext = (record: MiddlewareActionRecord) => ReturnType<Action>;
 
-middlewareParams: {
+type middlewareParams = {
   setState: MiddlewareNext, 
   getState: () => State,
   getMaps: () => InjectMaps,
   dispatch: (action, ...arg: any[]) => ReturnType<Action>,
 };
 
-*/
-const LogMiddleware: MiddleWare<typeof store.type> = (middlewareParams) => (next: MiddlewareNext) => (record: MiddlewareActionRecord) => {
-  console.log(`${record.moduleName}: ${record.actionName}`, record.state);
-  return next(record); // 你应该return, 只有这样你在页面调用action的时候才会有返回值
-  // return middlewareParams.setState(record); // 你应该return，只有这样你在页面调用action的时候才会有返回值
+const LogMiddleware: MiddleWare<typeof store.type> = (middlewareParams) =>
+  (next: MiddlewareNext) => 
+    (record: MiddlewareActionRecord) => {
+      console.log(`${record.moduleName}: ${record.actionName}`, record.state);
+      return next(record); // 你应该return, 只有这样你在页面调用action的时候才会有返回值
+      // return middlewareParams.setState(record); // 你应该return，只有这样你在页面调用action的时候才会有返回值
 };
 const store = createStore(
   { app }, 
@@ -504,8 +506,6 @@ const store = createStore(
 );
 
 export default store;
-
-
 ```
 
 ### 内置中间件说明
@@ -540,17 +540,25 @@ const action2 = async () => await new Promise(res => res(2333));
 ```
 
 #### fillObjectRestDataMiddleware: state增量更新/覆盖更新，state是对象时才有效
-```typescript
-
-const state = {a: 1, b:2};
-const action = () => ({a: 11})// 调用此action，最后的state是{a: 11, b:2}， 此中间件要求，state和action返回的数据必须都是普通对象
+```ts
+const state = {
+  a: 1,
+  b: 2
+};
+/**
+ * 调用此action，最后的state是{a: 11, b:2}此中间件要求
+ * state和action返回的数据必须都是普通对象
+ */
+const action = () => ({a: 11})
 ```
 
 
 #### shallowEqualMiddleware：浅层比较优化中间件，仅限于普通对象的state
-```typescript
-
-const state = {a: 1, b:2};
+```ts
+const state = {
+  a: 1,
+  b: 2
+};
 const action = () => ({a: 1, b:2}) // 与旧的state相同，不做更新视图
 ```
 
@@ -563,7 +571,6 @@ const action = () => undefined; // 这种action的返回不会作为新的state
 #### devtool：开发调试工具
 
 ```typescript
-
 // redux.devtool.middleware.ts
 import { Middleware } from 'natur';
 import { createStore } from 'redux';
@@ -653,7 +660,7 @@ inject('app')(App, () => <div>loading</div>);
 
 ## 在react之外使用natur
 
-```js
+```ts
 // 引入之前创建的store实例
 import store from 'my-store-instance';
 
@@ -887,8 +894,7 @@ type StoreInsType = Store<typeof allSyncModules, typeof allAsyncModules>;
  - 由于低版本不支持react.forwardRef方法，所以不能直接使用ref获取包裹的组件实例，需要使用forwardedRef属性获取（用法同ref）
 
  - 在TypeScript中的提示可能不那么友好，比如
- ```ts
-
+ ```tsx
 @inject('count', 'name')
 class App extends React.Component {
   // ...
@@ -901,7 +907,7 @@ class App extends React.Component {
 class _App extends React.Component {
   // ...
 }
-const App = @inject('count', 'name')(_App);
+const App = inject('count', 'name')(_App);
 // 正确
 <App forwardedRef={console.log} />
 
@@ -910,7 +916,7 @@ const App = @inject('count', 'name')(_App);
 
 ## 插件
 
-- [natur-service: natur上层调度库](https://www.npmjs.com/package/natur-service)
-- [natur-persist: localStorage数据持久化插件](https://www.npmjs.com/package/natur-persist)
-- [natur-persist-async: 异步数据持久化插件](https://www.npmjs.com/package/natur-persist-async)
-
+- [natur-service: natur上层调度库](/zh/natur-service)
+- [natur-persist: localStorage数据持久化插件](/zh/natur-persist)
+- [natur-persist-async: 异步数据持久化插件](/zh/natur-persist-async)
+- [umi-natur: natur的umi差劲啊](/zh/umi-natur)

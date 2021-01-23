@@ -1,5 +1,5 @@
 module.exports = {
-  title: "EMPTY",
+  title: "EMPTY916",
   description: "Just playing around",
   locales: {
     // 键名是该语言所属的子路径
@@ -8,14 +8,14 @@ module.exports = {
       selectText: "Languages",
       label: "English",
       lang: "en-US", // 将会被设置为 <html> 的 lang 属性
-      title: "EMPTY",
+      title: "EMPTY916",
       description: "empty site",
     },
     "/zh/": {
       selectText: "选择语言",
       label: "简体中文",
       lang: "zh-CN",
-      title: "EMPTY",
+      title: "EMPTY916",
       description: "empty916的站",
     },
   },
@@ -26,6 +26,7 @@ module.exports = {
         selectText: "Languages",
         label: "English",
         sidebar: 'auto',
+        lastUpdated: true,
         nav: [
           {
             text: "Natur",
@@ -34,17 +35,25 @@ module.exports = {
                 text: "natur",
                 link: "/natur/",
               },
-            ],
-          },
-        ],
-        sidebar: [
-          {
-            title: "Natur",
-            // path: "/natur",
-            children: [
               {
-                title: "natur",
-                path: "/natur/",
+                text: "natur api",
+                link: "/natur/api",
+              },
+              {
+                text: "natur-service",
+                link: "/natur-service/",
+              },
+              {
+                text: "natur-persist",
+                link: "/natur-persist/",
+              },
+              {
+                text: "natur-persist-async",
+                link: "/natur-persist-async/",
+              },
+              {
+                text: "umi-natur",
+                link: "/umi-natur/",
               },
             ],
           },
@@ -54,6 +63,7 @@ module.exports = {
         selectText: "选择语言",
         label: "简体中文",
         sidebar: 'auto',
+        lastUpdated: '最后更新',
         nav: [
           {
             text: "Natur",
@@ -65,6 +75,22 @@ module.exports = {
               {
                 text: "natur api",
                 link: "/zh/natur/api",
+              },
+              {
+                text: "natur-service",
+                link: "/zh/natur-service/",
+              },
+              {
+                text: "natur-persist",
+                link: "/zh/natur-persist/",
+              },
+              {
+                text: "natur-persist-async",
+                link: "/zh/natur-persist-async/",
+              },
+              {
+                text: "umi-natur",
+                link: "/zh/umi-natur/",
               },
             ],
           },

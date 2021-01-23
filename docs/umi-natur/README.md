@@ -1,0 +1,153 @@
+# umi-natur
+
+The umi plugin that automatically generates natur code is super easy to use
+
+## install
+
+```bash
+# or yarn add umi-natur -D
+$ npm install umi-natur -D
+```
+
+## use
+
+Configure in `.umirc.ts`,
+
+```ts
+export default {
+  plugins: [
+    // configure natur plugin to umi
+    ['umi-natur'],
+  ],
+  natur: {
+    /* see parameter introduction for details */
+  }
+}
+```
+
+## parameter introduction
+
+### natur
+
+The plugin will automatically scan the files under the store folder by default
+if the legal natur module is automatically exported, it will be captured by the plug-in,
+and generate the code under .umi/store
+
+```ts
+// you can use like this
+import {store, inject} from 'umi';
+```
+
+### natur.dirName
+
+- **required:** `false`
+- **type:**`string`
+- **default:**`'store'`
+- The plugin defaults that your natur module code is written in the store folder. If your module is written in other folders, you can also modify it, such as 'pages'
+
+
+### natur.isSyncModule
+- **required:** `false`
+- **type:**`(filePath： string) => boolean`
+- according to the file address, determine whether this module is a synchronous module, either a synchronous module or an asynchronous module
+
+
+### natur.interceptors
+- **required:** `false`
+- **type:**`string`
+- your interceptors file address
+- This file address must be the default exported function
+- The input parameter of this function is a function to get store, and the return value of this function must be an intercepter array
+
+
+#### demo
+
+`.umirc.ts`
+```ts
+export default {
+  plugins： [
+    ['umi-natur'],
+  ],
+  natur： {
+    interceptors： '@/my-interceptors.ts',
+  }
+}
+```
+
+`my-interceptors.ts`
+```ts
+export default (getStore： () => Store) => {
+  return [
+    // ...your interceptors
+  ];
+}
+```
+
+### natur.middlewares
+- **required:** `false`
+- **type:**`string`
+- Your middlewares file address
+- This file address must be the default exported function
+- The input parameter of this function is a function to get store, and the return value of this function must be an array of middlewares
+- Once you customize the middleware, the default middleware will be removed, and the configuration of the middleware will be completely up to you
+
+
+
+#### demo
+
+`.umirc.ts`
+```ts
+export default {
+  plugins： [
+    ['umi-natur'],
+  ],
+  natur： {
+    middlewares： '@/my-middlewares.ts',
+  }
+}
+```
+
+`my-middlewares.ts`
+```ts
+export default (getStore： () => Store) => {
+  return [
+    // ...your middlewares
+  ];
+}
+```
+
+### natur.persist
+
+- **required:** `false`
+- This is the persistent configuration
+- Same as [natur-persist](/natur-persist) configuration
+
+### natur.service
+
+- **required:** `false`
+- The plug-in will scan the code in the service folder. If there are Service classes in the files in this folder that are exported by default, then the code for Service instantiation will be automatically generated under .umi/service
+
+### natur.service.dirName
+
+- **type:**`string`
+- **default:**`'service'`
+- The plug-in scans the code in the service folder. If there are files in this folder, Service classes are exported by default
+- Then the code for Service instantiation will be automatically generated under .umi/service
+
+### natur.service.superClassName
+
+- **type:**`string`
+- **default:**`'BaseService'`
+- The key to identifying whether it is a Service class is that if the class is integrated in BaseService, it will be exported
+- Similarly, if you define a Service base class yourself, then you can also modify the scan configuration
+
+### natur.service.ignore
+
+- **required:** `false`
+- **type:** `RegExp[]`
+- If you do not want some Service classes to be automatically generated code, then you can configure the ignored class name
+
+
+## LICENSE
+
+MIT
