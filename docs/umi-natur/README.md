@@ -30,7 +30,7 @@ export default {
 ### natur
 
 The plugin will automatically scan the files under the store folder by default
-if the legal natur module is automatically exported, it will be captured by the plug-in,
+if the legal natur module is exported by default, it will be captured by the plugin,
 and generate the code under .umi/store
 
 ```ts
