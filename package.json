@@ -4,9 +4,8 @@
   "description": "<!-- **empty916/empty916** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.",
   "main": "index.js",
   "scripts": {
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
   },
   "repository": {
     "type": "git",
