@@ -67,7 +67,7 @@ import { createStore, createInject } from 'natur';
 const store = createStore({count}, {});
 const inject = createInject({storeGetter: () => store});
 ```
-### 在React中使用
+### use in React
 ```tsx
 // create an injector of count module
 const injector = inject('count');
