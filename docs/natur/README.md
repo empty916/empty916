@@ -645,7 +645,7 @@ const store = createStore(
 
 ## complex business scenarios of cross-module interaction
 
-> In complex business scenarios, there are usually scenarios where multiple modules monitor and call each other, so for this scenario, you can use [natur-service](https://www.npmjs.com/package/natur-service) Non-intrusive solution, you can monitor any changes in the module, and non-invasive development of complex business logic, while retaining the simplicity and maintainability of each module.
+> In complex business scenarios, there are usually scenarios where multiple modules monitor and call each other, so for this scenario, you can use [natur-service](/natur-service/) Non-intrusive solution, you can monitor any changes in the module, and non-invasive development of complex business logic, while retaining the simplicity and maintainability of each module.
 
 ---
 
