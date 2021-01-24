@@ -21,6 +21,8 @@ export default {
   ],
   natur: {
     /* 详情见参数介绍 */
+    persist: { /* ... */ },
+    service: { /* ... */ },
   }
 }
 ```
@@ -29,6 +31,7 @@ export default {
 
 ### natur
 
+- **类型：**`object`
 插件默认会自动扫描store文件夹下面的文件
 如果是合法的natur模块被默认导出，那么会被插件捕捉到，
 并将导入代码生成在.umi/store下
@@ -47,7 +50,7 @@ import {store, inject} from 'umi';
 
 ### natur.isSyncModule
 - **必填：** `false`
-- **类型：**`(filePath： string) => boolean`
+- **类型：**`(filePath: string) => boolean`
 - 根据文件地址判断，这个模块是否同步模块, 不是同步模块就是异步模块
 
 
@@ -64,18 +67,18 @@ import {store, inject} from 'umi';
 `.umirc.ts`
 ```ts
 export default {
-  plugins： [
+  plugins: [
     ['umi-natur'],
   ],
-  natur： {
-    interceptors： '@/my-interceptors.ts',
+  natur: {
+    interceptors: '@/my-interceptors.ts',
   }
 }
 ```
 
 `my-interceptors.ts`
 ```ts
-export default (getStore： () => Store) => {
+export default (getStore: () => Store) => {
   return [
     // ...your interceptors
   ];
@@ -97,18 +100,18 @@ export default (getStore： () => Store) => {
 `.umirc.ts`
 ```ts
 export default {
-  plugins： [
+  plugins: [
     ['umi-natur'],
   ],
-  natur： {
-    middlewares： '@/my-middlewares.ts',
+  natur: {
+    middlewares: '@/my-middlewares.ts',
   }
 }
 ```
 
 `my-middlewares.ts`
 ```ts
-export default (getStore： () => Store) => {
+export default (getStore: () => Store) => {
   return [
     // ...your middlewares
   ];
@@ -118,12 +121,14 @@ export default (getStore： () => Store) => {
 ### natur.persist
 
 - **必填：** `false`
+- **类型：** `object`
 - 这个是持久化配置
 - 跟[natur-persist](/zh/natur-persist)配置一样
 
 ### natur.service
 
 - **必填：** `false`
+- **类型：** `object`
 - 插件会扫描service文件夹下的代码，如果在这个文件夹下的文件，有Service类被默认导出, 那么Service实例化的代码会被自动生成在.umi/service下
 
 ### natur.service.dirName

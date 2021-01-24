@@ -39,50 +39,56 @@ sidebarDepth: 3
 ## simple demo
 
 [codesandbox](https://codesandbox.io/s/natur-2x-simple-demo-nx0pp?file=/src/App.tsx)
+### declare a module
 
 ```tsx
-// index.tsx
-import { createStore, createInject } from 'natur';
-import React, { useEffect } from "react";
-import ReactDOM from "react-dom";
-
 const count = {
-  state: { // Store data
+  // save data
+  state: {
     number: 0,
   },
-  maps: { // State mapping. For example, I need to know if the number in the state is even
+  // map of state
+  maps: { 
     isEven: ['number', number => number % 2 === 0],
   },
-  actions: { // Used to modify state. The returned data will be used as the new state (this part is done internally by natur)
+  // actions is used to update state
+  actions: { 
     inc: number => ({number: number + 1}),
     dec: number => ({number: number - 1}),
   }
 }
+```
 
-// The step of creating the store needs to be completed before rendering the component, because in the component, you need to use the store you created
+### create store and inject
+
+```ts
+import { createStore, createInject } from 'natur';
+
 const store = createStore({count}, {});
 const inject = createInject({storeGetter: () => store});
-
+```
+### 在React中使用
+```tsx
+// create an injector of count module
 const injector = inject('count');
 
-
+// declare props type
 const App = ({count}: typeof injector.type) => {
   return (
     <>
       <button onClick={() => count.actions.dec(count.state.number)}>-</button>
       <span>{count.state.number}</span>
       <button onClick={() => count.actions.inc(count.state.number)}>+</button>
+      <span>{count.maps.isEven}</span>
     </>
   )
 };
-// Inject the count module
-// Inject the count module
-// Inject the count module
+
+// inject count module into App component by injector
 const IApp = injector(App);
 
-// Render the injected component
+// render injected component
 ReactDOM.render(<IApp />, document.querySelector('#app'));
-
 ```
 
 
@@ -93,29 +99,22 @@ ReactDOM.render(<IApp />, document.querySelector('#app'));
 ### state
 
 
-1. Required parameters
-2. state is used to store data
-3. state itself does not limit the data type, you can use a three-party library such as**immutablejs**
-
-```ts
-type State = any;
-```
+- **required:**`true`
+- **type:**`any`
+- state is used to store data
 
 ### maps
 
 
-1. maps is an optional parameter, and maps itself must be an ordinary object
-1. maps is a map of state data, and its child elements must be an array. Let's call it map for now.
-1. If the map is an array, the preceding elements are all declaring the dependency of this map on the state. The last function can get the dependency declared earlier, and you can implement what you want in it. On the page, you can get the result of the last function of the array.
-1. If the map is a function, then it can only accept state as an input parameter, or there is no parameter. If it is a state as a parameter, then when the state is updated, the map must be re-executed and there is no cache. If the map has no parameters, then this map will only be executed once
-1. The results of maps are cached. If the value of the dependencies you declare does not change, the last function will not be re-executed.
-1. In fact, this should be called mapState. I think the name is too long, so I changed it to maps.
+- **required:**`false`
+- **type:**`{[map: string]: Array<string|Function> | Function;}`
+
+- maps is a map of state data, and its member must be an array of function. Let's call it map for now.
+- If the map is an array, the preceding elements are all declaring the dependency of this map on the state. The last function can get the dependency declared earlier, and you can implement what you want in it. On the page, you can get the result of the last function of the array.
+- If the map is a function, then it can only accept state as an input parameter, or there is no parameter. If it is a state as a parameter, then when the state is updated, the map must be re-executed and there is no cache. If the map has no parameters, then this map will only be executed once
+- The results of maps are cached. If the value of the dependencies you declare does not change, the last function will not be re-executed.
 
 ```ts
-type Maps = {
-  [map: string]: Array<string|Function> | Function;
-}
-
 const demo = {
   state: {
     number: 1,
@@ -130,17 +129,33 @@ const demo = {
     // It can also be a function, no dependencies, only executed once
     isTrue: () => true,
   },
-  // ...actions
 }
+
+/**
+ * the demo module data you got at component is
+ * demo: {
+ *  state: {
+ *    number: 1,
+ *  }
+ *  maps: {
+ *    isEven: false,
+ *    isEven2: false,
+ *    isEven3: false,
+ *    isTrue: true
+ *  }
+ * ...
+ * }
+ */
 ```
 
 
 ### actions
 
 
-1. actions is a parameter that must be passed in, it must be a common object itself
-2. The child elements of actions must be functions. If no middleware is set, any data it returns will be used as the new state, and the react components using this module will be notified to update, which is done inside natur.
-3. actions must follow the immutable specification!
+- **required:**`true`
+- **type:**`{[action: string]: (...arg: any[]) => any;}`
+- The member of actions must be functions. If no middleware is set, any data it returns will be used as the new state, and the react components using this module will be notified to update, which is done inside natur.
+- actions must follow the immutable specification!
 
 ```ts
 type Actions = {

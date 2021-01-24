@@ -40,49 +40,56 @@ sidebarDepth: 2
 ## 简单的示例
 
 [在线体验](https://codesandbox.io/s/natur-2x-simple-demo-nx0pp?file=/src/App.tsx)
+### 声明模块
+
 ```tsx
-
-// index.tsx
-import { createStore, createInject } from 'natur';
-import React, { useEffect } from "react";
-import ReactDOM from "react-dom";
-
 const count = {
-  state: { // 存放数据
+  // 存放数据
+  state: {
     number: 0,
   },
-  maps: { // state的映射。比如，我需要知道state中的number是否是偶数
+  // state的映射
+  maps: { 
     isEven: ['number', number => number % 2 === 0],
   },
-  actions: { // 用来修改state。返回的数据会作为新的state(这部分由natur内部完成)
+  // actions用来修改state
+  actions: { 
     inc: number => ({number: number + 1}),
     dec: number => ({number: number - 1}),
   }
 }
+```
 
-// 创建store这一步需要在渲染组件之前完成，因为在组件中，需要用到你创建的store
+### 创建store和inject
+
+```ts
+import { createStore, createInject } from 'natur';
+
 const store = createStore({count}, {});
 const inject = createInject({storeGetter: () => store});
-
+```
+### 在React中使用
+```tsx
+// 创建一个count模块的注入器
 const injector = inject('count');
 
+// 声明props类型
 const App = ({count}: typeof injector.type) => {
   return (
     <>
       <button onClick={() => count.actions.dec(count.state.number)}>-</button>
       <span>{count.state.number}</span>
       <button onClick={() => count.actions.inc(count.state.number)}>+</button>
+      <span>{count.maps.isEven}</span>
     </>
   )
 };
-// 注入count模块
-// 注入count模块
-// 注入count模块
+
+// 使用注入器向组件中注入count
 const IApp = injector(App);
 
 // 渲染注入后的组件
 ReactDOM.render(<IApp />, document.querySelector('#app'));
-
 ```
 
 
@@ -92,31 +99,22 @@ ReactDOM.render(<IApp />, document.querySelector('#app'));
 
 ### state
 
-1. 必须传入的参数
-2. state用来存储数据
-3. state本身不限制数据类型，你可以使用三方库比如**immutablejs**
+- **必填：**`true`
+- **类型：**`any`
+- state用来存储数据
 
-
-```typescript
-type State = any;
-```
 
 ### maps
 
+- **必填：**`false`
+- **类型：**`{[map: string]: Array<string|Function> | Function;}`
 
-1. maps是可选的参数，maps本身必须是一个普通对象
-1. maps是state数据的映射，它的子元素必须是一个数组或者函数，我们暂且称其为map
-1. 如果map是数组，前面的元素都是在声明此map对state的依赖项。最后一个函数可以获取前面声明的依赖，你可以在里面实现你想要的东西。在页面中，你可以获取数组最后一个函数运行的结果。
-1. 如果map是函数，那么它只能接受state作为入参，或者没有参数，如果是state作为参数，那么当state更新时，此map一定会重新执行，没有缓存。如果map没有参数，那么此map只会执行一次
-1. maps的结果是有缓存的，如果你声明的依赖项的值没有变化，那么最后一个函数便不会重新执行
-1. 其实这个应该叫mapState，我嫌名字太长，就改成了maps
+- maps是state数据的映射，它的成员必须是一个数组或者函数，我们暂且称其为map
+- 如果map是数组，前面的元素都是在声明此map对state的依赖项。最后一个函数可以获取前面声明的依赖，你可以在里面实现你想要的东西。在页面中，你可以获取数组最后一个函数运行的结果。
+- 如果map是函数，那么它只能接受state作为入参，或者没有参数，如果是state作为参数，那么当state更新时，此map一定会重新执行，没有缓存。如果map没有参数，那么此map只会执行一次
+- maps的结果是有缓存的，如果你声明的依赖项的值没有变化，那么最后一个函数便不会重新执行
 
-```typescript
-
-type Maps = {
-  [map: string]: Array<string|Function> | Function;
-}
-
+```ts
 const demo = {
   state: {
     number: 1,
@@ -131,25 +129,34 @@ const demo = {
     // 也可以是个函数，没有依赖，只执行一次
     isTrue: () => true,
   },
-  // ...actions
 }
+/**
+ * 在组件中你获得的数据为
+ * demo: {
+ *  state: {
+ *    number: 1,
+ *  }
+ *  maps: {
+ *    isEven: false,
+ *    isEven2: false,
+ *    isEven3: false,
+ *    isTrue: true
+ *  }
+ * ...
+ * }
+ */
 ```
 
 
 
 ### actions
 
+- **必填：**`true`
+- **类型：**`{[action: string]: (...arg: any[]) => any;}`
+- actions的成员必须是函数，如果不设置中间件，那么它返回的任何数据都会作为新的state，并通知使用此模块的react组件更新，这是在natur内部完成的。
+- actions必须遵照immutable规范！
 
-1. actions是必须传入的参数，它本身必须是个普通对象
-2. actions的子元素必须是函数，如果不设置中间件，那么它返回的任何数据都会作为新的state，并通知使用此模块的react组件更新，这是在natur内部完成的。
-3. actions必须遵照immutable规范！
-
-```typescript
-
-type Actions = {
-  [action: string]: (...arg: any[]) => any;
-}
-
+```ts
 const demo = {
   state: {
     number: 1,
@@ -160,6 +167,20 @@ const demo = {
     dec: number => ({number: number - 1}),
   }
 }
+
+/**
+ * 在组件中你获得的数据为
+ * demo: {
+ *  state: {
+ *    number: 1,
+ *  }
+ *  actions: {
+ *    inc: (number) => 新的state,
+ *    dec: (number) => 新的state,
+ *  }
+ * ...
+ * }
+ */
 ```
 
 ## 复杂的例子

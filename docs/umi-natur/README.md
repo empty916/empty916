@@ -21,6 +21,8 @@ export default {
   ],
   natur: {
     /* see parameter introduction for details */
+    persist: { /* ... */ },
+    service: { /* ... */ },
   }
 }
 ```
@@ -29,6 +31,7 @@ export default {
 
 ### natur
 
+- **type:**`object`
 The plugin will automatically scan the files under the store folder by default
 if the legal natur module is exported by default, it will be captured by the plugin,
 and generate the code under .umi/store
@@ -48,7 +51,7 @@ import {store, inject} from 'umi';
 
 ### natur.isSyncModule
 - **required:** `false`
-- **type:**`(filePath： string) => boolean`
+- **type:**`(filePath: string) => boolean`
 - according to the file address, determine whether this module is a synchronous module, either a synchronous module or an asynchronous module
 
 
@@ -65,18 +68,18 @@ import {store, inject} from 'umi';
 `.umirc.ts`
 ```ts
 export default {
-  plugins： [
+  plugins: [
     ['umi-natur'],
   ],
-  natur： {
-    interceptors： '@/my-interceptors.ts',
+  natur: {
+    interceptors: '@/my-interceptors.ts',
   }
 }
 ```
 
 `my-interceptors.ts`
 ```ts
-export default (getStore： () => Store) => {
+export default (getStore: () => Store) => {
   return [
     // ...your interceptors
   ];
@@ -98,18 +101,18 @@ export default (getStore： () => Store) => {
 `.umirc.ts`
 ```ts
 export default {
-  plugins： [
+  plugins: [
     ['umi-natur'],
   ],
-  natur： {
-    middlewares： '@/my-middlewares.ts',
+  natur: {
+    middlewares: '@/my-middlewares.ts',
   }
 }
 ```
 
 `my-middlewares.ts`
 ```ts
-export default (getStore： () => Store) => {
+export default (getStore: () => Store) => {
   return [
     // ...your middlewares
   ];
@@ -119,13 +122,16 @@ export default (getStore： () => Store) => {
 ### natur.persist
 
 - **required:** `false`
+- **type:**`object`
+
 - This is the persistent configuration
 - Same as [natur-persist](/natur-persist) configuration
 
 ### natur.service
 
 - **required:** `false`
-- The plug-in will scan the code in the service folder. If there are Service classes in the files in this folder that are exported by default, then the code for Service instantiation will be automatically generated under .umi/service
+- **type:**`object`
+- The plugin will scan the code in the service folder. If there are Service classes in the files in this folder that are exported by default, then the code for Service instantiation will be automatically generated under .umi/service
 
 ### natur.service.dirName
 
