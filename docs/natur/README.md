@@ -16,11 +16,11 @@ sidebarDepth: 3
 
 ## start
 
-1. Open your react project
+1. open your react project
 1. install **natur**
-  ```node
+  ```bash
+  # npm install natur -S
   yarn add natur
-  // npm install natur -S
   ```
 ## design
 

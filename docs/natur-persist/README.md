@@ -2,7 +2,7 @@
 
 ## introduction
 
-- natur state manager's localstorage cache middleware
+- natur state manager's cache middleware
 - sync natur data to localStorage or sessionStorage
 - synchronization operation has a certain delay, use anti-shake for synchronization operation
 

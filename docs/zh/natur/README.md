@@ -17,9 +17,9 @@ sidebarDepth: 2
 
 1. 打开你的react项目
 1. 安装```natur```
-  ```node
+  ```bash
   yarn add natur
-  // npm install natur -S
+  # npm install natur -S
   ```
 
 ## 设计

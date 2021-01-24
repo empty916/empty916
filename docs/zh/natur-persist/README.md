@@ -2,7 +2,7 @@
 
 ## 基本介绍
 
-- natur状态管理器的localstorage缓存中间件
+- natur状态管理器的缓存中间件
 - 将natur数据同步到localStorage或者sessionStorage
 - 同步操作有一定的延迟，使用防抖做同步操作
 

@@ -10,7 +10,7 @@ The call layer design of natur action is used to aggregate multiple actions into
 | natur | natur-service |
 | -- | -- |
 | 2.0.0 | 2.0.0 |
-| 2.1.0 | 2.1.x |
+| 2.1.x | 2.1.x |
 
 ## demo
 
