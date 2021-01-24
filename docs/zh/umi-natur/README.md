@@ -32,9 +32,7 @@ export default {
 ### natur
 
 - **类型：**`object`
-插件默认会自动扫描store文件夹下面的文件
-如果是合法的natur模块被默认导出，那么会被插件捕捉到，
-并将导入代码生成在.umi/store下
+- 插件默认会自动扫描store文件夹下面的文件, 如果是合法的natur模块被默认导出，那么会被插件捕捉到，并将导入代码生成在.umi/store下
 ```ts
 // 你可以这么使用
 import {store, inject} from 'umi';
