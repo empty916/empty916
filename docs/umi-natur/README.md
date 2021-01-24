@@ -27,9 +27,9 @@ export default {
 }
 ```
 
-## parameter introduction
+# parameter introduction
 
-### natur
+## natur
 
 - **type:**`object`
 - The plugin will automatically scan the files under the store folder by default, if the legal natur module is exported by default, it will be captured by the plugin, and generate the code under .umi/store
@@ -39,7 +39,7 @@ export default {
 import {store, inject} from 'umi';
 ```
 
-### natur.dirName
+### dirName
 
 - **required:** `false`
 - **type:**`string`
@@ -47,13 +47,13 @@ import {store, inject} from 'umi';
 - The plugin defaults that your natur module code is written in the store folder. If your module is written in other folders, you can also modify it, such as 'pages'
 
 
-### natur.isSyncModule
+### isSyncModule
 - **required:** `false`
 - **type:**`(filePath: string) => boolean`
 - according to the file address, determine whether this module is a synchronous module, either a synchronous module or an asynchronous module
 
 
-### natur.interceptors
+### interceptors
 - **required:** `false`
 - **type:**`string`
 - your interceptors file address
@@ -84,7 +84,7 @@ export default (getStore: () => Store) => {
 }
 ```
 
-### natur.middlewares
+### middlewares
 - **required:** `false`
 - **type:**`string`
 - Your middlewares file address
@@ -117,7 +117,7 @@ export default (getStore: () => Store) => {
 }
 ```
 
-### natur.persist
+## persist
 
 - **required:** `false`
 - **type:**`object`
@@ -125,27 +125,27 @@ export default (getStore: () => Store) => {
 - This is the persistent configuration
 - Same as [natur-persist](/natur-persist) configuration
 
-### natur.service
+## service
 
 - **required:** `false`
 - **type:**`object`
 - The plugin will scan the code in the service folder. If there are Service classes in the files in this folder that are exported by default, then the code for Service instantiation will be automatically generated under .umi/service
 
-### natur.service.dirName
+### dirName
 
 - **type:**`string`
 - **default:**`'service'`
 - The plug-in scans the code in the service folder. If there are files in this folder, Service classes are exported by default
 - Then the code for Service instantiation will be automatically generated under .umi/service
 
-### natur.service.superClassName
+### superClassName
 
 - **type:**`string`
 - **default:**`'BaseService'`
 - The key to identifying whether it is a Service class is that if the class is integrated in BaseService, it will be exported
 - Similarly, if you define a Service base class yourself, then you can also modify the scan configuration
 
-### natur.service.ignore
+### ignore
 
 - **required:** `false`
 - **type:** `RegExp[]`

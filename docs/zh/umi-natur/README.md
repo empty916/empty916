@@ -1,3 +1,6 @@
+---
+sidebarDepth: 3
+---
 # umi-natur
 
 自动生成 natur 代码的的 umi 插件，超级好用
@@ -26,10 +29,9 @@ export default {
   }
 }
 ```
+# 参数
+## natur
 
-## 参数
-
-### natur
 
 - **类型：**`object`
 - 插件默认会自动扫描store文件夹下面的文件, 如果是合法的natur模块被默认导出，那么会被插件捕捉到，并将导入代码生成在.umi/store下
@@ -38,7 +40,7 @@ export default {
 import {store, inject} from 'umi';
 ```
 
-### natur.dirName
+### dirName
 
 - **必填：** `false`
 - **类型：**`string`
@@ -46,13 +48,13 @@ import {store, inject} from 'umi';
 - 插件默认你的natur模块代码是写在store文件夹下的如果你的模块是写在其他文件夹下，你也可以修改，比如'pages'
 
 
-### natur.isSyncModule
+### isSyncModule
 - **必填：** `false`
 - **类型：**`(filePath: string) => boolean`
 - 根据文件地址判断，这个模块是否同步模块, 不是同步模块就是异步模块
 
 
-### natur.interceptors
+### interceptors
 - **必填：** `false`
 - **类型：**`string`
 - 你的interceptors文件地址
@@ -83,7 +85,7 @@ export default (getStore: () => Store) => {
 }
 ```
 
-### natur.middlewares
+### middlewares
 - **必填：** `false`
 - **类型：**`string`
 - 你的middlewares文件地址
@@ -116,34 +118,34 @@ export default (getStore: () => Store) => {
 }
 ```
 
-### natur.persist
+## persist
 
 - **必填：** `false`
 - **类型：** `object`
 - 这个是持久化配置
 - 跟[natur-persist](/zh/natur-persist)配置一样
 
-### natur.service
+## service
 
 - **必填：** `false`
 - **类型：** `object`
 - 插件会扫描service文件夹下的代码，如果在这个文件夹下的文件，有Service类被默认导出, 那么Service实例化的代码会被自动生成在.umi/service下
 
-### natur.service.dirName
+### dirName
 
 - **类型：**`string`
 - **默认值：**`'service'`
 - 插件会扫描service文件夹下的代码，如果在这个文件夹下的文件，有Service类被默认导出
 - 那么Service实例化的代码会被自动生成在.umi/service下
 
-### natur.service.superClassName
+### superClassName
 
 - **类型：**`string`
 - **默认值：**`'BaseService'`
 - 识别是否是Service class的关键是，如果类是集成于BaseService，才会被导出
 - 同样，如果你是自己定义了一个Service基类，那么你也可以修改这个扫描配置
 
-### natur.service.ignore
+### ignore
 
 - **必填：** `false`
 - **类型：** `RegExp[]`
