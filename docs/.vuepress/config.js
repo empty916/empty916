@@ -57,6 +57,10 @@ module.exports = {
               },
             ],
           },
+          {
+            text: 'github',
+            link: 'https://github.com/empty916',
+          }
         ],
       },
       "/zh/": {
@@ -94,6 +98,10 @@ module.exports = {
               },
             ],
           },
+          {
+            text: 'github',
+            link: 'https://github.com/empty916',
+          }
         ],
       },
     },
