@@ -33,11 +33,31 @@ export default {
 
 - **type:**`object`
 - The plugin will automatically scan the files under the store folder by default, if the legal natur module is exported by default, it will be captured by the plugin, and generate the code under .umi/store
+- demo
 
-```ts
-// you can use like this
-import {store, inject} from 'umi';
-```
+  `src/store/demo.ts`
+  ```ts
+  const state = {
+    /* ... */
+  }
+  const actions = {
+    /* ... */
+  }
+  export default {
+    state,
+    actions,
+  }
+  ```
+  `use-store-and-inject.ts`
+  ```ts
+  import {store, inject} from 'umi';
+
+  const demo = store.getModule('demo');
+  const injector = inject('demo');
+  ```
+- The file path will be converted to the module name, for example:
+  - `src/store/modulea-list.ts`will be transformed into`moduleaList`
+  - `src/store/module_a/list/[id$].ts`will be transformed into`moduleAListId`
 
 ### dirName
 
@@ -59,30 +79,28 @@ import {store, inject} from 'umi';
 - your interceptors file address
 - This file address must be the default exported function
 - The input parameter of this function is a function to get store, and the return value of this function must be an intercepter array
+- demo
 
-
-#### demo
-
-`.umirc.ts`
-```ts
-export default {
-  plugins: [
-    ['umi-natur'],
-  ],
-  natur: {
-    interceptors: '@/my-interceptors.ts',
+  `.umirc.ts`
+  ```ts
+  export default {
+    plugins: [
+      ['umi-natur'],
+    ],
+    natur: {
+      interceptors: '@/my-interceptors.ts',
+    }
   }
-}
-```
+  ```
 
-`my-interceptors.ts`
-```ts
-export default (getStore: () => Store) => {
-  return [
-    // ...your interceptors
-  ];
-}
-```
+  `my-interceptors.ts`
+  ```ts
+  export default (getStore: () => Store) => {
+    return [
+      // ...your interceptors
+    ];
+  }
+  ```
 
 ### middlewares
 - **required:** `false`
@@ -91,31 +109,28 @@ export default (getStore: () => Store) => {
 - This file address must be the default exported function
 - The input parameter of this function is a function to get store, and the return value of this function must be an array of middlewares
 - Once you customize the middleware, the default middleware will be removed, and the configuration of the middleware will be completely up to you
+- demo
 
-
-
-#### demo
-
-`.umirc.ts`
-```ts
-export default {
-  plugins: [
-    ['umi-natur'],
-  ],
-  natur: {
-    middlewares: '@/my-middlewares.ts',
+  `.umirc.ts`
+  ```ts
+  export default {
+    plugins: [
+      ['umi-natur'],
+    ],
+    natur: {
+      middlewares: '@/my-middlewares.ts',
+    }
   }
-}
-```
+  ```
 
-`my-middlewares.ts`
-```ts
-export default (getStore: () => Store) => {
-  return [
-    // ...your middlewares
-  ];
-}
-```
+  `my-middlewares.ts`
+  ```ts
+  export default (getStore: () => Store) => {
+    return [
+      // ...your middlewares
+    ];
+  }
+  ```
 
 ## persist
 
@@ -130,6 +145,29 @@ export default (getStore: () => Store) => {
 - **required:** `false`
 - **type:**`object`
 - The plugin will scan the code in the service folder. If there are Service classes in the files in this folder that are exported by default, then the code for Service instantiation will be automatically generated under .umi/service
+- demo
+
+  `src/service/demo.ts`
+  ```ts
+  import { BaseService } from 'umi';
+  export default class DemoService extends BaseService {
+    start() {
+      this.watch('other', () => {
+        this.dispath('demo', 'action');
+      })
+    }
+    getDemo() {
+      return this.store.getModule('demo');
+    }
+  }
+  ```
+  `use-service.ts`
+  ```ts
+  import { demoService } from '@@/service';
+
+  const demo = demoService.getDemo();
+  ```
+
 
 ### dirName
 

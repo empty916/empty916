@@ -35,10 +35,31 @@ export default {
 
 - **类型：**`object`
 - 插件默认会自动扫描store文件夹下面的文件, 如果是合法的natur模块被默认导出，那么会被插件捕捉到，并将导入代码生成在.umi/store下
-```ts
-// 你可以这么使用
-import {store, inject} from 'umi';
-```
+- demo
+
+  `src/store/demo.ts`
+  ```ts
+  const state = {
+    /* ... */
+  }
+  const actions = {
+    /* ... */
+  }
+  export default {
+    state,
+    actions,
+  }
+  ```
+  `use-store-and-inject.ts`
+  ```ts
+  import {store, inject} from 'umi';
+
+  const demo = store.getModule('demo');
+  const injector = inject('demo');
+  ```
+- 文件路径会被转化为模块名，例如：
+  - `src/store/modulea-list.ts`会转化为`moduleaList`
+  - `src/store/module_a/list/[id$].ts`会转化为`moduleAListId`
 
 ### dirName
 
@@ -62,28 +83,28 @@ import {store, inject} from 'umi';
 - 这个函数的入参是一个获取store的函数，这个函数的返回值必须是一个intercepter数组
 
 
-#### demo
+- demo
 
-`.umirc.ts`
-```ts
-export default {
-  plugins: [
-    ['umi-natur'],
-  ],
-  natur: {
-    interceptors: '@/my-interceptors.ts',
+  `.umirc.ts`
+  ```ts
+  export default {
+    plugins: [
+      ['umi-natur'],
+    ],
+    natur: {
+      interceptors: '@/my-interceptors.ts',
+    }
   }
-}
-```
+  ```
 
-`my-interceptors.ts`
-```ts
-export default (getStore: () => Store) => {
-  return [
-    // ...your interceptors
-  ];
-}
-```
+  `my-interceptors.ts`
+  ```ts
+  export default (getStore: () => Store) => {
+    return [
+      // ...your interceptors
+    ];
+  }
+  ```
 
 ### middlewares
 - **必填：** `false`
@@ -92,31 +113,28 @@ export default (getStore: () => Store) => {
 - 这个文件地址必须是默认导出的函数
 - 这个函数的入参是一个获取store的函数，这个函数的返回值必须是一个middlewares数组
 - 一旦你自定义了中间件，那么默认的中间件会被移除，中间件的配置将完全由你决定
+- demo
 
-
-
-#### demo
-
-`.umirc.ts`
-```ts
-export default {
-  plugins: [
-    ['umi-natur'],
-  ],
-  natur: {
-    middlewares: '@/my-middlewares.ts',
+  `.umirc.ts`
+  ```ts
+  export default {
+    plugins: [
+      ['umi-natur'],
+    ],
+    natur: {
+      middlewares: '@/my-middlewares.ts',
+    }
   }
-}
-```
+  ```
 
-`my-middlewares.ts`
-```ts
-export default (getStore: () => Store) => {
-  return [
-    // ...your middlewares
-  ];
-}
-```
+  `my-middlewares.ts`
+  ```ts
+  export default (getStore: () => Store) => {
+    return [
+      // ...your middlewares
+    ];
+  }
+  ```
 
 ## persist
 
@@ -130,6 +148,28 @@ export default (getStore: () => Store) => {
 - **必填：** `false`
 - **类型：** `object`
 - 插件会扫描service文件夹下的代码，如果在这个文件夹下的文件，有Service类被默认导出, 那么Service实例化的代码会被自动生成在.umi/service下
+- demo
+
+  `src/service/demo.ts`
+  ```ts
+  import { BaseService } from 'umi';
+  export default class DemoService extends BaseService {
+    start() {
+      this.watch('other', () => {
+        this.dispath('demo', 'action');
+      })
+    }
+    getDemo() {
+      return this.store.getModule('demo');
+    }
+  }
+  ```
+  `use-service.ts`
+  ```ts
+  import { demoService } from '@@/service';
+
+  const demo = demoService.getDemo();
+  ```
 
 ### dirName
 
