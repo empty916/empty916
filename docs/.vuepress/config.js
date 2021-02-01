@@ -58,7 +58,7 @@ module.exports = {
             ],
           },
           {
-            text: 'github',
+            text: 'GitHub',
             link: 'https://github.com/empty916',
           }
         ],
@@ -99,7 +99,7 @@ module.exports = {
             ],
           },
           {
-            text: 'github',
+            text: 'GitHub',
             link: 'https://github.com/empty916',
           }
         ],
