@@ -20,7 +20,7 @@ Configure in `.umirc.ts`,
 export default {
   plugins: [
     // 配置natur插件到umi
-    ['umi-natur'],
+    'umi-natur',
   ],
   natur: {
     /* 详情见参数介绍 */

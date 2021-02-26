@@ -17,7 +17,7 @@ Configure in `.umirc.ts`,
 export default {
   plugins: [
     // configure natur plugin to umi
-    ['umi-natur'],
+    'umi-natur',
   ],
   natur: {
     /* see parameter introduction for details */
