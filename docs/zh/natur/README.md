@@ -183,126 +183,6 @@ const demo = {
  */
 ```
 
-## 复杂的例子
-
-[在线体验](https://codesandbox.io/s/natur-2x-complex-demo-jyut0?file=/src/store.ts)
-
-### 创建 store 实例
-
-```tsx
-import { createStore, createInject } from "natur";
-
-// 这是natur内置常用的中间件, 推荐使用
-import {
-  thunkMiddleware,
-  promiseMiddleware,
-  shallowEqualMiddleware,
-  fillObjectRestDataMiddleware,
-  filterUndefinedMiddleware
-} from "natur/dist/middlewares";
-import devtool from "./redux.devtool.middleware.js";
-
-const app = {
-  state: {
-    name: "tom",
-    todos: [
-      {
-        text: "play game "
-      }
-    ],
-    games: new Map([["favorite", "lol"]])
-  },
-  maps: {
-    firstTodoText: ["todos[0].text", firstTodoText => firstTodoText],
-    deepDep: [
-      "todos[0].text",
-      s => s.games.get("favorite"),
-      (firstTodo, favorite) => firstTodo + favorite
-    ]
-  },
-  actions: {
-    changeName: newName => ({ name: newName }),
-    asyncChangeName: newName => Promise.resolve({ name: newName }),
-    thunkChangeName: newName => ({ getState, setState, getMaps }) => {
-      getState(); // 获取当前最新的state
-      setState({ name: newName }); // 设置state的name
-      getMaps(); // 获取当前最新的maps
-      return { name: newName + "1" }; // 更新state的name
-    }
-  }
-};
-
-// 其他的模块
-const otherModules = {
-  //...
-};
-
-// 创建store实例
-const store = createStore({ app, ...otherModules }, {}, {
-  middlewares: [
-    // 这个是推荐的中间件配置，顺序也有要求，详细请查看中间件篇
-    thunkMiddleware,
-    promiseMiddleware,
-    fillObjectRestDataMiddleware,
-    shallowEqualMiddleware,
-    filterUndefinedMiddleware,
-    devtool
-  ]
-});
-
-export const inject = createInject({
-  storeGetter: () => store,
-});
-
-export default store;
-
-```
-
----
-
-### 使用 inject 将模块注入组件当中
-
-```tsx
-
-import React from "react";
-import "./styles.css";
-
-import { inject } from "your-inject";
-
-const injector = inject('app');
-
-const App = ({ app }: typeof injector.type) => {
-  // 获取注入的app模块
-  const { state, actions } = app;
-  return (
-    <>
-      changeName:
-      <input
-        value={state.name} // app中的数据
-        onChange={e => actions.changeName(e.target.value)}
-      />
-      <br />
-      asyncChangeName:
-      <input
-        value={state.name} // app中的数据
-        onChange={e => actions.asyncChangeName(e.target.value)}
-      />
-      <br />
-      thunkChangeName:
-      <input
-        value={state.name} // app中的数据
-        onChange={e => actions.thunkChangeName(e.target.value)}
-      />
-    </>
-  );
-};
-
-// 注入store中的app模块；
-export default injector(App);
-```  
-
----
-
 ## 应用场景
 
 
@@ -434,8 +314,7 @@ const app = {
 
 ```
 
-
-## 组件只监听部分数据的变更
+### 组件只监听部分数据的变更
 
 ```tsx
 import { inject } from 'your-inject';
@@ -474,7 +353,7 @@ const App = ({app}: typeof injector.type) => {
 
 ---
 
-## 懒加载模块配置
+### 懒加载模块配置
 
 ```ts
 /*
@@ -507,11 +386,9 @@ const store = createStore(
 
 
 
-## 初始化state
+### 初始化state
 
 ```tsx
-
-
 import { createStore } from 'natur';
 const app = {
   state: {
@@ -539,11 +416,176 @@ const store = createStore(
 );
 
 export default store;
-
-
 ```
 
 ---
+
+
+
+### 跨模块的交互的复杂业务场景
+
+
+> 在复杂的业务场景下，通常会存在多个模块之间相互监控，调用的场景，所以为了这种场景，可以使用[natur-service](/zh/natur-service/)无侵入性的解决方案，可以监听模块的任何变动，以及无侵入性的开发复杂的业务逻辑，同时保留每个模块的简洁和可维护性。
+
+
+### 加载时候的占位组件配置
+
+```tsx
+import { createInject } from 'natur';
+// 全局配置
+const inject = createInject({
+  storeGetter: () => store,
+  loadingComponent: () => <div>loading...</div>,
+})
+
+// 局部使用
+inject('app')(App, () => <div>loading</div>);
+```
+
+
+### 在react之外使用natur
+
+```ts
+// 引入之前创建的store实例
+import store from 'my-store-instance';
+
+/*
+  获取注册的app模块, 等同于在react组件中获取的app模块
+  如果你想要获取懒加载的模块，
+  那么你必须确定，这个时候该模块已经加载好了
+*/
+const app = store.getModule('app');
+/*
+  如果你确定，懒加载模块，还没有加载好
+  你可以监听懒加载模块，然后获取
+*/
+store.subscribe('lazyModuleName', () => {
+  const lazyModule = store.getModule('lazyModuleName');
+});
+
+/*
+state: {
+  name: 'tom'
+},
+actions: {
+  changeName,
+  asyncChangeName,
+},
+maps: {
+  splitName: ['t', 'o', 'm'],
+  addName: lastName => state.name + lastName,
+}
+*/
+
+
+
+/*
+  当你在这里使用action方法更新state时，
+  所有注入过app模块的组件都会更新，
+  并获取到最新的app模块中的数据，
+  建议不要滥用
+*/
+app.actions.changeName('jerry');
+// 等同于
+store.dispatch('app', 'changeName', 'jerry');
+
+/**
+ * 
+ * type: 模块变动的类型
+ * init: 模块初始化事件
+ * update: 模块state更新事件
+ * remove: 模块移除事件
+ * 
+ * actionName: 模块更新state时的action名字
+ */
+type ModuleEvent = {
+	type: 'init' | 'update' | 'remove',
+	actionName?: string,
+};
+// 监听模块变动
+const unsubscribe = store.subscribe('app', (me: ModuleEvent) => {
+  // 这里可以拿到最新的app数据
+  store.getModule('app');
+});
+
+
+// 取消监听
+unsubscribe();
+
+```
+
+
+### 手动导入模块
+
+```ts
+
+// initStore.ts
+import { createStore } from 'natur';
+
+// 在实例化store的时候，没有导入懒加载模块
+export default createStore({/*...modules*/}, {});
+
+// ================================================
+// lazyloadPage.ts 这是一个懒加载的页面
+import store from 'initStore.ts'
+
+const lazyLoadModule = {
+  state: {
+    name: 'tom',
+  },
+  actions: {
+    changeName: newName => ({ name: newName }),
+  },
+  maps: {
+    nameSplit: state => state.name.split(''),
+    addName: state => lastName => state.name + lastName,
+  },
+};
+/*
+手动添加模块，在此模块被添加之前，其他地方无法使用此模块
+要想其他地方也使用，则必须在store实例化的时候就导入
+*/
+store.setModule('lazyModuleName', lazyLoadModule);
+
+const lazyLoadView = () => {
+  // 现在你可以获取手动添加的模块了
+  const {state, maps, actions} = store.getModule('lazyModuleName');
+  return (
+    <div>{state.name}</div>
+  )
+}
+
+
+```
+### dispatch
+
+```typescript
+import { createStore, inject, InjectStoreModule } from 'natur';
+
+const count = {
+  state: { // 存放数据
+    number: 0,
+  },
+  maps: { // state的映射。比如，我需要知道state中的number是否是偶数
+    isEven: ['number', number => number % 2 === 0],
+  },
+  actions: { // 用来修改state。返回的数据会作为新的state(这部分由natur内部完成)
+    inc: number => ({number: number + 1}),
+    dec: number => ({number: number - 1}),
+  }
+}
+
+// 创建store这一步需要在渲染组件之前完成，因为在组件中，需要用到你创建的store
+const store = createStore({count}, {});
+
+const {actions, state} = store.getModule('count')
+
+actions.inc(state.number);
+// 等于
+store.dispatch('count', 'inc', state.number);
+
+```
+
 
 
 ## 拦截器
@@ -788,169 +830,6 @@ const store = createStore(
 ---
 
 
-## 跨模块的交互的复杂业务场景
-
-
-> 在复杂的业务场景下，通常会存在多个模块之间相互监控，调用的场景，所以为了这种场景，可以使用[natur-service](/zh/natur-service/)无侵入性的解决方案，可以监听模块的任何变动，以及无侵入性的开发复杂的业务逻辑，同时保留每个模块的简洁和可维护性。
-
-
-## 加载时候的占位组件配置
-
-```tsx
-import { createInject } from 'natur';
-// 全局配置
-const inject = createInject({
-  storeGetter: () => store,
-  loadingComponent: () => <div>loading...</div>,
-})
-
-// 局部使用
-inject('app')(App, () => <div>loading</div>);
-```
-
-
-## 在react之外使用natur
-
-```ts
-// 引入之前创建的store实例
-import store from 'my-store-instance';
-
-/*
-  获取注册的app模块, 等同于在react组件中获取的app模块
-  如果你想要获取懒加载的模块，
-  那么你必须确定，这个时候该模块已经加载好了
-*/
-const app = store.getModule('app');
-/*
-  如果你确定，懒加载模块，还没有加载好
-  你可以监听懒加载模块，然后获取
-*/
-store.subscribe('lazyModuleName', () => {
-  const lazyModule = store.getModule('lazyModuleName');
-});
-
-/*
-state: {
-  name: 'tom'
-},
-actions: {
-  changeName,
-  asyncChangeName,
-},
-maps: {
-  splitName: ['t', 'o', 'm'],
-  addName: lastName => state.name + lastName,
-}
-*/
-
-
-
-/*
-  当你在这里使用action方法更新state时，
-  所有注入过app模块的组件都会更新，
-  并获取到最新的app模块中的数据，
-  建议不要滥用
-*/
-app.actions.changeName('jerry');
-// 等同于
-store.dispatch('app', 'changeName', 'jerry');
-
-/**
- * 
- * type: 模块变动的类型
- * init: 模块初始化事件
- * update: 模块state更新事件
- * remove: 模块移除事件
- * 
- * actionName: 模块更新state时的action名字
- */
-type ModuleEvent = {
-	type: 'init' | 'update' | 'remove',
-	actionName?: string,
-};
-// 监听模块变动
-const unsubscribe = store.subscribe('app', (me: ModuleEvent) => {
-  // 这里可以拿到最新的app数据
-  store.getModule('app');
-});
-
-
-// 取消监听
-unsubscribe();
-
-```
-
-
-## 手动导入模块
-
-```ts
-
-// initStore.ts
-import { createStore } from 'natur';
-
-// 在实例化store的时候，没有导入懒加载模块
-export default createStore({/*...modules*/}, {});
-
-// ================================================
-// lazyloadPage.ts 这是一个懒加载的页面
-import store from 'initStore.ts'
-
-const lazyLoadModule = {
-  state: {
-    name: 'tom',
-  },
-  actions: {
-    changeName: newName => ({ name: newName }),
-  },
-  maps: {
-    nameSplit: state => state.name.split(''),
-    addName: state => lastName => state.name + lastName,
-  },
-};
-/*
-手动添加模块，在此模块被添加之前，其他地方无法使用此模块
-要想其他地方也使用，则必须在store实例化的时候就导入
-*/
-store.setModule('lazyModuleName', lazyLoadModule);
-
-const lazyLoadView = () => {
-  // 现在你可以获取手动添加的模块了
-  const {state, maps, actions} = store.getModule('lazyModuleName');
-  return (
-    <div>{state.name}</div>
-  )
-}
-
-
-```
-## dispatch
-
-```typescript
-import { createStore, inject, InjectStoreModule } from 'natur';
-
-const count = {
-  state: { // 存放数据
-    number: 0,
-  },
-  maps: { // state的映射。比如，我需要知道state中的number是否是偶数
-    isEven: ['number', number => number % 2 === 0],
-  },
-  actions: { // 用来修改state。返回的数据会作为新的state(这部分由natur内部完成)
-    inc: number => ({number: number + 1}),
-    dec: number => ({number: number - 1}),
-  }
-}
-
-// 创建store这一步需要在渲染组件之前完成，因为在组件中，需要用到你创建的store
-const store = createStore({count}, {});
-
-const {actions, state} = store.getModule('count')
-
-actions.inc(state.number);
-// 等于
-store.dispatch('count', 'inc', state.number);
-
-```
 
 ## typescript支持
 

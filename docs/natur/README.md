@@ -174,129 +174,6 @@ const demo = {
 }
 ```
 
-## complex demo
-
-[codesandbox](https://codesandbox.io/s/natur-2x-complex-demo-jyut0?file=/src/store.ts)
-
-### The first step is to create a store instance
-
-```ts
-
-import { createStore, createInject } from "natur";
-
-// This is a commonly used middleware built in natur, recommended
-import {
-  thunkMiddleware,
-  promiseMiddleware,
-  shallowEqualMiddleware,
-  fillObjectRestDataMiddleware,
-  filterUndefinedMiddleware
-} from "natur/dist/middlewares";
-import devtool from "./redux.devtool.middleware.js";
-
-const app = {
-  state: {
-    name: "tom",
-    todos: [
-      {
-        text: "play game "
-      }
-    ],
-    games: new Map([["favorite", "lol"]])
-  },
-  maps: {
-    firstTodoText: ["todos[0].text", firstTodoText => firstTodoText],
-    deepDep: [
-      "todos[0].text",
-      s => s.games.get("favorite"),
-      (firstTodo, favorite) => firstTodo + favorite
-    ]
-  },
-  actions: {
-    changeName: newName => ({ name: newName }),
-    asyncChangeName: newName => Promise.resolve({ name: newName }),
-    thunkChangeName: newName => ({ getState, setState, getMaps }) => {
-      getState(); // get the latest state
-      setState({ name: newName }); // Set the name of the state
-      getMaps(); // get the latest maps
-      return { name: newName + "1" }; // update the name of the state
-    }
-  }
-};
-
-// 其他的模块
-const otherModules = {
-  //...
-};
-
-// 创建store实例
-const store = createStore({ app, ...otherModules }, {}, {
-  middlewares: [
-    // This is the recommended middleware configuration,
-    // and the order is also required
-    // please see the middleware article for details
-    thunkMiddleware,
-    promiseMiddleware,
-    fillObjectRestDataMiddleware,
-    shallowEqualMiddleware,
-    filterUndefinedMiddleware,
-    devtool
-  ]
-});
-export const inject = createInject({
-  storeGetter: () => store,
-})
-export default store;
-
-```
-
----
-
-### The second step is to inject the module into the component
-
-```tsx
-import { inject } from "your-inject";
-
-const injector = inject('app', 'otherModuleName');
-
-const App = ({app, otherModuleName}: typeof injector.type) => {
-  // Get the injected app module
-  const {state, actions, maps} = app;
-  /*
-    The obtained app module
-    state: {
-      name: 'tom',
-      todos: [{
-        text: 'play game ',
-      }],
-      games: new Map(['favorite', 'lol'])
-    },
-    actions: {
-      changeName,
-      asyncChangeName,
-      thunkChangeName,
-    },
-    maps: {
-      deepDep: 'play game lol',
-    }
-  */
-  return (
-    <input
-      value={state.name} // Data in the app
-      onChange={e => actions.changeName(e.target.value)}
-    />
-  )
-};
-
-// Inject the app module in the store;
-export default injector(App);   
-
-```  
-
-**Alright, you already have it. Here are some additional features.**
-
----
-
 
 ## usecase
 
@@ -429,7 +306,7 @@ const app = {
 ```
 
 
-## The component only listens to changes in some data
+### the component only listens to changes in some data
 
 ```tsx
 import { inject } from 'your-inject';
@@ -472,7 +349,7 @@ const App = ({app}: typeof injector.type) => {
 
 ---
 
-## lazy loading module configuration
+### lazy loading module configuration
 
 ```ts
 /*
@@ -505,11 +382,9 @@ const store = createStore(
 
 
 
-## initialization state
+### initialization state
 
 ```tsx
-
-
 import { createStore } from 'natur';
 const app = {
   state: {
@@ -537,11 +412,159 @@ const store = createStore(
 );
 
 export default store;
+```
+
+
+
+### complex business scenarios of cross-module interaction
+
+> In complex business scenarios, there are usually scenarios where multiple modules monitor and call each other, so for this scenario, you can use [natur-service](/natur-service/) Non-intrusive solution, you can monitor any changes in the module, and non-invasive development of complex business logic, while retaining the simplicity and maintainability of each module.
+
+---
+
+
+### placeholder component configuration when loading
+
+```tsx
+import { createInject } from 'natur';
+// Global configuration
+const inject = createInject({
+  storeGetter: () => store,
+  loadingComponent: () => <div>loading...</div>,
+})
+// Local use
+inject('app')(App, () => <div>loading</div>);
+```
+
+
+### use natur outside react
+
+```ts
+// Store instance created before
+import store from 'my-store-instance';
+
+/*
+  Get the registered app module, which is equivalent to the app module obtained in the react component
+  If you want to get lazy loaded modules,
+  Then you have to make sure that the module is already loaded at this time
+*/
+const app = store.getModule('app');
+/*
+  If you are sure, lazy load the module, not loaded yet
+  You can listen for lazy loading modules and get
+*/
+store.subscribe('lazyModuleName', () => {
+  const lazyModule = store.getModule('lazyModuleName');
+});
+
+/*
+state: {
+  name: 'tom'
+},
+actions: {
+  changeName,
+  asyncChangeName,
+},
+maps: {
+  splitName: ['t', 'o', 'm'],
+  addName: lastName => state.name + lastName,
+}
+*/
+/*
+  When you use the action method to update the state here,
+  All components injected into the app module will be updated,
+  And get the data in the latest app module,
+  Advised not to abuse
+*/
+app.actions.changeName('jerry');
+// Equivalent to
+store.dispatch('app', 'changeName', 'jerry');
+
+// Monitoring module changes
+const unsubscribe = store.subscribe('app', () => {
+  // Here you can get the latest app data
+  store.getModule('app');
+});
+
+
+// Cancel listening
+unsubscribe();
+
+```
+
+
+
+### dispatch
+
+```typescript
+import { createStore, inject, InjectStoreModule } from 'natur';
+
+const count = {
+  state: {
+    number: 0,
+  },
+  maps: {
+    isEven: ['number', number => number % 2 === 0],
+  },
+  actions: {
+    inc: number => ({number: number + 1}),
+    dec: number => ({number: number - 1}),
+  }
+}
+
+const store = createStore({count}, {});
+
+const {actions, state} = store.getModule('count')
+
+actions.inc(state.number);
+// Equivalent to
+store.dispatch('count', 'inc', state.number);
+
+```
+
+### importing modules manually
+
+```ts
+
+// initStore.ts
+import { createStore } from 'natur';
+
+// When instantiating the store, no lazy loading module was imported
+export default createStore({/*...modules*/}, {});
+
+// ================================================
+// lazyloadPage.ts This is a lazy loaded page
+import store from 'initStore.ts'
+
+const lazyLoadModule = {
+  state: {
+    name: 'tom',
+  },
+  actions: {
+    changeName: newName => ({ name: newName }),
+  },
+  maps: {
+    nameSplit: state => state.name.split(''),
+    addName: state => lastName => state.name + lastName,
+  },
+};
+/*
+Add the module manually, it cannot be used anywhere else until it is added
+To use it elsewhere, it must be imported when the store is instantiated
+*/
+store.setModule('lazyModuleName', lazyLoadModule);
+
+const lazyLoadView = () => {
+  // Now you can get manually added modules
+  const {state, maps, actions} = store.getModule('lazyModuleName');
+  return (
+    <div>{state.name}</div>
+  )
+}
 
 
 ```
 
----
 
 
 ## interceptor
@@ -772,155 +795,6 @@ const store = createStore(
 );
 ```
 
-
-## complex business scenarios of cross-module interaction
-
-> In complex business scenarios, there are usually scenarios where multiple modules monitor and call each other, so for this scenario, you can use [natur-service](/natur-service/) Non-intrusive solution, you can monitor any changes in the module, and non-invasive development of complex business logic, while retaining the simplicity and maintainability of each module.
-
----
-
-
-## Placeholder component configuration when loading
-
-```tsx
-import { createInject } from 'natur';
-// Global configuration
-const inject = createInject({
-  storeGetter: () => store,
-  loadingComponent: () => <div>loading...</div>,
-})
-// Local use
-inject('app')(App, () => <div>loading</div>);
-```
-
-
-## Use natur outside react
-
-```ts
-// Store instance created before
-import store from 'my-store-instance';
-
-/*
-  Get the registered app module, which is equivalent to the app module obtained in the react component
-  If you want to get lazy loaded modules,
-  Then you have to make sure that the module is already loaded at this time
-*/
-const app = store.getModule('app');
-/*
-  If you are sure, lazy load the module, not loaded yet
-  You can listen for lazy loading modules and get
-*/
-store.subscribe('lazyModuleName', () => {
-  const lazyModule = store.getModule('lazyModuleName');
-});
-
-/*
-state: {
-  name: 'tom'
-},
-actions: {
-  changeName,
-  asyncChangeName,
-},
-maps: {
-  splitName: ['t', 'o', 'm'],
-  addName: lastName => state.name + lastName,
-}
-*/
-/*
-  When you use the action method to update the state here,
-  All components injected into the app module will be updated,
-  And get the data in the latest app module,
-  Advised not to abuse
-*/
-app.actions.changeName('jerry');
-// Equivalent to
-store.dispatch('app', 'changeName', 'jerry');
-
-// Monitoring module changes
-const unsubscribe = store.subscribe('app', () => {
-  // Here you can get the latest app data
-  store.getModule('app');
-});
-
-
-// Cancel listening
-unsubscribe();
-
-```
-
-
-
-## dispatch
-
-```typescript
-import { createStore, inject, InjectStoreModule } from 'natur';
-
-const count = {
-  state: {
-    number: 0,
-  },
-  maps: {
-    isEven: ['number', number => number % 2 === 0],
-  },
-  actions: {
-    inc: number => ({number: number + 1}),
-    dec: number => ({number: number - 1}),
-  }
-}
-
-const store = createStore({count}, {});
-
-const {actions, state} = store.getModule('count')
-
-actions.inc(state.number);
-// Equivalent to
-store.dispatch('count', 'inc', state.number);
-
-```
-
-## Importing modules manually
-
-```ts
-
-// initStore.ts
-import { createStore } from 'natur';
-
-// When instantiating the store, no lazy loading module was imported
-export default createStore({/*...modules*/}, {});
-
-// ================================================
-// lazyloadPage.ts This is a lazy loaded page
-import store from 'initStore.ts'
-
-const lazyLoadModule = {
-  state: {
-    name: 'tom',
-  },
-  actions: {
-    changeName: newName => ({ name: newName }),
-  },
-  maps: {
-    nameSplit: state => state.name.split(''),
-    addName: state => lastName => state.name + lastName,
-  },
-};
-/*
-Add the module manually, it cannot be used anywhere else until it is added
-To use it elsewhere, it must be imported when the store is instantiated
-*/
-store.setModule('lazyModuleName', lazyLoadModule);
-
-const lazyLoadView = () => {
-  // Now you can get manually added modules
-  const {state, maps, actions} = store.getModule('lazyModuleName');
-  return (
-    <div>{state.name}</div>
-  )
-}
-
-
-```
 
 ## typescript support
 
