@@ -303,6 +303,136 @@ export default injector(App);
 
 ---
 
+## 应用场景
+
+
+### 同步更新数据
+
+- 这里我们默认使用官方推荐的中间件配置, 详情请看中间件部分
+
+```ts
+
+const app = {
+  state: {
+    name: "tom",
+  },
+  actions: {
+    // 这里是同步更新state中的name数据
+    changeName: newName => ({ name: newName }),
+  }
+};
+
+```
+
+### 异步更新数据
+- 这里我们默认使用官方推荐的中间件配置, 详情请看中间件部分
+
+
+```ts
+
+const app = {
+  state: {
+    name: "tom",
+  },
+  actions: {
+    // 这里是异步更新state中的name数据
+    changeName: newName => Promise.resolve({ name: newName }),
+  }
+};
+
+```
+### 异步多批次更新数据
+- 这里我们默认使用官方推荐的中间件配置, 详情请看中间件部分
+
+
+```ts
+import { ThunkParams } from "natur/dist/middlewares";
+
+const state = {
+  now: Date.now(),
+}
+const actions = {
+  // 这里是异步多批次更新state中的name数据
+  updateNow: () => ({setState}: ThunkParams<typeof state>) => {
+    // 每秒更新一次now的值
+    setInterval(() => setState({now: Date.now()}), 1000);
+  },
+}
+
+const app = {
+  state,
+  actions
+};
+
+```
+
+
+### 在actions中获取最新的state，maps值
+
+- 这里我们默认使用官方推荐的中间件配置, 详情请看中间件部分
+
+```ts
+import { ThunkParams } from "natur/dist/middlewares";
+
+const state = {
+  name: 'tom',
+}
+const maps = {
+  nameIsTome: ['name', (name: string) => name === 'tom'],
+}
+
+const actions = {
+  updateName: () => ({getState, getMaps}: ThunkParams<typeof state, typeof maps>) => {
+    // 获取最新的state值
+    const currentState = getState();
+    // 获取最新的maps值
+    const currentMaps = getMaps();
+  },
+}
+
+const app = {
+  state,
+  maps,
+  actions
+};
+
+```
+
+
+### 在actions中调用其他的action
+
+- 这里我们默认使用官方推荐的中间件配置, 详情请看中间件部分
+
+
+```ts
+import { ThunkParams } from "natur/dist/middlewares";
+
+const state = {
+  name: 'tom',
+  updateNameTimes: 0,
+}
+
+const actions = {
+  // 这是被调用的actions
+  increaseUpdateNameTimes: (p1: string, p2: string) => ({getState}: ThunkParams<typeof state>) => ({
+    updateNameTimes: getState().updateNameTimes + 1,
+  }),
+  // 这是调用increaseUpdateNameTimes的action
+  updateName: (newName: string) => ({dispatch}: ThunkParams) => {
+    // 调用increaseUpdateNameTimes方法
+    dispatch('increaseUpdateNameTimes', 'p1', 'p2');
+    // 你也可以调用其他模块的actions，但不建议广泛使用
+    // dispatch('otherModule/actions', /* ...arguments */);
+    return {name: newName};
+  },
+}
+
+const app = {
+  state,
+  actions
+};
+
+```
 
 
 ## 组件只监听部分数据的变更
@@ -621,7 +751,7 @@ const createMiddleware = ():Middleware => {
 export default createMiddleware();
 ```
 
-#### 推荐的中间件配置
+### 推荐的中间件配置
 
 **注意：中间件配置的先后顺序很重要**
 

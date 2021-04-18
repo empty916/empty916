@@ -298,6 +298,136 @@ export default injector(App);
 ---
 
 
+## usecase
+
+
+### synchronous update data
+
+- here we use the officially recommended middleware configuration by default, please see the middleware section for details
+
+```ts
+
+const app = {
+  state: {
+    name: "tom",
+  },
+  actions: {
+    // here is the synchronous update of the name data in the state
+    changeName: newName => ({ name: newName }),
+  }
+};
+
+```
+
+### asynchronous update data
+
+- here we use the officially recommended middleware configuration by default, please see the middleware section for details
+
+```ts
+
+const app = {
+  state: {
+    name: "tom",
+  },
+  actions: {
+    // here is the asynchronous update of the name data in the state
+    changeName: newName => Promise.resolve({ name: newName }),
+  }
+};
+
+```
+### update data asynchronously in multiple batches
+
+- here we use the officially recommended middleware configuration by default, please see the middleware section for details
+
+```ts
+import { ThunkParams } from "natur/dist/middlewares";
+
+const state = {
+  now: Date.now(),
+}
+const actions = {
+  // here is the asynchronous multi-batch update of the name data in the state
+  updateNow: () => ({setState}: ThunkParams<typeof state>) => {
+    // update the value of now every second
+    setInterval(() => setState({now: Date.now()}), 1000);
+  },
+}
+
+const app = {
+  state,
+  actions
+};
+
+```
+
+
+### get the latest state and maps value in actions
+
+- here we use the officially recommended middleware configuration by default, please see the middleware section for details
+
+```ts
+import { ThunkParams } from "natur/dist/middlewares";
+
+const state = {
+  name: 'tom',
+}
+const maps = {
+  nameIsTome: ['name', (name: string) => name === 'tom'],
+}
+
+const actions = {
+  updateName: () => ({getState, getMaps}: ThunkParams<typeof state, typeof maps>) => {
+    // get the latest state value
+    const currentState = getState();
+    // get the latest maps value
+    const currentMaps = getMaps();
+  },
+}
+
+const app = {
+  state,
+  maps,
+  actions
+};
+
+```
+
+
+### call other actions in actions
+
+- here we use the officially recommended middleware configuration by default, please see the middleware section for details
+
+```ts
+import { ThunkParams } from "natur/dist/middlewares";
+
+const state = {
+  name: 'tom',
+  updateNameTimes: 0,
+}
+
+const actions = {
+  // this is the action being called
+  increaseUpdateNameTimes: (p1: string, p2: string) => ({getState}: ThunkParams<typeof state>) => ({
+    updateNameTimes: getState().updateNameTimes + 1,
+  }),
+  // This is the action that calls increaseUpdateNameTimes
+  updateName: (newName: string) => ({dispatch}: ThunkParams) => {
+    // call increaseUpdateNameTimes method
+    dispatch('increaseUpdateNameTimes', 'p1', 'p2');
+    // you can also call actions of other modules, but it is not recommended to use them widely
+    // dispatch('otherModule/actions', /* ...arguments */);
+    return {name: newName};
+  },
+}
+
+const app = {
+  state,
+  actions
+};
+
+```
+
 
 ## The component only listens to changes in some data
 
@@ -610,7 +740,7 @@ const createMiddleware = ():Middleware => {
 export default createMiddleware();
 ```
 
-- Recommended middleware configuration
+### recommended middleware configuration
 
 **Note: The order of middleware configuration is important**
 
