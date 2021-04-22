@@ -97,20 +97,20 @@ ReactDOM.render(<IApp />, document.querySelector('#app'));
 
 **一个模块由state, maps, actions构成**
 
-### state
+### state — 存储数据
 
 - **必填：**`true`
 - **类型：**`any`
 - state用来存储数据
 
 
-### maps
+### maps — 计算属性
 
 - **必填：**`false`
 - **类型：**`{[map: string]: Array<string|Function> | Function;}`
 
 - maps是state数据的映射，它的成员必须是一个数组或者函数，我们暂且称其为map
-- 如果map是数组，前面的元素都是在声明此map对state的依赖项。最后一个函数可以获取前面声明的依赖，你可以在里面实现你想要的东西。在页面中，你可以获取数组最后一个函数运行的结果。
+- 如果map是数组，前面的元素都是在声明此map对state的依赖项。最后一个函数可以获取前面声明的依赖，你可以在里面实现你需要的计算的逻辑。在组件中，你可以获取数组最后一个函数运行的结果。
 - 如果map是函数，那么它只能接受state作为入参，或者没有参数，如果是state作为参数，那么当state更新时，此map一定会重新执行，没有缓存。如果map没有参数，那么此map只会执行一次
 - maps的结果是有缓存的，如果你声明的依赖项的值没有变化，那么最后一个函数便不会重新执行
 
@@ -149,7 +149,7 @@ const demo = {
 
 
 
-### actions
+### actions — 更新数据
 
 - **必填：**`true`
 - **类型：**`{[action: string]: (...arg: any[]) => any;}`

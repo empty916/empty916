@@ -96,21 +96,21 @@ ReactDOM.render(<IApp />, document.querySelector('#app'));
 
 **A module consists of state, maps, actions**
 
-### state
+### state — Storing Data
 
 
 - **required:**`true`
 - **type:**`any`
 - state is used to store data
 
-### maps
+### maps — Computed Properties
 
 
 - **required:**`false`
 - **type:**`{[map: string]: Array<string|Function> | Function;}`
 
 - maps is a map of state data, and its member must be an array of function. Let's call it map for now.
-- If the map is an array, the preceding elements are all declaring the dependency of this map on the state. The last function can get the dependency declared earlier, and you can implement what you want in it. On the page, you can get the result of the last function of the array.
+- If the map is an array, the preceding elements are all declaring the dependency of this map on the state. The last function can get the dependency declared earlier, and you can implement the calculation logic you need in it. On the component, you can get the result of the last function of the array.
 - If the map is a function, then it can only accept state as an input parameter, or there is no parameter. If it is a state as a parameter, then when the state is updated, the map must be re-executed and there is no cache. If the map has no parameters, then this map will only be executed once
 - The results of maps are cached. If the value of the dependencies you declare does not change, the last function will not be re-executed.
 
@@ -148,8 +148,7 @@ const demo = {
  */
 ```
 
-
-### actions
+### actions — Updating Data
 
 
 - **required:**`true`
@@ -903,7 +902,7 @@ class _App extends React.Component {
   // ...
 }
 const App = inject('count', 'name')(_App);
-// 正确
+// correct
 <App forwardedRef={console.log} />
 
  ```
