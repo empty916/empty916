@@ -3,7 +3,13 @@ sidebarDepth: 3
 ---
 # umi-natur
 
-自动生成 natur 代码的的 umi 插件，超级好用
+- 自动生成 natur 代码的 umi 插件，超级好用
+- 支持自动配置natur
+- 支持自动扫描natur模块代码并导入
+- 支持ssr场景
+- 支持自动扫描service代码，并自动配置，同样servcie也可以应用于ssr场景
+- 支持persist配置
+
 
 ## 安装
 
@@ -11,10 +17,9 @@ sidebarDepth: 3
 # or yarn add umi-natur -D
 $ npm install umi-natur -D
 ```
+## 普通使用方式
 
-## 使用方式
-
-Configure in `.umirc.ts`,
+1. 首先添加配置`.umirc.ts`,
 
 ```ts
 export default {
@@ -29,6 +34,134 @@ export default {
   }
 }
 ```
+2. 创建你的natur模块
+`store/count.ts`
+```ts
+
+const state = 0;
+const actions = {
+  update: (newState: number) => newState,
+};
+
+const count = {
+  state,
+  actions,
+};
+
+export default count;
+
+```
+
+3. 使用你的模块
+```tsx
+import React, { useEffect } from 'react';
+import { inject } from 'umi';
+
+const injector = inject('count');
+
+const App = ({count}: typeof injector.type) => {
+  useEffect(() => {
+    count.actions.update(1);
+  }, [])
+  return (
+    <div>{count.state}</div>
+  );
+};
+
+export default injector(App);
+```
+
+
+## ssr使用场景
+
+::: tip
+umi >= 3.4.14\
+umi-natur >= 1.1.1
+:::
+
+
+`.umirc.ts`配置文件
+
+```ts {3}
+export default {
+  plugins: ['umi-natur'],
+  ssr: {},
+  natur: {
+    /* see parameter introduction for details */
+    persist: { /* ... */ },
+    service: { /* ... */ },
+  }
+}
+```
+
+示例页面`index.tsx`
+```tsx
+import React, { useEffect } from 'react';
+import { inject, Store } from 'umi';
+
+const injector = inject('aModule');
+
+const App = ({aModule}: typeof injector.type) => {
+  useEffect(() => {
+    // 客户端执行一个action
+    aModule.actions.aAction();
+  }, [])
+  return <div>...</div>;
+};
+
+App.getInitialProps = async ({store}: {store: Store}) => {
+  // 服务端执行一个action，这里的代码不会在客户端执行，所以你要在客户端重复执行一次
+  await store.dispatch('aModule', 'aAction');
+  // 必须把数据返回给客户端使用
+  return store.getAllStates();
+}
+
+export default injector(App);
+```
+
+## 使用service
+
+
+1. 添加service配置
+`.umirc.ts`
+```ts {4}
+export default {
+  plugins: ['umi-natur'],
+  natur: {
+    service: { /* ... */ },
+  }
+}
+```
+2. 创建service模块
+`service/count2`
+```ts
+import { BaseService } from 'umi';
+
+// 这里表示count2模块会监听count的变动，然后同步count的state到自己的state
+// 类名必须是大写字母开头
+export default class Count2Service extends BaseService {
+    start() {
+        // 这里的代码是自动执行的
+        this.watch('count', ({state, actionName}) => {
+            if (actionName === 'update' && state) {
+                this.dispatch('count2', 'update', state);
+            }
+        })
+    }
+    getCount2State = () => {
+      return this.store.getModule('count2').state;
+    }
+}
+```
+3. 使用service模块
+
+`some.ts`
+```ts
+// 实例是小写字母开头的
+import { count2Service } from '@@/service';
+count2Service.getCount2State();
+```
+
 # 参数
 ## natur
 

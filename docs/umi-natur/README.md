@@ -1,7 +1,11 @@
 # umi-natur
 
-The umi plugin that automatically generates natur code is super easy to use
-
+- the umi plug-in that automatically generates natur code is super easy to use
+- support automatic configuration of natur
+- support automatic scanning of natur module code and import
+- support ssr scene
+- support automatic scanning of service code and automatic configuration, the same servcie can also be applied to ssr scenarios
+- support persist configuration
 ## install
 
 ```bash
@@ -9,9 +13,9 @@ The umi plugin that automatically generates natur code is super easy to use
 $ npm install umi-natur -D
 ```
 
-## use
+## common use
 
-Configure in `.umirc.ts`,
+1. at first, config your `.umirc.ts`,
 
 ```ts
 export default {
@@ -26,6 +30,138 @@ export default {
   }
 }
 ```
+
+
+2. then create natur module
+`store/count.ts`
+```ts
+
+const state = 0;
+const actions = {
+  update: (newState: number) => newState,
+};
+
+const count = {
+  state,
+  actions,
+};
+
+export default count;
+
+```
+
+3. use natur module
+```tsx
+import React, { useEffect } from 'react';
+import { inject } from 'umi';
+
+const injector = inject('count');
+
+const App = ({count}: typeof injector.type) => {
+  useEffect(() => {
+    count.actions.update(1);
+  }, [])
+  return (
+    <div>{count.state}</div>
+  );
+};
+
+export default injector(App);
+```
+
+
+## ssr usecase
+
+::: tip
+umi >= 3.4.14\
+umi-natur >= 1.1.1
+:::
+
+Configure in `.umirc.ts`,
+
+```ts {3}
+export default {
+  plugins: ['umi-natur'],
+  ssr: {},
+  natur: {
+    /* see parameter introduction for details */
+    persist: { /* ... */ },
+    service: { /* ... */ },
+  }
+}
+```
+
+`index.tsx`
+```tsx
+import React, { useEffect } from 'react';
+import { inject, Store } from 'umi';
+
+const injector = inject('aModule');
+
+const App = ({aModule}: typeof injector.type) => {
+  useEffect(() => {
+    // run client side action
+    aModule.actions.aAction();
+  }, [])
+  return return <div>...</div>;
+};
+
+App.getInitialProps = async ({store}: {store: Store}) => {
+  // run server side action. The code here will not be executed on the client side, so you have to execute it again on the client side
+  await store.dispatch('aModule', 'aAction');
+  // must return all states to client
+  return store.getAllStates();
+}
+
+export default injector(App);
+```
+
+
+## use service
+
+
+1. add service config
+`.umirc.ts`
+```ts {4}
+export default {
+  plugins: ['umi-natur'],
+  natur: {
+    service: { /* ... */ },
+  }
+}
+```
+2. create service module
+`service/count2`
+```ts
+import { BaseService } from 'umi';
+
+// This means that the count2 module will monitor the changes of count, and then synchronize the state of count to its own state
+// The class name must start with uppercase
+export default class Count2Service extends BaseService {
+    start() {
+        // The code here is executed automatically
+        this.watch('count', ({state, actionName}) => {
+            if (actionName === 'update' && state) {
+                this.dispatch('count2', 'update', state);
+            }
+        })
+    }
+    getCount2State = () => {
+      return this.store.getModule('count2').state;
+    }
+}
+```
+3. Use the service module
+
+`some.ts`
+```ts
+// Class instances start with a lowercase letter
+import { count2Service } from '@@/service';
+count2Service.getCount2State();
+```
+
+
+
 
 # parameter introduction
 
