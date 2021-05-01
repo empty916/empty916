@@ -14,8 +14,11 @@ sidebarDepth: 3
 ## 安装
 
 ```bash
-# or yarn add umi-natur -D
-$ npm install umi-natur -D
+# or npm install umi-natur -D
+$ yarn add umi-natur -D
+
+# or npm install natur -S
+$ yarn add natur
 ```
 ## 普通使用方式
 
@@ -27,11 +30,7 @@ export default {
     // 配置natur插件到umi
     'umi-natur',
   ],
-  natur: {
-    /* 详情见参数介绍 */
-    persist: { /* ... */ },
-    service: { /* ... */ },
-  }
+  natur: {}
 }
 ```
 2. 创建你的natur模块

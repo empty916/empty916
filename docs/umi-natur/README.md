@@ -9,8 +9,11 @@
 ## install
 
 ```bash
-# or yarn add umi-natur -D
-$ npm install umi-natur -D
+# or npm install umi-natur -D
+$ yarn add umi-natur -D
+
+# or npm install natur -S
+$ yarn add natur
 ```
 
 ## common use
@@ -23,11 +26,7 @@ export default {
     // configure natur plugin to umi
     'umi-natur',
   ],
-  natur: {
-    /* see parameter introduction for details */
-    persist: { /* ... */ },
-    service: { /* ... */ },
-  }
+  natur: {}
 }
 ```
 
