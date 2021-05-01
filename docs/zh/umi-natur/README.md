@@ -85,11 +85,7 @@ umi-natur >= 1.1.1
 export default {
   plugins: ['umi-natur'],
   ssr: {},
-  natur: {
-    /* see parameter introduction for details */
-    persist: { /* ... */ },
-    service: { /* ... */ },
-  }
+  natur: {}
 }
 ```
 
@@ -140,7 +136,7 @@ import { BaseService } from 'umi';
 // 类名必须是大写字母开头
 export default class Count2Service extends BaseService {
     start() {
-        // 这里的代码是自动执行的
+        // 这里的代码是自动执行的， ssr模式下也是如此
         this.watch('count', ({state, actionName}) => {
             if (actionName === 'update' && state) {
                 this.dispatch('count2', 'update', state);

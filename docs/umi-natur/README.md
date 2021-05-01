@@ -82,11 +82,7 @@ Configure in `.umirc.ts`,
 export default {
   plugins: ['umi-natur'],
   ssr: {},
-  natur: {
-    /* see parameter introduction for details */
-    persist: { /* ... */ },
-    service: { /* ... */ },
-  }
+  natur: {}
 }
 ```
 
@@ -138,7 +134,7 @@ import { BaseService } from 'umi';
 // The class name must start with uppercase
 export default class Count2Service extends BaseService {
     start() {
-        // The code here is executed automatically
+        // The code here is executed automatically，ssr mode also
         this.watch('count', ({state, actionName}) => {
             if (actionName === 'update' && state) {
                 this.dispatch('count2', 'update', state);
