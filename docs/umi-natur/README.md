@@ -71,7 +71,7 @@ export default injector(App);
 
 ## ssr usecase
 
-::: tip
+::: tip Minimum Version Requirements
 umi >= 3.4.14\
 umi-natur >= 1.1.1
 :::

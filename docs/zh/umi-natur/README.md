@@ -73,7 +73,7 @@ export default injector(App);
 
 ## ssr使用场景
 
-::: tip
+::: tip 最低版本要求
 umi >= 3.4.14\
 umi-natur >= 1.1.1
 :::
