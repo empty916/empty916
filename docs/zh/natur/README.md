@@ -8,7 +8,7 @@ sidebarDepth: 2
 1. 这是一个简洁、高效的react状态管理器
 1. 良好的typescript体验
 1. 浏览器兼容：IE8+
-1. 支持react 15.x, 16.x, 以及anujs
+1. 支持react, 以及anujs
 1. 单元测试覆盖率99％，放心使用
 1. 包体积，minizip 5k(uglify+gzip压缩后5k)
 
