@@ -188,7 +188,7 @@ const demo = {
 
 ### 同步更新数据
 
-- 这里我们默认使用官方推荐的中间件配置, 详情请看中间件部分
+- 这里我们默认使用[官方推荐的中间件配置](#推荐的中间件配置), 详情请看中间件部分
 
 ```ts
 
@@ -205,7 +205,7 @@ const app = {
 ```
 
 ### 异步更新数据
-- 这里我们默认使用官方推荐的中间件配置, 详情请看中间件部分
+- 这里我们默认使用[官方推荐的中间件配置](#推荐的中间件配置), 详情请看中间件部分
 
 
 ```ts
@@ -222,7 +222,7 @@ const app = {
 
 ```
 ### 异步多批次更新数据
-- 这里我们默认使用官方推荐的中间件配置, 详情请看中间件部分
+- 这里我们默认使用[官方推荐的中间件配置](#推荐的中间件配置), 详情请看中间件部分
 
 
 ```ts
@@ -249,7 +249,7 @@ const app = {
 
 ### 在actions中获取最新的state，maps值
 
-- 这里我们默认使用官方推荐的中间件配置, 详情请看中间件部分
+- 这里我们默认使用[官方推荐的中间件配置](#推荐的中间件配置), 详情请看中间件部分
 
 ```ts
 import { ThunkParams } from "natur/dist/middlewares";
@@ -281,7 +281,7 @@ const app = {
 
 ### 在actions中调用其他的action
 
-- 这里我们默认使用官方推荐的中间件配置, 详情请看中间件部分
+- 这里我们默认使用[官方推荐的中间件配置](#推荐的中间件配置), 详情请看中间件部分
 
 
 ```ts
@@ -289,20 +289,18 @@ import { ThunkParams } from "natur/dist/middlewares";
 
 const state = {
   name: 'tom',
-  updateNameTimes: 0,
+  loading: true,
 }
 
 const actions = {
-  // 这是被调用的actions
-  increaseUpdateNameTimes: (p1: string, p2: string) => ({getState}: ThunkParams<typeof state>) => ({
-    updateNameTimes: getState().updateNameTimes + 1,
-  }),
-  // 这是调用increaseUpdateNameTimes的action
-  updateName: (newName: string) => ({dispatch}: ThunkParams) => {
+  loading: (loading: boolean) => ({loading}),
+  fetchData: (newName: string) => async ({dispatch}: ThunkParams) => {
     // 调用increaseUpdateNameTimes方法
-    dispatch('increaseUpdateNameTimes', 'p1', 'p2');
+    dispatch('loading', true);
     // 你也可以调用其他模块的actions，但不建议广泛使用
     // dispatch('otherModule/actions', /* ...arguments */);
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    dispatch('loading', false);
     return {name: newName};
   },
 }

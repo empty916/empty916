@@ -179,7 +179,7 @@ const demo = {
 
 ### synchronous update data
 
-- here we use the officially recommended middleware configuration by default, please see the middleware section for details
+- here we use the [officially recommended middleware configuration](#recommended-middleware-configuration) by default, please see the middleware section for details
 
 ```ts
 
@@ -197,7 +197,7 @@ const app = {
 
 ### asynchronous update data
 
-- here we use the officially recommended middleware configuration by default, please see the middleware section for details
+- here we use the [officially recommended middleware configuration](#recommended-middleware-configuration) by default, please see the middleware section for details
 
 ```ts
 
@@ -214,7 +214,7 @@ const app = {
 ```
 ### update data asynchronously in multiple batches
 
-- here we use the officially recommended middleware configuration by default, please see the middleware section for details
+- here we use the [officially recommended middleware configuration](#recommended-middleware-configuration) by default, please see the middleware section for details
 
 ```ts
 import { ThunkParams } from "natur/dist/middlewares";
@@ -240,7 +240,7 @@ const app = {
 
 ### get the latest state and maps value in actions
 
-- here we use the officially recommended middleware configuration by default, please see the middleware section for details
+- here we use the [officially recommended middleware configuration](#recommended-middleware-configuration) by default, please see the middleware section for details
 
 ```ts
 import { ThunkParams } from "natur/dist/middlewares";
@@ -272,27 +272,26 @@ const app = {
 
 ### call other actions in actions
 
-- here we use the officially recommended middleware configuration by default, please see the middleware section for details
+- here we use the [officially recommended middleware configuration](#recommended-middleware-configuration) by default, please see the middleware section for details
 
 ```ts
 import { ThunkParams } from "natur/dist/middlewares";
 
 const state = {
   name: 'tom',
-  updateNameTimes: 0,
+  loading: true,
 }
 
 const actions = {
-  // this is the action being called
-  increaseUpdateNameTimes: (p1: string, p2: string) => ({getState}: ThunkParams<typeof state>) => ({
-    updateNameTimes: getState().updateNameTimes + 1,
-  }),
+  loading: (loading: boolean) => ({loading}),
   // This is the action that calls increaseUpdateNameTimes
-  updateName: (newName: string) => ({dispatch}: ThunkParams) => {
+  fetchData: (newName: string) => async ({dispatch}: ThunkParams) => {
     // call increaseUpdateNameTimes method
-    dispatch('increaseUpdateNameTimes', 'p1', 'p2');
+    dispatch('loading', true);
     // you can also call actions of other modules, but it is not recommended to use them widely
     // dispatch('otherModule/actions', /* ...arguments */);
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    dispatch('loading', false);
     return {name: newName};
   },
 }
