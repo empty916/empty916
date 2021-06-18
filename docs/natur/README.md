@@ -284,9 +284,9 @@ const state = {
 
 const actions = {
   loading: (loading: boolean) => ({loading}),
-  // This is the action that calls increaseUpdateNameTimes
+  // This is the action that calls loading
   fetchData: (newName: string) => async ({dispatch}: ThunkParams) => {
-    // call increaseUpdateNameTimes method
+    // call loading method
     dispatch('loading', true);
     // you can also call actions of other modules, but it is not recommended to use them widely
     // dispatch('otherModule/actions', /* ...arguments */);

@@ -295,7 +295,7 @@ const state = {
 const actions = {
   loading: (loading: boolean) => ({loading}),
   fetchData: (newName: string) => async ({dispatch}: ThunkParams) => {
-    // 调用increaseUpdateNameTimes方法
+    // 调用loading方法
     dispatch('loading', true);
     // 你也可以调用其他模块的actions，但不建议广泛使用
     // dispatch('otherModule/actions', /* ...arguments */);
