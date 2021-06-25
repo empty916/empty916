@@ -113,19 +113,21 @@ ReactDOM.render(<IApp />, document.querySelector('#app'));
 - 如果map是数组，前面的元素都是在声明此map对state的依赖项。最后一个函数可以获取前面声明的依赖，你可以在里面实现你需要的计算的逻辑。在组件中，你可以获取数组最后一个函数运行的结果。
 - 如果map是函数，那么它只能接受state作为入参，或者没有参数，如果是state作为参数，那么当state更新时，此map一定会重新执行，没有缓存。如果map没有参数，那么此map只会执行一次
 - maps的结果是有缓存的，如果你声明的依赖项的值没有变化，那么最后一个函数便不会重新执行
+- 什么时候需要手动声明依赖？如果你的map逻辑较为复杂，或者你的map返回值不是基本类型的值，需要给到组件渲染，那么你可以考虑手动声明依赖，保证性能。一般请看直接使用函数的方式即可。
 
 ```ts
 const demo = {
   state: {
     number: 1,
+    value: 2
   },
   maps: {
     // 数组前面的元素，都是在声明此map对state的依赖项，最后一个函数可以获取前面声明的依赖，你可以在里面实现你想要的东西
-    isEven: ['number', number => number % 2 === 0],
+    sum1: ['number', 'value', (number, value) => number + value],
     // 你也可以通过函数的方式声明依赖项，这对于复杂类型的state很有用
-    isEven2: [state => state.number, number => number % 2 === 0],
+    sum2: [state => state.number, s => s.value, (number, value) => number + value],
     // 也可以是个函数，直接依赖整个state，缺点是只要state更新就会重新执行函数，没有缓存
-    isEven3: ({number}) => number % 2 === 0,
+    sum3: ({number, value}) => number + value,
     // 也可以是个函数，没有依赖，只执行一次
     isTrue: () => true,
   },
@@ -135,11 +137,12 @@ const demo = {
  * demo: {
  *  state: {
  *    number: 1,
+ *    value: 2,
  *  }
  *  maps: {
- *    isEven: false,
- *    isEven2: false,
- *    isEven3: false,
+ *    sum1: 3,
+ *    sum2: 3,
+ *    sum3: 3,
  *    isTrue: true
  *  }
  * ...

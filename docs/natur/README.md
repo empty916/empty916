@@ -110,22 +110,24 @@ ReactDOM.render(<IApp />, document.querySelector('#app'));
 - **type:**`{[map: string]: Array<string|Function> | Function;}`
 
 - maps is a map of state data, and its member must be an array of function. Let's call it map for now.
-- If the map is an array, the preceding elements are all declaring the dependency of this map on the state. The last function can get the dependency declared earlier, and you can implement the calculation logic you need in it. On the component, you can get the result of the last function of the array.
-- If the map is a function, then it can only accept state as an input parameter, or there is no parameter. If it is a state as a parameter, then when the state is updated, the map must be re-executed and there is no cache. If the map has no parameters, then this map will only be executed once
-- The results of maps are cached. If the value of the dependencies you declare does not change, the last function will not be re-executed.
+- if the map is an array, the preceding elements are all declaring the dependency of this map on the state. The last function can get the dependency declared earlier, and you can implement the calculation logic you need in it. On the component, you can get the result of the last function of the array.
+- if the map is a function, then it can only accept state as an input parameter, or there is no parameter. If it is a state as a parameter, then when the state is updated, the map must be re-executed and there is no cache. If the map has no parameters, then this map will only be executed once
+- the results of maps are cached. If the value of the dependencies you declare does not change, the last function will not be re-executed.
+- when do I need to manually declare dependencies? If your map logic is more complicated, or the return value of your map is not a basic type value and needs to be rendered to the component, then you can consider manually declaring dependencies to ensure performance. Generally, please refer to the way of using functions directly.
 
 ```ts
 const demo = {
   state: {
     number: 1,
+    value: 2,
   },
   maps: {
     // The elements in front of the array are all declaring the dependency of this map on state. The last function can get the previously declared dependencies. You can implement what you want in it.
-    isEven: ['number', number => number % 2 === 0],
+    sum1: ['number', 'value', (number, value) => number + value],
     // You can also declare dependencies as functions, which is useful for complex types of state
-    isEven2: [state => state.number, number => number % 2 === 0],
+    sum2: [state => state.number, s => s.value, (number, value) => number + value],
     // It can also be a function that directly depends on the entire state. The disadvantage is that the function will be re-executed as long as the state is updated, and there is no cache.
-    isEven3: ({number}) => number % 2 === 0,
+    sum3: ({number, value}) => number + value,
     // It can also be a function, no dependencies, only executed once
     isTrue: () => true,
   },
@@ -136,11 +138,12 @@ const demo = {
  * demo: {
  *  state: {
  *    number: 1,
+ *    value: 2,
  *  }
  *  maps: {
- *    isEven: false,
- *    isEven2: false,
- *    isEven3: false,
+ *    sum1: 3,
+ *    sum2: 3,
+ *    sum3: 3,
  *    isTrue: true
  *  }
  * ...
