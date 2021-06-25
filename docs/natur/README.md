@@ -113,7 +113,7 @@ ReactDOM.render(<IApp />, document.querySelector('#app'));
 - if the map is an array, the preceding elements are all declaring the dependency of this map on the state. The last function can get the dependency declared earlier, and you can implement the calculation logic you need in it. On the component, you can get the result of the last function of the array.
 - if the map is a function, then it can only accept state as an input parameter, or there is no parameter. If it is a state as a parameter, then when the state is updated, the map must be re-executed and there is no cache. If the map has no parameters, then this map will only be executed once
 - the results of maps are cached. If the value of the dependencies you declare does not change, the last function will not be re-executed.
-- when do I need to manually declare dependencies? If your map logic is more complicated, or the return value of your map is not a basic type value and needs to be rendered to the component, then you can consider manually declaring dependencies to ensure performance. Generally, please refer to the way of using functions directly.
+- When do I need to manually declare dependencies? If your map logic is more complicated, or the return value of your map is not a basic type value and needs to be rendered to the component, then you can consider manually declaring dependencies to ensure performance. Generally, you can use the function directly.
 
 ```ts
 const demo = {
