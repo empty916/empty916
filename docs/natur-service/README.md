@@ -12,79 +12,179 @@ The call layer design of natur action is used to aggregate multiple actions into
 | 2.0.0 | 2.0.0 |
 | 2.1.x | 2.1.x |
 
-## demo
 
-```typescript
-import store from "your-natur-store-instance";
+## install
+
+```bash
+# npm install natur-service -S
+$ yarn install natur-service
+```
+
+
+## purpose
+
+1. for cross-module communication and business processing, he can do the following two things
+1. observe module updates and update details
+1. dispatch an action of a module, even if the lazy loaded module has not been loaded yet
+
+## tutorials
+
+### sample store
+
+`store.ts`
+```ts
+import { createStore } from 'natur';
+
+const count = {
+  state: 1,
+  actions: {
+    inc: (state) => state + 1,
+    dec: (state) => state - 1,
+  }
+}
+
+const modules = {
+  count,
+  count2: count,
+};
+
+const lazyModules = {};
+
+export const store = createStore(modules, lazyModules);
+export type M = typeof modules;
+export type LM = typeof lazyModules;
+
+```
+
+
+
+
+### observe module updates and update details
+
+`count-service.ts`
+```ts
+import {store, M, LM} from "store";
 import NaturService from "natur-service";
-import { InjectStoreModule, State } from "natur";
 
-// sync modules of your store
-type M = typeof modules;
-// lazy modules of your store
-type LM = typeof lazyModules;
+class CountService extends NaturService<M, LM> {
+  constructor() {
+    super(store);
+    // observe the count module, please see the documentation for ModuleEvent
+    this.watch("count", (me: ModuleEvent) => {
+      // this is the update details
+      console.log(me);
+      // this is the business logic you want to execute
+      console.log('count module has changed.');
+    });
+  }
+}
 
-class BaseService extends NaturService<M, LM> {
-  /**
-   * for server side render， bind your store instance to every service instance
-   * also you can make it optional.
-   */
+// instantiate, start listening
+const countService = new CountService();
+
+```
+
+
+### dispatch action
+
+`count-service.ts`
+```ts
+import {store, M, LM} from "store";
+import NaturService from "natur-service";
+
+class CountService extends NaturService<M, LM> {
+  constructor() {
+    super(store);
+    // execute the inc action of the count module
+    this.dispatch('count', 'inc', 0).then(() => {
+      // if count is a module that has not been loaded yet, this action will not be triggered until count is loaded
+      // if the same action is called multiple times during the unloading period, the old dispatch will throw a fixed Promise error to clear the cache and prevent stack overflow
+      console.log('dispatch complete');
+    })
+  }
+}
+
+// instantiate, do dispatch
+const countService = new CountService();
+```
+
+
+### destroy observing and cache
+
+`count-service.ts`
+```ts
+import {store, M, LM} from "store";
+import NaturService from "natur-service";
+
+class CountService extends NaturService<M, LM> {
+  constructor() {
+    super(store);
+    this.watch("count", () => {/* ...business logic */});
+  }
+}
+
+const countService = new CountService();
+
+// do destroy
+countService.destroy();
+
+```
+
+
+
+### improve the code
+
+- encapsulate complex initialization code
+
+`base-service.ts`
+```ts
+import {store, M, LM} from "store";
+import NaturService from "natur-service";
+
+export class BaseService extends NaturService<M, LM> {
   constructor(s: typeof store = store) {
     super(s);
     this.start();
   }
   start() {}
 }
+```
 
+- create business service
+`count-service.ts`
+```ts
+import { BaseService } from "base-service";
 
-class UserService extends BaseService {
+class CountService extends BaseService {
   start() {
-    // get store instanse
+    // you can directly get to the store
     this.store;
-    this.getStore();
-
-    // watch the user module
-    this.watch("user", (moduleEvent: {
-        type: "init" | "update" | "remove"; // user module change type, please see natur document for details
-        actionName: string; // the name of the action that triggered the user change
-        state: State; // new user state
-        oldModule: InjectStoreModule; // old user module data
-        newModule: InjectStoreModule; // new user module data
-      }) => {
-        // callback function when the user module changes
-        if (state) {
-          // The dispatch here is different from natur's dispatch, 
-          // it can push lazy-loaded modules that have not been loaded,
-          // or manually loaded modules that are not configured
-          this.dispatch("app", "syncUserData", state);
-          
-          /**
-           * When the push is repeated, 
-           * but the module is still not loaded, 
-           * natur-service will stop the last push and throw the following error
-           * {
-           *  code: 0,
-           *  message: 'stop the last dispath!'
-           * }
-           * in order to ensure that the same type of push only keeps the latest push, 
-           * to prevent stack overflow,
-           * if you don't like the handling of throwing errors, then you can override this method
-           */
-          this.dispatch("app", "syncUserData", state);
-        }
-      }
-    );
+    this.watch("count", ({state}) => {
+      this.dispatch('count1', 'inc', state);
+    });
   }
-  // other business logic
 }
 
-const userService = new UserService(store);
-
-userService.destroy();
-userService = null;
+const countService = new CountService();
 ```
+
+
+## ModuleEvent
+
+| property name | description           |type|
+|-----|---------------|---|
+|state|the latest state of the module |any \| undefined|
+|type| the type of module update,'init' is triggered when the module is initialized,'update' is triggered when the state of the module is updated, and'remove' is triggered when the module is remove |'init' \|'update' \|'remove'|
+|actionName|the name of the action that triggers the module update, only exists when the type is'update' |string \| undefined|
+|oldModule| the data of the old module, when the type is'init', it is undefined |InjectStoreModule \| undefined|
+|newModule | the data of the new module, when the type is 'remove', it is undefined |InjectStoreModule \| undefined|
+
 
 
 ## NOTE
 
-- You should not use service in the store module, because the initialization of the service depends on the initialization of the store, which will cause circular references.
+
+- remember to import the instantiated service into your project entry
+- you should not use service in the store module, because the initialization of the service depends on the initialization of the store, which will cause circular references.
+- it will not start observing immediately after instantiation, but will start observing after a micro task queue
+- please note that when dispatching an action of a lazy-loaded module that has not been loaded multiple times, the old dispatch will report an error.
