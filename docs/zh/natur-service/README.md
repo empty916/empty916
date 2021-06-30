@@ -44,7 +44,7 @@ const count = {
 
 const modules = {
   count,
-  count2: count,
+  count1: count,
 };
 
 const lazyModules = {};
