@@ -321,23 +321,18 @@ const app = {
 import { inject } from 'your-inject';
 
 // 这里App组件只会监听app，state中name的变化，其他值的变化不会引起App组件的更新
-let injector = inject(
-  ['app', {
-    state: ['name'], // 也可以使用函数声明 state: [s => s.name]
-  }]
-); 
+let injector = inject('app').watch('app', {
+  state: ['name'], // 也可以使用函数声明 state: [s => s.name]
+});
 
 // 这里App组件只会监听app，maps中deepDep的变化，其他值的变化不会引起App组件的更新
-injector = inject(
-  ['app', {
-    maps: ['deepDep'], 
-  }]
-); 
+injector = inject('app').watch('app', {
+  maps: ['deepDep'], 
+})(App); 
 
 // 这里App组件不论app模块发生什么变化，都不会更新
-injector = inject(
-  ['app', {}]
-); 
+injector = inject('app').watch('app', {})(App); 
+
 
 // 因为actions在创建后会保持不变，所以你不必监听它的变化
 const App = ({app}: typeof injector.type) => {

@@ -314,27 +314,20 @@ import { inject } from 'your-inject';
 
 
 // Here the App component will only listen to changes in the name of the app and state. Changes in other values will not cause updates to the App component
-let injector = inject(
-  ['app', {
-    state: ['name'], // You can also use function declarations state: [s => s.name]
-  }]
-); 
+let injector = inject('app').watch('app', {
+  state: ['name'], // You can also use function declarations state: [s => s.name]
+});
 
 
 // Here the App component only listens to changes in the app and the map's deepDep. Changes in other values will not cause updates to the App component
-injector = inject(
-  ['app', {
-    maps: ['deepDep'], 
-  }]
-)(App); 
+injector = inject('app').watch('app', {
+  maps: ['deepDep'], 
+})(App); 
 
 // Here the App component will not be updated regardless of any changes in the app module
-injector = inject(
-  ['app', {}]
-)(App); 
+injector = inject('app').watch('app', {})(App); 
 
 // Because actions stay the same after they are created, you don't have to listen for changes
-
 const App = ({app}: typeof injector.type) => {
   // get app module
   const {state, actions, maps} = app;
