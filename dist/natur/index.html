@@ -8,7 +8,7 @@
     
     <meta name="description" content="empty site">
     
-    <link rel="preload" href="/assets/css/0.styles.fdde5c9a.css" as="style"><link rel="preload" href="/assets/js/app.598c7883.js" as="script"><link rel="preload" href="/assets/js/2.e4845fa5.js" as="script"><link rel="preload" href="/assets/js/6.bdbd2779.js" as="script"><link rel="prefetch" href="/assets/js/10.c1e6ba9e.js"><link rel="prefetch" href="/assets/js/11.d356ee42.js"><link rel="prefetch" href="/assets/js/12.2724b7f8.js"><link rel="prefetch" href="/assets/js/13.667dc499.js"><link rel="prefetch" href="/assets/js/14.afd5b4da.js"><link rel="prefetch" href="/assets/js/15.dd7b0768.js"><link rel="prefetch" href="/assets/js/16.0718f125.js"><link rel="prefetch" href="/assets/js/17.7c9d1b50.js"><link rel="prefetch" href="/assets/js/18.18957a8d.js"><link rel="prefetch" href="/assets/js/19.6143bcb5.js"><link rel="prefetch" href="/assets/js/20.a25f0082.js"><link rel="prefetch" href="/assets/js/3.f28e76ee.js"><link rel="prefetch" href="/assets/js/4.bd1f08ae.js"><link rel="prefetch" href="/assets/js/5.a4018245.js"><link rel="prefetch" href="/assets/js/7.1540b171.js"><link rel="prefetch" href="/assets/js/8.b5760b33.js"><link rel="prefetch" href="/assets/js/9.c643aa64.js">
+    <link rel="preload" href="/assets/css/0.styles.fdde5c9a.css" as="style"><link rel="preload" href="/assets/js/app.1d5b6800.js" as="script"><link rel="preload" href="/assets/js/2.e4845fa5.js" as="script"><link rel="preload" href="/assets/js/6.e857004d.js" as="script"><link rel="prefetch" href="/assets/js/10.c1e6ba9e.js"><link rel="prefetch" href="/assets/js/11.e26ff219.js"><link rel="prefetch" href="/assets/js/12.2724b7f8.js"><link rel="prefetch" href="/assets/js/13.667dc499.js"><link rel="prefetch" href="/assets/js/14.98190ac7.js"><link rel="prefetch" href="/assets/js/15.0c7bd342.js"><link rel="prefetch" href="/assets/js/16.c4fe8877.js"><link rel="prefetch" href="/assets/js/17.7c9d1b50.js"><link rel="prefetch" href="/assets/js/18.18957a8d.js"><link rel="prefetch" href="/assets/js/19.6143bcb5.js"><link rel="prefetch" href="/assets/js/20.a25f0082.js"><link rel="prefetch" href="/assets/js/3.f28e76ee.js"><link rel="prefetch" href="/assets/js/4.bd1f08ae.js"><link rel="prefetch" href="/assets/js/5.a4018245.js"><link rel="prefetch" href="/assets/js/7.94896893.js"><link rel="prefetch" href="/assets/js/8.b5760b33.js"><link rel="prefetch" href="/assets/js/9.2b283bae.js">
     <link rel="stylesheet" href="/assets/css/0.styles.fdde5c9a.css">
   </head>
   <body>
@@ -136,8 +136,7 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
     <span class="token function-variable function">dec</span><span class="token operator">:</span> <span class="token builtin">number</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token builtin">number</span><span class="token operator">:</span> <span class="token builtin">number</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre></div><h2 id="usecase"><a href="#usecase" class="header-anchor">#</a> usecase</h2> <h3 id="synchronous-update-data"><a href="#synchronous-update-data" class="header-anchor">#</a> synchronous update data</h3> <ul><li>here we use the <a href="#recommended-middleware-configuration">officially recommended middleware configuration</a> by default, please see the middleware section for details</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>
-<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">{</span>
+</code></pre></div><h2 id="usecase"><a href="#usecase" class="header-anchor">#</a> usecase</h2> <h3 id="synchronous-update-data"><a href="#synchronous-update-data" class="header-anchor">#</a> synchronous update data</h3> <ul><li>here we use the <a href="#recommended-middleware-configuration">officially recommended middleware configuration</a> by default, please see the middleware section for details</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">{</span>
   state<span class="token operator">:</span> <span class="token punctuation">{</span>
     name<span class="token operator">:</span> <span class="token string">&quot;tom&quot;</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
@@ -146,9 +145,7 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
     <span class="token function-variable function">changeName</span><span class="token operator">:</span> newName <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token operator">:</span> newName <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
-
-</code></pre></div><h3 id="asynchronous-update-data"><a href="#asynchronous-update-data" class="header-anchor">#</a> asynchronous update data</h3> <ul><li>here we use the <a href="#recommended-middleware-configuration">officially recommended middleware configuration</a> by default, please see the middleware section for details</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>
-<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">{</span>
+</code></pre></div><h3 id="asynchronous-update-data"><a href="#asynchronous-update-data" class="header-anchor">#</a> asynchronous update data</h3> <ul><li>here we use the <a href="#recommended-middleware-configuration">officially recommended middleware configuration</a> by default, please see the middleware section for details</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">{</span>
   state<span class="token operator">:</span> <span class="token punctuation">{</span>
     name<span class="token operator">:</span> <span class="token string">&quot;tom&quot;</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
@@ -157,7 +154,6 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
     <span class="token function-variable function">changeName</span><span class="token operator">:</span> newName <span class="token operator">=&gt;</span> <span class="token builtin">Promise</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token operator">:</span> newName <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
-
 </code></pre></div><h3 id="update-data-asynchronously-in-multiple-batches"><a href="#update-data-asynchronously-in-multiple-batches" class="header-anchor">#</a> update data asynchronously in multiple batches</h3> <ul><li>here we use the <a href="#recommended-middleware-configuration">officially recommended middleware configuration</a> by default, please see the middleware section for details</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> ThunkParams <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;natur/dist/middlewares&quot;</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> state <span class="token operator">=</span> <span class="token punctuation">{</span>
@@ -175,7 +171,6 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
   state<span class="token punctuation">,</span>
   actions
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
-
 </code></pre></div><h3 id="get-the-latest-state-and-maps-value-in-actions"><a href="#get-the-latest-state-and-maps-value-in-actions" class="header-anchor">#</a> get the latest state and maps value in actions</h3> <ul><li>here we use the <a href="#recommended-middleware-configuration">officially recommended middleware configuration</a> by default, please see the middleware section for details</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> ThunkParams <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;natur/dist/middlewares&quot;</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> state <span class="token operator">=</span> <span class="token punctuation">{</span>
@@ -199,7 +194,6 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
   maps<span class="token punctuation">,</span>
   actions
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
-
 </code></pre></div><h3 id="call-other-actions-in-actions"><a href="#call-other-actions-in-actions" class="header-anchor">#</a> call other actions in actions</h3> <ul><li>here we use the <a href="#recommended-middleware-configuration">officially recommended middleware configuration</a> by default, please see the middleware section for details</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> ThunkParams <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;natur/dist/middlewares&quot;</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> state <span class="token operator">=</span> <span class="token punctuation">{</span>
@@ -225,9 +219,7 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
   state<span class="token punctuation">,</span>
   actions
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
-
 </code></pre></div><h3 id="the-component-only-listens-to-changes-in-some-data"><a href="#the-component-only-listens-to-changes-in-some-data" class="header-anchor">#</a> the component only listens to changes in some data</h3> <div class="language-tsx extra-class"><pre class="language-tsx"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> inject <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'your-inject'</span><span class="token punctuation">;</span>
-
 
 <span class="token comment">// Here the App component will only listen to changes in the name of the app and state. Changes in other values will not cause updates to the App component</span>
 <span class="token keyword">let</span> injector <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span><span class="token string">'app'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">watch</span><span class="token punctuation">(</span><span class="token string">'app'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
@@ -255,6 +247,10 @@ injector <span class="token operator">=</span> <span class="token function">inje
   <span class="token punctuation">)</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
+<span class="token comment">// complex demo</span>
+<span class="token keyword">const</span> complexInjector <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span><span class="token string">'app'</span><span class="token punctuation">,</span> <span class="token string">'other'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">watch</span><span class="token punctuation">(</span><span class="token string">'app'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">watch</span><span class="token punctuation">(</span><span class="token string">'other'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>state<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token parameter">s</span> <span class="token operator">=&gt;</span> s<span class="token punctuation">.</span>xxx<span class="token punctuation">]</span><span class="token punctuation">,</span> maps<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'xxx'</span><span class="token punctuation">]</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
 </code></pre></div><hr> <h3 id="lazy-loading-module-configuration"><a href="#lazy-loading-module-configuration" class="header-anchor">#</a> lazy loading module configuration</h3> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token comment">/*
   module1.js
   export {
@@ -365,7 +361,6 @@ store<span class="token punctuation">.</span><span class="token function">dispat
 
 <span class="token comment">// Cancel listening</span>
 <span class="token function">unsubscribe</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
 </code></pre></div><h3 id="dispatch"><a href="#dispatch" class="header-anchor">#</a> dispatch</h3> <div class="language-typescript extra-class"><pre class="language-typescript"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> createStore<span class="token punctuation">,</span> inject<span class="token punctuation">,</span> InjectStoreModule <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'natur'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> count <span class="token operator">=</span> <span class="token punctuation">{</span>
@@ -388,7 +383,6 @@ store<span class="token punctuation">.</span><span class="token function">dispat
 actions<span class="token punctuation">.</span><span class="token function">inc</span><span class="token punctuation">(</span>state<span class="token punctuation">.</span><span class="token builtin">number</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment">// Equivalent to</span>
 store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token string">'count'</span><span class="token punctuation">,</span> <span class="token string">'inc'</span><span class="token punctuation">,</span> state<span class="token punctuation">.</span><span class="token builtin">number</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
 </code></pre></div><h3 id="importing-modules-manually"><a href="#importing-modules-manually" class="header-anchor">#</a> importing modules manually</h3> <div class="language-ts extra-class"><pre class="language-ts"><code>
 <span class="token comment">// initStore.ts</span>
 <span class="token keyword">import</span> <span class="token punctuation">{</span> createStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'natur'</span><span class="token punctuation">;</span>
@@ -425,8 +419,6 @@ store<span class="token punctuation">.</span><span class="token function">setMod
     <span class="token operator">&lt;</span>div<span class="token operator">&gt;</span><span class="token punctuation">{</span>state<span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
   <span class="token punctuation">)</span>
 <span class="token punctuation">}</span>
-
-
 </code></pre></div><h2 id="interceptor"><a href="#interceptor" class="header-anchor">#</a> interceptor</h2> <p><strong>When the module calls action or store.dispatch, it will pass the interceptor first, so the interceptor can be applied to control whether the action is executed, and the input parameter control of the action</strong></p> <div class="language-tsx extra-class"><pre class="language-tsx"><code>
 <span class="token keyword">import</span> <span class="token punctuation">{</span>
   createStore<span class="token punctuation">,</span>
@@ -481,10 +473,7 @@ store<span class="token punctuation">.</span><span class="token function">setMod
 <span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> store<span class="token punctuation">;</span>
-
-</code></pre></div><h2 id="middleware"><a href="#middleware" class="header-anchor">#</a> middleware</h2> <p><strong>The execution of the middleware occurs after the action is executed and before the state is updated. Can receive the return value of the action, generally can be applied to the processing of the return value of the action, the control of state update, etc.</strong></p> <div class="language-tsx extra-class"><pre class="language-tsx"><code>
-
-<span class="token keyword">import</span> <span class="token punctuation">{</span> createStore<span class="token punctuation">,</span> MiddleWare<span class="token punctuation">,</span> MiddlewareNext<span class="token punctuation">,</span> MiddlewareActionRecord <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'natur'</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="middleware"><a href="#middleware" class="header-anchor">#</a> middleware</h2> <p><strong>The execution of the middleware occurs after the action is executed and before the state is updated. Can receive the return value of the action, generally can be applied to the processing of the return value of the action, the control of state update, etc.</strong></p> <div class="language-tsx extra-class"><pre class="language-tsx"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> createStore<span class="token punctuation">,</span> MiddleWare<span class="token punctuation">,</span> MiddlewareNext<span class="token punctuation">,</span> MiddlewareActionRecord <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'natur'</span><span class="token punctuation">;</span>
 <span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token punctuation">{</span>
   state<span class="token operator">:</span> <span class="token punctuation">{</span>
     name<span class="token operator">:</span> <span class="token string">'tom'</span><span class="token punctuation">,</span>
@@ -526,10 +515,7 @@ store<span class="token punctuation">.</span><span class="token function">setMod
 <span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> store<span class="token punctuation">;</span>
-
-
-</code></pre></div><h3 id="built-in-middleware-description"><a href="#built-in-middleware-description" class="header-anchor">#</a> built-in middleware description</h3> <ul><li>thunkMiddleware: Due to the runtime closure problem within the component, the latest state cannot be obtained, so all this middleware exists</li></ul> <div class="language-typescript extra-class"><pre class="language-typescript"><code>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> thunkMiddleware<span class="token punctuation">,</span> ThunkParams <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'natur/dist/middlewares'</span>
+</code></pre></div><h3 id="built-in-middleware-description"><a href="#built-in-middleware-description" class="header-anchor">#</a> built-in middleware description</h3> <ul><li>thunkMiddleware: Due to the runtime closure problem within the component, the latest state cannot be obtained, so all this middleware exists</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> thunkMiddleware<span class="token punctuation">,</span> ThunkParams <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'natur/dist/middlewares'</span>
 
 <span class="token keyword">const</span> <span class="token function-variable function">actionExample</span> <span class="token operator">=</span> <span class="token punctuation">(</span>myParams<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>
   getState<span class="token punctuation">,</span> 
@@ -581,8 +567,7 @@ store<span class="token punctuation">.</span><span class="token function">setMod
 <span class="token punctuation">}</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">createMiddleware</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre></div><h3 id="recommended-middleware-configuration"><a href="#recommended-middleware-configuration" class="header-anchor">#</a> recommended middleware configuration</h3> <p><strong>Note: The order of middleware configuration is important</strong></p> <div class="language-typescript extra-class"><pre class="language-typescript"><code>
-<span class="token keyword">import</span> <span class="token punctuation">{</span>createStore<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'natur'</span><span class="token punctuation">;</span>
+</code></pre></div><h3 id="recommended-middleware-configuration"><a href="#recommended-middleware-configuration" class="header-anchor">#</a> recommended middleware configuration</h3> <p><strong>Note: The order of middleware configuration is important</strong></p> <div class="language-typescript extra-class"><pre class="language-typescript"><code><span class="token keyword">import</span> <span class="token punctuation">{</span>createStore<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'natur'</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token punctuation">{</span> 
   thunkMiddleware<span class="token punctuation">,</span>
   promiseMiddleware<span class="token punctuation">,</span> 
@@ -606,8 +591,7 @@ store<span class="token punctuation">.</span><span class="token function">setMod
     <span class="token punctuation">]</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre></div><h2 id="typescript-support"><a href="#typescript-support" class="header-anchor">#</a> typescript support</h2> <h3 id="base-usage"><a href="#base-usage" class="header-anchor">#</a> base usage</h3> <div class="language-ts extra-class"><pre class="language-ts"><code>
-<span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="typescript-support"><a href="#typescript-support" class="header-anchor">#</a> typescript support</h2> <h3 id="base-usage"><a href="#base-usage" class="header-anchor">#</a> base usage</h3> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> ReactDOM <span class="token keyword">from</span> <span class="token string">'react-dom'</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> inject <span class="token keyword">from</span> <span class="token string">'your-inject'</span>
 <span class="token keyword">import</span> <span class="token punctuation">{</span>ModuleType<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'natur'</span><span class="token punctuation">;</span>
@@ -655,8 +639,6 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
   app<span class="token punctuation">,</span>
   document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'#app'</span><span class="token punctuation">)</span>
 <span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-
 </code></pre></div><h3 id="redefine-store-type"><a href="#redefine-store-type" class="header-anchor">#</a> Redefine store type</h3> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">import</span> <span class="token punctuation">{</span>Store<span class="token punctuation">,</span> createStore<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'natur'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> count <span class="token operator">=</span> <span class="token punctuation">{</span>
@@ -679,9 +661,7 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
 <span class="token keyword">type</span> <span class="token class-name">StoreInsType</span> <span class="token operator">=</span> Store<span class="token operator">&lt;</span><span class="token keyword">typeof</span> allSyncModules<span class="token punctuation">,</span> <span class="token keyword">typeof</span> allAsyncModules<span class="token operator">&gt;</span><span class="token punctuation">;</span>
 
 <span class="token comment">// The type of StoreInsType is the type of store, you can extend your type</span>
-
-</code></pre></div><h2 id="cautions"><a href="#cautions" class="header-anchor">#</a> cautions</h2> <ul><li><p>Because the lower version does not support the react.forwardRef method, you cannot directly use the ref to obtain the wrapped component instance. You need to use the forwardedRef property to obtain it (the usage is the same as ref).</p></li> <li><p>Tips in TypeScript may be less friendly, like</p></li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>
-@<span class="token function">inject</span><span class="token punctuation">(</span><span class="token string">'count'</span><span class="token punctuation">,</span> <span class="token string">'name'</span><span class="token punctuation">)</span>
+</code></pre></div><h2 id="cautions"><a href="#cautions" class="header-anchor">#</a> cautions</h2> <ul><li><p>Because the lower version does not support the react.forwardRef method, you cannot directly use the ref to obtain the wrapped component instance. You need to use the forwardedRef property to obtain it (the usage is the same as ref).</p></li> <li><p>Tips in TypeScript may be less friendly, like</p></li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>@<span class="token function">inject</span><span class="token punctuation">(</span><span class="token string">'count'</span><span class="token punctuation">,</span> <span class="token string">'name'</span><span class="token punctuation">)</span>
 <span class="token keyword">class</span> <span class="token class-name">App</span> <span class="token keyword">extends</span> <span class="token class-name">React</span><span class="token punctuation">.</span>Component <span class="token punctuation">{</span>
  <span class="token comment">// ...</span>
 <span class="token punctuation">}</span>
@@ -696,8 +676,7 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
 <span class="token keyword">const</span> App <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span><span class="token string">'count'</span><span class="token punctuation">,</span> <span class="token string">'name'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>_App<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment">// correct</span>
 <span class="token operator">&lt;</span>App forwardedRef<span class="token operator">=</span><span class="token punctuation">{</span><span class="token builtin">console</span><span class="token punctuation">.</span>log<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">&gt;</span>
-
-</code></pre></div><ul><li><strong>To modify state in actions, you need to follow the immutable specification</strong></li></ul> <h2 id="plugins"><a href="#plugins" class="header-anchor">#</a> plugins</h2> <ul><li><a href="/natur-service">natur-service: natur upper scheduling library</a></li> <li><a href="/natur-persist">natur-persist: localStorage plugins</a></li> <li><a href="/natur-persist-async">natur-persist-async: async presit plugin</a></li> <li><a href="/umi-natur">umi-natur: umi plugin of natur</a></li></ul></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">8/22/2021, 6:18:52 PM</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
-    <script src="/assets/js/app.598c7883.js" defer></script><script src="/assets/js/2.e4845fa5.js" defer></script><script src="/assets/js/6.bdbd2779.js" defer></script>
+</code></pre></div><ul><li><strong>To modify state in actions, you need to follow the immutable specification</strong></li></ul> <h2 id="plugins"><a href="#plugins" class="header-anchor">#</a> plugins</h2> <ul><li><a href="/natur-service">natur-service: natur upper scheduling library</a></li> <li><a href="/natur-persist">natur-persist: localStorage plugins</a></li> <li><a href="/natur-persist-async">natur-persist-async: async presit plugin</a></li> <li><a href="/umi-natur">umi-natur: umi plugin of natur</a></li></ul></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">8/22/2021, 7:54:49 PM</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.1d5b6800.js" defer></script><script src="/assets/js/2.e4845fa5.js" defer></script><script src="/assets/js/6.e857004d.js" defer></script>
   </body>
 </html>
