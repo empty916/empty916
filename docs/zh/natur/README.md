@@ -194,7 +194,6 @@ const demo = {
 - 这里我们默认使用[官方推荐的中间件配置](#推荐的中间件配置), 详情请看中间件部分
 
 ```ts
-
 const app = {
   state: {
     name: "tom",
@@ -204,7 +203,6 @@ const app = {
     changeName: newName => ({ name: newName }),
   }
 };
-
 ```
 
 ### 异步更新数据
@@ -212,7 +210,6 @@ const app = {
 
 
 ```ts
-
 const app = {
   state: {
     name: "tom",
@@ -222,7 +219,6 @@ const app = {
     changeName: newName => Promise.resolve({ name: newName }),
   }
 };
-
 ```
 ### 异步多批次更新数据
 - 这里我们默认使用[官方推荐的中间件配置](#推荐的中间件配置), 详情请看中间件部分
@@ -246,7 +242,6 @@ const app = {
   state,
   actions
 };
-
 ```
 
 
@@ -278,7 +273,6 @@ const app = {
   maps,
   actions
 };
-
 ```
 
 
@@ -312,7 +306,6 @@ const app = {
   state,
   actions
 };
-
 ```
 
 ### 组件只监听部分数据的变更
@@ -345,6 +338,11 @@ const App = ({app}: typeof injector.type) => {
     />
   )
 };
+
+// 复杂的例子
+const complexInjector = inject('app', 'other')
+  .watch('app', {})
+  .watch('other', {state: [s => s.xxx], maps: ['xxx']})
 ```  
 
 ---
@@ -507,14 +505,12 @@ const unsubscribe = store.subscribe('app', (me: ModuleEvent) => {
 
 // 取消监听
 unsubscribe();
-
 ```
 
 
 ### 手动导入模块
 
 ```ts
-
 // initStore.ts
 import { createStore } from 'natur';
 
@@ -550,8 +546,6 @@ const lazyLoadView = () => {
     <div>{state.name}</div>
   )
 }
-
-
 ```
 ### dispatch
 
@@ -579,7 +573,6 @@ const {actions, state} = store.getModule('count')
 actions.inc(state.number);
 // 等于
 store.dispatch('count', 'inc', state.number);
-
 ```
 
 
@@ -589,7 +582,6 @@ store.dispatch('count', 'inc', state.number);
 **在模块调用action或者store.dispatch时会先经过interceptor，因此拦截器可以应用于，控制action是否执行，以及action的入参控制等场景**
 
 ```ts
-
 import {
   createStore,
   Interceptor
@@ -641,7 +633,6 @@ const store = createStore(
 );
 
 export default store;
-
 ```
 
 ## 中间件
@@ -702,7 +693,6 @@ export default store;
 #### thunkMiddleware: 因为组件内运行时闭包问题，拿不到最新state, 所有有此中间件存在
 
 ```typescript
-
 import { thunkMiddleware, ThunkParams } from 'natur/dist/middlewares'
 
 const actionExample = (myParams: any) => ({
@@ -722,7 +712,6 @@ const actionExample = (myParams: any) => ({
 
 #### promiseMiddleware: action支持异步操作
 ```typescript
-
 // promiseMiddleware
 const action1 = () => Promise.resolve(2333);
 const action2 = async () => await new Promise(res => res(2333));
@@ -831,7 +820,6 @@ const store = createStore(
 
 ### 基础用法
 ```ts
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import inject from 'your-inject';
@@ -882,8 +870,6 @@ ReactDOM.render(
   app,
   document.querySelector('#app')
 );
-
-
 ```
 
 ### 重新定义store类型
@@ -911,7 +897,6 @@ const store = createStore(allSyncModules, allAsyncModules);
 type StoreInsType = Store<typeof allSyncModules, typeof allAsyncModules>;
 
 // StoreInsType的类型就是store的类型，你可以扩展你的类型
-
 ```
 
 
@@ -936,8 +921,7 @@ class _App extends React.Component {
 const App = inject('count', 'name')(_App);
 // 正确
 <App forwardedRef={console.log} />
-
- ```
+```
 - **在actions中修改state，需要遵循immutable规范**
 
 ## 插件

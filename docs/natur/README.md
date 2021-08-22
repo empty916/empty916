@@ -185,7 +185,6 @@ const demo = {
 - here we use the [officially recommended middleware configuration](#recommended-middleware-configuration) by default, please see the middleware section for details
 
 ```ts
-
 const app = {
   state: {
     name: "tom",
@@ -195,7 +194,6 @@ const app = {
     changeName: newName => ({ name: newName }),
   }
 };
-
 ```
 
 ### asynchronous update data
@@ -203,7 +201,6 @@ const app = {
 - here we use the [officially recommended middleware configuration](#recommended-middleware-configuration) by default, please see the middleware section for details
 
 ```ts
-
 const app = {
   state: {
     name: "tom",
@@ -213,7 +210,6 @@ const app = {
     changeName: newName => Promise.resolve({ name: newName }),
   }
 };
-
 ```
 ### update data asynchronously in multiple batches
 
@@ -237,7 +233,6 @@ const app = {
   state,
   actions
 };
-
 ```
 
 
@@ -269,7 +264,6 @@ const app = {
   maps,
   actions
 };
-
 ```
 
 
@@ -303,7 +297,6 @@ const app = {
   state,
   actions
 };
-
 ```
 
 
@@ -311,7 +304,6 @@ const app = {
 
 ```tsx
 import { inject } from 'your-inject';
-
 
 // Here the App component will only listen to changes in the name of the app and state. Changes in other values will not cause updates to the App component
 let injector = inject('app').watch('app', {
@@ -339,6 +331,10 @@ const App = ({app}: typeof injector.type) => {
   )
 };
 
+// complex demo
+const complexInjector = inject('app', 'other')
+  .watch('app', {})
+  .watch('other', {state: [s => s.xxx], maps: ['xxx']})
 ```  
 
 ---
@@ -483,7 +479,6 @@ const unsubscribe = store.subscribe('app', () => {
 
 // Cancel listening
 unsubscribe();
-
 ```
 
 
@@ -513,7 +508,6 @@ const {actions, state} = store.getModule('count')
 actions.inc(state.number);
 // Equivalent to
 store.dispatch('count', 'inc', state.number);
-
 ```
 
 ### importing modules manually
@@ -555,8 +549,6 @@ const lazyLoadView = () => {
     <div>{state.name}</div>
   )
 }
-
-
 ```
 
 
@@ -620,14 +612,11 @@ const store = createStore(
 );
 
 export default store;
-
 ```
 
 ## middleware
 **The execution of the middleware occurs after the action is executed and before the state is updated. Can receive the return value of the action, generally can be applied to the processing of the return value of the action, the control of state update, etc.**
 ```tsx
-
-
 import { createStore, MiddleWare, MiddlewareNext, MiddlewareActionRecord } from 'natur';
 const app = {
   state: {
@@ -670,16 +659,13 @@ const store = createStore(
 );
 
 export default store;
-
-
 ```
 
 ### built-in middleware description
 
 - thunkMiddleware: Due to the runtime closure problem within the component, the latest state cannot be obtained, so all this middleware exists
 
-```typescript
-
+```ts
 import { thunkMiddleware, ThunkParams } from 'natur/dist/middlewares'
 
 const actionExample = (myParams: any) => ({
@@ -762,7 +748,6 @@ export default createMiddleware();
 **Note: The order of middleware configuration is important**
 
 ```typescript
-
 import {createStore} from 'natur';
 import { 
   thunkMiddleware,
@@ -794,7 +779,6 @@ const store = createStore(
 
 ### base usage
 ```ts
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import inject from 'your-inject'
@@ -843,8 +827,6 @@ ReactDOM.render(
   app,
   document.querySelector('#app')
 );
-
-
 ```
 
 
@@ -873,7 +855,6 @@ const store = createStore(allSyncModules, allAsyncModules);
 type StoreInsType = Store<typeof allSyncModules, typeof allAsyncModules>;
 
 // The type of StoreInsType is the type of store, you can extend your type
-
 ```
 
 
@@ -883,7 +864,6 @@ type StoreInsType = Store<typeof allSyncModules, typeof allAsyncModules>;
 
  - Tips in TypeScript may be less friendly, like
  ```ts
-
 @inject('count', 'name')
 class App extends React.Component {
   // ...
@@ -899,7 +879,6 @@ class _App extends React.Component {
 const App = inject('count', 'name')(_App);
 // correct
 <App forwardedRef={console.log} />
-
  ```
 - **To modify state in actions, you need to follow the immutable specification**
 
