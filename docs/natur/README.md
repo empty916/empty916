@@ -180,6 +180,16 @@ const demo = {
 ## usecase
 
 
+### inject multiple modules
+
+```ts
+// import your inject function you created. for details, please refer to the simple demo above
+import inject from 'your-inject';
+
+const injector = inject('module1', 'module2', /* ...more module name */)
+
+```
+
 ### synchronous update data
 
 - here we use the [officially recommended middleware configuration](#recommended-middleware-configuration) by default, please see the middleware section for details
@@ -303,6 +313,7 @@ const app = {
 ### the component only listens to changes in some data
 
 ```tsx
+// import your inject function you created. for details, please refer to the simple demo above
 import { inject } from 'your-inject';
 
 // Here the App component will only listen to changes in the name of the app and state. Changes in other values will not cause updates to the App component
@@ -678,7 +689,7 @@ export default store;
 
 ### built-in middleware description
 
-- thunkMiddleware: Due to the runtime closure problem within the component, the latest state cannot be obtained, so all this middleware exists
+- thunkMiddleware: The thunk middleware allows actions to return functions, and has enhanced functions such as obtaining the latest state, maps, and setState, dispatch, etc.
 
 ```ts
 import { thunkMiddleware, ThunkParams } from 'natur/dist/middlewares'
@@ -796,6 +807,7 @@ const store = createStore(
 ```ts
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import your inject function you created. for details, please refer to the simple demo above
 import inject from 'your-inject'
 import {ModuleType} from 'natur';
 

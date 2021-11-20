@@ -35,16 +35,25 @@ $ yarn install natur-service
 import { createStore } from 'natur';
 
 const count = {
-  state: 1,
+  state: 0,
   actions: {
     inc: (state) => state + 1,
     dec: (state) => state - 1,
   }
 }
+// 另一个模块，这里仅用于演示
+const count1 = {
+  state: 1,
+  actions: {
+    inc: (state) => state + 1,
+    dec: (state) => state - 1,
+    update: (state) => state,
+  }
+}
 
 const modules = {
   count,
-  count1: count,
+  count1,
 };
 
 const lazyModules = {};
@@ -127,7 +136,7 @@ countService.destroy();
 
 
 
-### 优化代码
+### 代码封装建议
 
 - 将复杂的初始化代码封装
 
@@ -154,8 +163,9 @@ class CountService extends BaseService {
   start() {
     // 你可以直接获取到store
     this.store;
+    // 这里表示，监听count中state的变化，并将其同步到count1中
     this.watch("count", ({state}) => {
-      this.dispatch('count1', 'inc', state);
+      this.dispatch('count1', 'update', state);
     });
   }
 }

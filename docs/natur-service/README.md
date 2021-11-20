@@ -43,6 +43,15 @@ const count = {
   }
 }
 
+// annother module, just for demo
+const count1 = {
+  state: 1,
+  actions: {
+    inc: (state) => state + 1,
+    dec: (state) => state - 1,
+  }
+}
+
 const modules = {
   count,
   count1: count,
@@ -132,7 +141,7 @@ countService.destroy();
 
 
 
-### improve the code
+### code packaging suggestions
 
 - encapsulate complex initialization code
 
@@ -159,6 +168,7 @@ class CountService extends BaseService {
   start() {
     // you can directly get to the store
     this.store;
+    // this means to watch the change of state in count and synchronize it to count1
     this.watch("count", ({state}) => {
       this.dispatch('count1', 'inc', state);
     });

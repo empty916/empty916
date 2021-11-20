@@ -188,6 +188,15 @@ const demo = {
 
 ## 应用场景
 
+### 注入多个模块
+
+```ts
+// 导入你之前创建的inject函数，详情请参考上面的简单例子
+import inject from 'your-inject';
+
+const injector = inject('module1', 'module2', /* ...其他更多的模块名 */)
+
+```
 
 ### 同步更新数据
 
@@ -311,6 +320,7 @@ const app = {
 ### 组件只监听部分数据的变更
 
 ```tsx
+// 导入你之前创建的inject函数，详情请参考上面的简单例子
 import { inject } from 'your-inject';
 
 // 这里App组件只会监听app，state中name的变化，其他值的变化不会引起App组件的更新
@@ -706,7 +716,7 @@ export default store;
 
 ### 内置中间件说明
 
-#### thunkMiddleware: 因为组件内运行时闭包问题，拿不到最新state, 所有有此中间件存在
+#### thunkMiddleware: thunk中间件可以使得action可以返回函数，拥有了获取最新的state，maps，以及setState，dispatch等增强功能
 
 ```typescript
 import { thunkMiddleware, ThunkParams } from 'natur/dist/middlewares'
@@ -838,6 +848,7 @@ const store = createStore(
 ```ts
 import React from 'react';
 import ReactDOM from 'react-dom';
+// 导入你之前创建的inject函数，详情请参考上面的简单例子
 import inject from 'your-inject';
 import {ModuleType, Store} from 'natur';
 
