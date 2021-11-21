@@ -926,6 +926,29 @@ type StoreInsType = Store<typeof allSyncModules, typeof allAsyncModules>;
 // StoreInsType的类型就是store的类型，你可以扩展你的类型
 ```
 
+## 为什么选择NATUR
+
+### 系统设计理念
+
+1. `natur`的初衷是简单自然的掌管项目中所有的业务逻辑，在这方面是不同于[redux](https://redux.js.org/)或者[mobx](https://mobx.js.org/README.html)这样的状态管理库。`natur`可以轻松的让项目中所有的业务与`UI`层松耦合，这可以让`UI`保持足够的简单和纯粹，对于项目的维护性有着很大的好处。
+1. 在`natur`中包含两个部分，一个是模块，一个是模块间的通讯以及调用，这里推荐使用的是[natur-service](/zh/natur-service)方案
+1. 模块的`state`包含了业务数据的存储。`maps`包含了`state`衍生数据的逻辑，以及缓存的设计保证性能，值得一提的是，`maps`使用了手动声明依赖的方式，这也与是`react`一贯的设计风格相符合。`action`包含了`state`数据更新，以及其他业务逻辑（比如一个没有返回值的API的调用），`natur`推荐`action`设计的职责明确，一个`action`只做一件事原则。如果能让每个`action`的执行有对应`state`变化，那么这能够让整个项目具有可观测和追踪性，并且可以更好的为模块间的通讯服务(可观测和追踪性可以通过[拦截器](#拦截器)和[中间件](#中间件)来实现)。
+1. 在模块通讯这里，[natur-service](/zh/natur-service)推荐使用一个类管理一个业务模块或者一个业务流程而非一个`natur`模块对应一个[natur-service](/zh/natur-service)类。模块通讯的设计规范方面，则是建议在自己的`service`中`watch`别的模块，而非在别的`service`中`dispatch`自己模块中的`action`，这样也能保证开发人员与业务模块的职责明确。`service`类的设计应尽量保证简单，只包含`natur`模块的`watch`以及`dispatch`等逻辑。更加丰富的逻辑建议维护在`natur`的模块中，以保证模块的功能完善。
+1. 在`natur`模块的设计方面，则是推荐用户细分模块，明确模块的边界，以及粒度，以保证模块的可维护性。确保一个`natur`模块中只处理自己的业务，而不需要关心其他模块，与别的模块没有耦合。
+1. 因为`natur`模块的创建和使用方式足够的简单，所以使得开发在设计方面能够尽可能简单自然的写出符合`natur`设计理念的项目，当然最主要的还是开发人员需要明白`natur`的设计理念并遵循它。
+
+### 与redux对比
+
+1. 首先[redux](https://redux.js.org/)是全局状态管理器，这与`natur`的项目业务逻辑管理的设计目标是不同的。
+1. 其次[redux](https://redux.js.org/)的使用成本比较高，`natur`使用则是非常的简单
+1. 性能方面，在`natur`中存在缓存、[模块懒加载](#懒加载模块配置)，以及[部分监听功能](#组件只监听部分数据的变更)的支持，你不需要额外的库来保证你的项目性能。
+
+### 与mobx的对比
+
+1. 兼容性方面，因为[mobx](https://mobx.js.org/README.html)使用了`proxy`或者`defineProperty`等`API`所以兼容性要稍微差点
+1. 在模块通讯方面，mobx的设计无法完美结耦，这个是一个遗憾
+1. 性能方面，`mobx`的缓存性能优化依赖`immutable`所以在使用友好性方面较于`natur`更好, 但是`natur`也有着[模块懒加载](#懒加载模块配置)这样的功能优于`mobx`
+
 
 ## 使用注意事项
 
