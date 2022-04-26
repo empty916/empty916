@@ -937,4 +937,5 @@ const App = inject('count', 'name')(_App);
 - [natur-service: natur upper scheduling library](/natur-service)
 - [natur-persist: localStorage plugins](/natur-persist)
 - [natur-persist-async: async presit plugin](/natur-persist-async)
+- [natur-immer: immer middleware](/natur-immer)
 - [umi-natur: umi plugin of natur](/umi-natur)

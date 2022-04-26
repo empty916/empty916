@@ -979,4 +979,5 @@ const App = inject('count', 'name')(_App);
 - [natur-service: natur上层调度库](/zh/natur-service)
 - [natur-persist: localStorage数据持久化插件](/zh/natur-persist)
 - [natur-persist-async: 异步数据持久化插件](/zh/natur-persist-async)
+- [natur-immer: immer插件](/zh/natur-immer)
 - [umi-natur: natur的umi插件](/zh/umi-natur)

@@ -94,6 +94,10 @@ module.exports = {
                 link: "/zh/natur-persist-async/",
               },
               {
+                text: "natur-immer",
+                link: "/zh/natur-immer/",
+              },
+              {
                 text: "umi-natur",
                 link: "/zh/umi-natur/",
               },
