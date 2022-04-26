@@ -100,7 +100,7 @@ export default {
 
 ## NOTE
 
-- 从测试看，返回state和不返回state均可以正常运行，但是无返回的action在调用action的地方是没有返回值类型的
+- 返回state和不返回state均可以正常运行，但是无返回的action在调用action的地方是没有返回值类型的
 ```ts
 import store from 'store';
 
@@ -110,5 +110,43 @@ const user = store.getModule('user');
   const res1 =  user.actions.fetchTodo(); // 这里的res1是user模型块的的State类型
   const res2 = user.actions.fetchTodoWithoutReturn(); // 这里的res2的ts类型是undefined类型
 })()
+
+```
+
+- `getState()`之后必须将此state保存，不能重复获取并且不保存对应的state，这样会导致state信息无法及时保存，如果只获取一次state则不存在这个问题
+```ts
+
+const demoActions = {
+    // 每一个state都保存了
+    goodAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
+        const ns = getState();
+        ns.age = age;
+        setState(ns); // 保存state
+
+        const ns2 = getState(); // 重复获取
+        ns2.name = 'xxx'
+        return ns; // 保存state
+    },
+    // 只获取一次state，natur-immer会识别到，自动帮你保存
+    goodAction2: (age: number) => ({getState, setState}: ThunkParams<State>) => {
+        const ns = getState();
+        ns.age = age;
+    },
+    // 只获取一次state，手动返回state执行保存
+    goodAction3: (age: number) => ({getState, setState}: ThunkParams<State>) => {
+        const ns = getState();
+        ns.age = age;
+        return ns;
+    },
+    // 每一个state都没有保存，会导致报错
+    badAction: () => async ({getState}: ThunkParams<State>) => {
+        const ns = getState();
+        ns.age = age;
+        // ns dose not save
+        const ns2 = getState(); // 重复获取
+        ns2.name = 'xxx'
+        // ns2 dose not save
+    },
+}
 
 ```
