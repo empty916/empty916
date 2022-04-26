@@ -8,7 +8,7 @@
     
     <meta name="description" content="empty site">
     
-    <link rel="preload" href="/assets/css/0.styles.fdde5c9a.css" as="style"><link rel="preload" href="/assets/js/app.72b6a582.js" as="script"><link rel="preload" href="/assets/js/2.e4845fa5.js" as="script"><link rel="preload" href="/assets/js/10.df8e5999.js" as="script"><link rel="prefetch" href="/assets/js/11.7b6ab4c4.js"><link rel="prefetch" href="/assets/js/12.8e6ceac3.js"><link rel="prefetch" href="/assets/js/13.1f068a17.js"><link rel="prefetch" href="/assets/js/14.5321145d.js"><link rel="prefetch" href="/assets/js/15.6f4cacee.js"><link rel="prefetch" href="/assets/js/16.c7e96bb5.js"><link rel="prefetch" href="/assets/js/17.4f748c4e.js"><link rel="prefetch" href="/assets/js/18.ae6355e3.js"><link rel="prefetch" href="/assets/js/19.ad3a5d86.js"><link rel="prefetch" href="/assets/js/20.0f699001.js"><link rel="prefetch" href="/assets/js/21.43c02f67.js"><link rel="prefetch" href="/assets/js/22.2db5db5d.js"><link rel="prefetch" href="/assets/js/3.932f1f45.js"><link rel="prefetch" href="/assets/js/4.bd1f08ae.js"><link rel="prefetch" href="/assets/js/5.a4018245.js"><link rel="prefetch" href="/assets/js/6.b4ba1831.js"><link rel="prefetch" href="/assets/js/7.8bff41c0.js"><link rel="prefetch" href="/assets/js/8.b5760b33.js"><link rel="prefetch" href="/assets/js/9.92028a27.js">
+    <link rel="preload" href="/assets/css/0.styles.fdde5c9a.css" as="style"><link rel="preload" href="/assets/js/app.01c74c59.js" as="script"><link rel="preload" href="/assets/js/2.e4845fa5.js" as="script"><link rel="preload" href="/assets/js/10.11357e15.js" as="script"><link rel="prefetch" href="/assets/js/11.1d2aa330.js"><link rel="prefetch" href="/assets/js/12.1901c72b.js"><link rel="prefetch" href="/assets/js/13.1f068a17.js"><link rel="prefetch" href="/assets/js/14.4435c0a6.js"><link rel="prefetch" href="/assets/js/15.6f4cacee.js"><link rel="prefetch" href="/assets/js/16.82652ebb.js"><link rel="prefetch" href="/assets/js/17.8154f16f.js"><link rel="prefetch" href="/assets/js/18.a56c9aac.js"><link rel="prefetch" href="/assets/js/19.ad3a5d86.js"><link rel="prefetch" href="/assets/js/20.0f699001.js"><link rel="prefetch" href="/assets/js/21.43c02f67.js"><link rel="prefetch" href="/assets/js/22.2db5db5d.js"><link rel="prefetch" href="/assets/js/3.932f1f45.js"><link rel="prefetch" href="/assets/js/4.bd1f08ae.js"><link rel="prefetch" href="/assets/js/5.a4018245.js"><link rel="prefetch" href="/assets/js/6.2c498fbd.js"><link rel="prefetch" href="/assets/js/7.8bff41c0.js"><link rel="prefetch" href="/assets/js/8.b5760b33.js"><link rel="prefetch" href="/assets/js/9.2b283bae.js">
     <link rel="stylesheet" href="/assets/css/0.styles.fdde5c9a.css">
   </head>
   <body>
@@ -158,7 +158,27 @@ $ <span class="token function">yarn</span> <span class="token function">install<
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
 
-</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">4/26/2022, 1:20:13 PM</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
-    <script src="/assets/js/app.72b6a582.js" defer></script><script src="/assets/js/2.e4845fa5.js" defer></script><script src="/assets/js/10.df8e5999.js" defer></script>
+</code></pre></div><ul><li><code>natur-immer</code> does not support the old notation</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>
+<span class="token keyword">const</span> demoActions <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token comment">// return immer draft</span>
+    <span class="token function-variable function">goodAction</span><span class="token operator">:</span> <span class="token punctuation">(</span>age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">,</span> setState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> ns<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token comment">/**
+     * copy and return a new object x
+     * the immer object obtained by getState, but this object is proxied, so manual immutable writing is not recommended. In extreme cases, memory overflow may occur.
+     */</span>
+    <span class="token function-variable function">badAction</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            <span class="token operator">...</span>ns<span class="token punctuation">,</span>
+            age<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">4/26/2022, 3:00:13 PM</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.01c74c59.js" defer></script><script src="/assets/js/2.e4845fa5.js" defer></script><script src="/assets/js/10.11357e15.js" defer></script>
   </body>
 </html>

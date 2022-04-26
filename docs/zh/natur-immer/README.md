@@ -150,3 +150,27 @@ const demoActions = {
 }
 
 ```
+
+- `natur-immer`不支持旧的写法
+```ts
+
+const demoActions = {
+    // 返回immer draft对象
+    goodAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
+        const ns = getState();
+        ns.age = age;
+        return ns;
+    },
+    /**
+     * 复制并返回新的对象 x
+     * getState获取的immer对象，但是这个对象是经过代理的，所以不建议手动的immutable写法，极端情况可能会导致内存溢出
+     */
+    badAction: () => async ({getState}: ThunkParams<State>) => {
+        const ns = getState();
+        return {
+            ...ns,
+            age,
+        }
+    },
+}
+```

@@ -155,3 +155,28 @@ const demoActions = {
 }
 
 ```
+
+
+- `natur-immer` does not support the old notation
+```ts
+
+const demoActions = {
+    // return immer draft
+    goodAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
+        const ns = getState();
+        ns.age = age;
+        return ns;
+    },
+    /**
+     * copy and return a new object x
+     * the immer object obtained by getState, but this object is proxied, so manual immutable writing is not recommended. In extreme cases, memory overflow may occur.
+     */
+    badAction: () => async ({getState}: ThunkParams<State>) => {
+        const ns = getState();
+        return {
+            ...ns,
+            age,
+        }
+    },
+}
+```
