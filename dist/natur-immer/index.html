@@ -8,7 +8,7 @@
     
     <meta name="description" content="empty site">
     
-    <link rel="preload" href="/assets/css/0.styles.fdde5c9a.css" as="style"><link rel="preload" href="/assets/js/app.01c74c59.js" as="script"><link rel="preload" href="/assets/js/2.e4845fa5.js" as="script"><link rel="preload" href="/assets/js/10.11357e15.js" as="script"><link rel="prefetch" href="/assets/js/11.1d2aa330.js"><link rel="prefetch" href="/assets/js/12.1901c72b.js"><link rel="prefetch" href="/assets/js/13.1f068a17.js"><link rel="prefetch" href="/assets/js/14.4435c0a6.js"><link rel="prefetch" href="/assets/js/15.6f4cacee.js"><link rel="prefetch" href="/assets/js/16.82652ebb.js"><link rel="prefetch" href="/assets/js/17.8154f16f.js"><link rel="prefetch" href="/assets/js/18.a56c9aac.js"><link rel="prefetch" href="/assets/js/19.ad3a5d86.js"><link rel="prefetch" href="/assets/js/20.0f699001.js"><link rel="prefetch" href="/assets/js/21.43c02f67.js"><link rel="prefetch" href="/assets/js/22.2db5db5d.js"><link rel="prefetch" href="/assets/js/3.932f1f45.js"><link rel="prefetch" href="/assets/js/4.bd1f08ae.js"><link rel="prefetch" href="/assets/js/5.a4018245.js"><link rel="prefetch" href="/assets/js/6.2c498fbd.js"><link rel="prefetch" href="/assets/js/7.8bff41c0.js"><link rel="prefetch" href="/assets/js/8.b5760b33.js"><link rel="prefetch" href="/assets/js/9.2b283bae.js">
+    <link rel="preload" href="/assets/css/0.styles.fdde5c9a.css" as="style"><link rel="preload" href="/assets/js/app.728ea92e.js" as="script"><link rel="preload" href="/assets/js/2.e4845fa5.js" as="script"><link rel="preload" href="/assets/js/10.f88ccbc0.js" as="script"><link rel="prefetch" href="/assets/js/11.682dde2f.js"><link rel="prefetch" href="/assets/js/12.90a55fa5.js"><link rel="prefetch" href="/assets/js/13.a2973348.js"><link rel="prefetch" href="/assets/js/14.3aee8518.js"><link rel="prefetch" href="/assets/js/15.e11a42f9.js"><link rel="prefetch" href="/assets/js/16.c7e96bb5.js"><link rel="prefetch" href="/assets/js/17.2a566f78.js"><link rel="prefetch" href="/assets/js/18.75db69a8.js"><link rel="prefetch" href="/assets/js/19.28764774.js"><link rel="prefetch" href="/assets/js/20.98d65ff5.js"><link rel="prefetch" href="/assets/js/21.6f1ff198.js"><link rel="prefetch" href="/assets/js/22.81f91518.js"><link rel="prefetch" href="/assets/js/3.932f1f45.js"><link rel="prefetch" href="/assets/js/4.bd1f08ae.js"><link rel="prefetch" href="/assets/js/5.a4018245.js"><link rel="prefetch" href="/assets/js/6.65ffe0e0.js"><link rel="prefetch" href="/assets/js/7.f397006f.js"><link rel="prefetch" href="/assets/js/8.b5760b33.js"><link rel="prefetch" href="/assets/js/9.92028a27.js">
     <link rel="stylesheet" href="/assets/css/0.styles.fdde5c9a.css">
   </head>
   <body>
@@ -22,6 +22,8 @@
   natur-persist
 </a></li><li class="dropdown-item"><!----> <a href="/natur-persist-async/" class="nav-link">
   natur-persist-async
+</a></li><li class="dropdown-item"><!----> <a href="/natur-immer/" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  natur-immer
 </a></li><li class="dropdown-item"><!----> <a href="/umi-natur/" class="nav-link">
   umi-natur
 </a></li></ul></div></div><div class="nav-item"><a href="https://github.com/empty916" target="_blank" rel="noopener noreferrer" class="nav-link external">
@@ -40,6 +42,8 @@
   natur-persist
 </a></li><li class="dropdown-item"><!----> <a href="/natur-persist-async/" class="nav-link">
   natur-persist-async
+</a></li><li class="dropdown-item"><!----> <a href="/natur-immer/" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  natur-immer
 </a></li><li class="dropdown-item"><!----> <a href="/umi-natur/" class="nav-link">
   umi-natur
 </a></li></ul></div></div><div class="nav-item"><a href="https://github.com/empty916" target="_blank" rel="noopener noreferrer" class="nav-link external">
@@ -123,48 +127,15 @@ $ <span class="token function">yarn</span> <span class="token function">install<
   <span class="token keyword">const</span> res2 <span class="token operator">=</span> user<span class="token punctuation">.</span>actions<span class="token punctuation">.</span><span class="token function">fetchTodoWithoutReturn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// the ts type of res2 here is the undefined type</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-</code></pre></div><ul><li>after <code>getState()</code>, the state must be saved. It cannot be obtained repeatedly and the corresponding state cannot be saved. This will cause the state information to not be saved in time. If the state is only obtained once, this problem does not exist.</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>
-<span class="token keyword">const</span> demoActions <span class="token operator">=</span> <span class="token punctuation">{</span>
-    <span class="token comment">// every state is saved</span>
-    <span class="token function-variable function">goodAction</span><span class="token operator">:</span> <span class="token punctuation">(</span>age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">,</span> setState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
-        <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-        <span class="token function">setState</span><span class="token punctuation">(</span>ns<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// save state</span>
-
-        <span class="token keyword">const</span> ns2 <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 重复获取</span>
-        ns2<span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">'xxx'</span>
-        <span class="token keyword">return</span> ns<span class="token punctuation">;</span> <span class="token comment">// save state</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token comment">// get the state only once, natur-immer will recognize it and save it for you automatically</span>
-    <span class="token function-variable function">goodAction2</span><span class="token operator">:</span> <span class="token punctuation">(</span>age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">,</span> setState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
-        <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token comment">// get the state only once, and manually return to the state to save it</span>
-    <span class="token function-variable function">goodAction3</span><span class="token operator">:</span> <span class="token punctuation">(</span>age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">,</span> setState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
-        <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-        <span class="token keyword">return</span> ns<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token comment">// each state is not saved, which will cause an error</span>
-    <span class="token function-variable function">badAction</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
-        <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-        <span class="token comment">// ns dose not save</span>
-        <span class="token keyword">const</span> ns2 <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// repeat get</span>
-        ns2<span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">'xxx'</span>
-        <span class="token comment">// ns2 dose not save</span>
-        <span class="token comment">// this will print error</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-<span class="token punctuation">}</span>
-
-</code></pre></div><ul><li><code>natur-immer</code> does not support the old notation</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>
+</code></pre></div><ul><li><code>natur-immer</code> shallow copy immer drafted state is not supported for now, because the immer draft object will be released after executing this action, which is easy to report errors, but you can follow the old writing method</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>
 <span class="token keyword">const</span> demoActions <span class="token operator">=</span> <span class="token punctuation">{</span>
     <span class="token comment">// return immer draft</span>
     <span class="token function-variable function">goodAction</span><span class="token operator">:</span> <span class="token punctuation">(</span>age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">,</span> setState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
         <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-        <span class="token keyword">return</span> ns<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            name<span class="token operator">:</span> ns<span class="token punctuation">.</span>name<span class="token punctuation">,</span> <span class="token comment">// this is a value, not a draft object, so it works fine</span>
+            age<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
     <span class="token comment">/**
      * copy and return a new object x
@@ -173,12 +144,12 @@ $ <span class="token function">yarn</span> <span class="token function">install<
     <span class="token function-variable function">badAction</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
         <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> <span class="token punctuation">{</span>
-            <span class="token operator">...</span>ns<span class="token punctuation">,</span>
+            <span class="token operator">...</span>ns<span class="token punctuation">,</span> <span class="token comment">// this will contain the draft object. After the action runs, the draft will be released, causing an error to occur.</span>
             age<span class="token punctuation">,</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
-</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">4/26/2022, 3:00:13 PM</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
-    <script src="/assets/js/app.01c74c59.js" defer></script><script src="/assets/js/2.e4845fa5.js" defer></script><script src="/assets/js/10.11357e15.js" defer></script>
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">4/26/2022, 3:54:21 PM</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.728ea92e.js" defer></script><script src="/assets/js/2.e4845fa5.js" defer></script><script src="/assets/js/10.f88ccbc0.js" defer></script>
   </body>
 </html>

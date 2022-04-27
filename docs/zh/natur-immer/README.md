@@ -113,53 +113,17 @@ const user = store.getModule('user');
 
 ```
 
-- `getState()`之后必须将此state保存，不能重复获取并且不保存对应的state，这样会导致state信息无法及时保存，如果只获取一次state则不存在这个问题
-```ts
-
-const demoActions = {
-    // 每一个state都保存了
-    goodAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
-        const ns = getState();
-        ns.age = age;
-        setState(ns); // 保存state
-
-        const ns2 = getState(); // 重复获取
-        ns2.name = 'xxx'
-        return ns; // 保存state
-    },
-    // 只获取一次state，natur-immer会识别到，自动帮你保存
-    goodAction2: (age: number) => ({getState, setState}: ThunkParams<State>) => {
-        const ns = getState();
-        ns.age = age;
-    },
-    // 只获取一次state，手动返回state执行保存
-    goodAction3: (age: number) => ({getState, setState}: ThunkParams<State>) => {
-        const ns = getState();
-        ns.age = age;
-        return ns;
-    },
-    // 每一个state都没有保存，会导致报错
-    badAction: () => async ({getState}: ThunkParams<State>) => {
-        const ns = getState();
-        ns.age = age;
-        // ns dose not save
-        const ns2 = getState(); // 重复获取
-        ns2.name = 'xxx'
-        // ns2 dose not save
-    },
-}
-
-```
-
-- `natur-immer`不支持旧的写法
+- `natur-immer`暂不支持浅拷贝immer drafted state, 因为执行完此次的action会释放immer draft对象，容易报错, 但是可以遵循旧的写法
 ```ts
 
 const demoActions = {
     // 返回immer draft对象
     goodAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
         const ns = getState();
-        ns.age = age;
-        return ns;
+        return {
+            name: ns.name, // 这是一个值，并不是一个draft对象，所以可以正常运行
+            age,
+        };
     },
     /**
      * 复制并返回新的对象 x
@@ -168,7 +132,7 @@ const demoActions = {
     badAction: () => async ({getState}: ThunkParams<State>) => {
         const ns = getState();
         return {
-            ...ns,
+            ...ns, // 这里会包含draft对象，action运行完后，此draft会被释放，导致错误发生
             age,
         }
     },

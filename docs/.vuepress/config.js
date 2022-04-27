@@ -53,6 +53,10 @@ module.exports = {
                 link: "/natur-persist-async/",
               },
               {
+                text: "natur-immer",
+                link: "/natur-immer/",
+              },
+              {
                 text: "umi-natur",
                 link: "/umi-natur/",
               },

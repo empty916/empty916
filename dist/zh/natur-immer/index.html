@@ -8,7 +8,7 @@
     
     <meta name="description" content="empty916的站">
     
-    <link rel="preload" href="/assets/css/0.styles.fdde5c9a.css" as="style"><link rel="preload" href="/assets/js/app.01c74c59.js" as="script"><link rel="preload" href="/assets/js/2.e4845fa5.js" as="script"><link rel="preload" href="/assets/js/17.8154f16f.js" as="script"><link rel="prefetch" href="/assets/js/10.11357e15.js"><link rel="prefetch" href="/assets/js/11.1d2aa330.js"><link rel="prefetch" href="/assets/js/12.1901c72b.js"><link rel="prefetch" href="/assets/js/13.1f068a17.js"><link rel="prefetch" href="/assets/js/14.4435c0a6.js"><link rel="prefetch" href="/assets/js/15.6f4cacee.js"><link rel="prefetch" href="/assets/js/16.82652ebb.js"><link rel="prefetch" href="/assets/js/18.a56c9aac.js"><link rel="prefetch" href="/assets/js/19.ad3a5d86.js"><link rel="prefetch" href="/assets/js/20.0f699001.js"><link rel="prefetch" href="/assets/js/21.43c02f67.js"><link rel="prefetch" href="/assets/js/22.2db5db5d.js"><link rel="prefetch" href="/assets/js/3.932f1f45.js"><link rel="prefetch" href="/assets/js/4.bd1f08ae.js"><link rel="prefetch" href="/assets/js/5.a4018245.js"><link rel="prefetch" href="/assets/js/6.2c498fbd.js"><link rel="prefetch" href="/assets/js/7.8bff41c0.js"><link rel="prefetch" href="/assets/js/8.b5760b33.js"><link rel="prefetch" href="/assets/js/9.2b283bae.js">
+    <link rel="preload" href="/assets/css/0.styles.fdde5c9a.css" as="style"><link rel="preload" href="/assets/js/app.728ea92e.js" as="script"><link rel="preload" href="/assets/js/2.e4845fa5.js" as="script"><link rel="preload" href="/assets/js/17.2a566f78.js" as="script"><link rel="prefetch" href="/assets/js/10.f88ccbc0.js"><link rel="prefetch" href="/assets/js/11.682dde2f.js"><link rel="prefetch" href="/assets/js/12.90a55fa5.js"><link rel="prefetch" href="/assets/js/13.a2973348.js"><link rel="prefetch" href="/assets/js/14.3aee8518.js"><link rel="prefetch" href="/assets/js/15.e11a42f9.js"><link rel="prefetch" href="/assets/js/16.c7e96bb5.js"><link rel="prefetch" href="/assets/js/18.75db69a8.js"><link rel="prefetch" href="/assets/js/19.28764774.js"><link rel="prefetch" href="/assets/js/20.98d65ff5.js"><link rel="prefetch" href="/assets/js/21.6f1ff198.js"><link rel="prefetch" href="/assets/js/22.81f91518.js"><link rel="prefetch" href="/assets/js/3.932f1f45.js"><link rel="prefetch" href="/assets/js/4.bd1f08ae.js"><link rel="prefetch" href="/assets/js/5.a4018245.js"><link rel="prefetch" href="/assets/js/6.65ffe0e0.js"><link rel="prefetch" href="/assets/js/7.f397006f.js"><link rel="prefetch" href="/assets/js/8.b5760b33.js"><link rel="prefetch" href="/assets/js/9.92028a27.js">
     <link rel="stylesheet" href="/assets/css/0.styles.fdde5c9a.css">
   </head>
   <body>
@@ -127,47 +127,15 @@ $ <span class="token function">yarn</span> <span class="token function">install<
   <span class="token keyword">const</span> res2 <span class="token operator">=</span> user<span class="token punctuation">.</span>actions<span class="token punctuation">.</span><span class="token function">fetchTodoWithoutReturn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 这里的res2的ts类型是undefined类型</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-</code></pre></div><ul><li><code>getState()</code>之后必须将此state保存，不能重复获取并且不保存对应的state，这样会导致state信息无法及时保存，如果只获取一次state则不存在这个问题</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>
-<span class="token keyword">const</span> demoActions <span class="token operator">=</span> <span class="token punctuation">{</span>
-    <span class="token comment">// 每一个state都保存了</span>
-    <span class="token function-variable function">goodAction</span><span class="token operator">:</span> <span class="token punctuation">(</span>age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">,</span> setState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
-        <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-        <span class="token function">setState</span><span class="token punctuation">(</span>ns<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 保存state</span>
-
-        <span class="token keyword">const</span> ns2 <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 重复获取</span>
-        ns2<span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">'xxx'</span>
-        <span class="token keyword">return</span> ns<span class="token punctuation">;</span> <span class="token comment">// 保存state</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token comment">// 只获取一次state，natur-immer会识别到，自动帮你保存</span>
-    <span class="token function-variable function">goodAction2</span><span class="token operator">:</span> <span class="token punctuation">(</span>age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">,</span> setState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
-        <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token comment">// 只获取一次state，手动返回state执行保存</span>
-    <span class="token function-variable function">goodAction3</span><span class="token operator">:</span> <span class="token punctuation">(</span>age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">,</span> setState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
-        <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-        <span class="token keyword">return</span> ns<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token comment">// 每一个state都没有保存，会导致报错</span>
-    <span class="token function-variable function">badAction</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
-        <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-        <span class="token comment">// ns dose not save</span>
-        <span class="token keyword">const</span> ns2 <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 重复获取</span>
-        ns2<span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">'xxx'</span>
-        <span class="token comment">// ns2 dose not save</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-<span class="token punctuation">}</span>
-
-</code></pre></div><ul><li><code>natur-immer</code>不支持旧的写法</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>
+</code></pre></div><ul><li><code>natur-immer</code>暂不支持浅拷贝immer drafted state, 因为执行完此次的action会释放immer draft对象，容易报错, 但是可以遵循旧的写法</li></ul> <div class="language-ts extra-class"><pre class="language-ts"><code>
 <span class="token keyword">const</span> demoActions <span class="token operator">=</span> <span class="token punctuation">{</span>
     <span class="token comment">// 返回immer draft对象</span>
     <span class="token function-variable function">goodAction</span><span class="token operator">:</span> <span class="token punctuation">(</span>age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">,</span> setState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
         <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ns<span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
-        <span class="token keyword">return</span> ns<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            name<span class="token operator">:</span> ns<span class="token punctuation">.</span>name<span class="token punctuation">,</span> <span class="token comment">// 这是一个值，并不是一个draft对象，所以可以正常运行</span>
+            age<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
     <span class="token comment">/**
      * 复制并返回新的对象 x
@@ -176,12 +144,12 @@ $ <span class="token function">yarn</span> <span class="token function">install<
     <span class="token function-variable function">badAction</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>getState<span class="token punctuation">}</span><span class="token operator">:</span> ThunkParams<span class="token operator">&lt;</span>State<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
         <span class="token keyword">const</span> ns <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> <span class="token punctuation">{</span>
-            <span class="token operator">...</span>ns<span class="token punctuation">,</span>
+            <span class="token operator">...</span>ns<span class="token punctuation">,</span> <span class="token comment">// 这里会包含draft对象，action运行完后，此draft会被释放，导致错误发生</span>
             age<span class="token punctuation">,</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
-</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">2022/4/26 15:00:13</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
-    <script src="/assets/js/app.01c74c59.js" defer></script><script src="/assets/js/2.e4845fa5.js" defer></script><script src="/assets/js/17.8154f16f.js" defer></script>
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">2022/4/26 15:54:21</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.728ea92e.js" defer></script><script src="/assets/js/2.e4845fa5.js" defer></script><script src="/assets/js/17.2a566f78.js" defer></script>
   </body>
 </html>

@@ -115,57 +115,17 @@ const user = store.getModule('user');
 ```
 
 
-
-- after `getState()`, the state must be saved. It cannot be obtained repeatedly and the corresponding state cannot be saved. This will cause the state information to not be saved in time. If the state is only obtained once, this problem does not exist.
-
-```ts
-
-const demoActions = {
-    // every state is saved
-    goodAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
-        const ns = getState();
-        ns.age = age;
-        setState(ns); // save state
-
-        const ns2 = getState(); // 重复获取
-        ns2.name = 'xxx'
-        return ns; // save state
-    },
-    // get the state only once, natur-immer will recognize it and save it for you automatically
-    goodAction2: (age: number) => ({getState, setState}: ThunkParams<State>) => {
-        const ns = getState();
-        ns.age = age;
-    },
-    // get the state only once, and manually return to the state to save it
-    goodAction3: (age: number) => ({getState, setState}: ThunkParams<State>) => {
-        const ns = getState();
-        ns.age = age;
-        return ns;
-    },
-    // each state is not saved, which will cause an error
-    badAction: () => async ({getState}: ThunkParams<State>) => {
-        const ns = getState();
-        ns.age = age;
-        // ns dose not save
-        const ns2 = getState(); // repeat get
-        ns2.name = 'xxx'
-        // ns2 dose not save
-        // this will print error
-    },
-}
-
-```
-
-
-- `natur-immer` does not support the old notation
+- `natur-immer` shallow copy immer drafted state is not supported for now, because the immer draft object will be released after executing this action, which is easy to report errors, but you can follow the old writing method
 ```ts
 
 const demoActions = {
     // return immer draft
     goodAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
         const ns = getState();
-        ns.age = age;
-        return ns;
+        return {
+            name: ns.name, // this is a value, not a draft object, so it works fine
+            age,
+        };
     },
     /**
      * copy and return a new object x
@@ -174,7 +134,7 @@ const demoActions = {
     badAction: () => async ({getState}: ThunkParams<State>) => {
         const ns = getState();
         return {
-            ...ns,
+            ...ns, // this will contain the draft object. After the action runs, the draft will be released, causing an error to occur.
             age,
         }
     },
