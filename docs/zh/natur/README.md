@@ -718,6 +718,8 @@ export default store;
 
 #### thunkMiddleware: thunk中间件可以使得action可以返回函数，拥有了获取最新的state，maps，以及setState，dispatch等增强功能
 
+**如果你喜欢mutable的写法，推荐使用[natur-immer](/zh/natur-immer)**
+
 ```typescript
 import { thunkMiddleware, ThunkParams } from 'natur/dist/middlewares'
 

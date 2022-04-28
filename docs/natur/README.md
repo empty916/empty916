@@ -691,6 +691,9 @@ export default store;
 
 - thunkMiddleware: The thunk middleware allows actions to return functions, and has enhanced functions such as obtaining the latest state, maps, and setState, dispatch, etc.
 
+**If you like mutable writing, [natur-immer](/natur-immer) is recommended**
+
+
 ```ts
 import { thunkMiddleware, ThunkParams } from 'natur/dist/middlewares'
 
