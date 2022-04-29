@@ -115,6 +115,26 @@ const user = store.getModule('user');
 ```
 
 
+- **design ideas：**`natur-immer` use [middleware](/natur/#middleware), cooperate with [immer](https://immerjs.github.io/immer/)'s [patches](https://immerjs.github.io/immer/patches) function, record the user's operation history on the `state`, and finally apply this operation record to **the latest state**. If you execute `getState` multiple times and perform operations on each state, then `natur-immer` will record all `state` operations in your current action execution, and apply the records to the latest `state` according to the `getState` call order from front to back
+
+```ts
+
+const state = {
+    age: 0,
+}
+
+const demoActions = {
+    addAgeAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
+        const ns = getState();
+        ns.age = age; // 0 => age
+        const ns2 = getState();
+        ns2.age++; // age => 0 + 1 this is final result
+        ns.age++; // because ns2 is fetched after ns, this result will be overwritten by the final result of ns2
+    },
+}
+
+```
+
 - `natur-immer` shallow copy immer drafted state is not supported for now, because the immer draft object will be released after executing this action, which is easy to report errors, but you can follow the old writing method
 ```ts
 

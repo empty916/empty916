@@ -17,6 +17,7 @@ $ yarn install natur-immer
 
 1. 将immer集成到natur中，使得在action中修改state时，只需使用mutable的写法即可
 
+
 ## 教程
 
 ### 替换`thunkMiddleware`
@@ -112,6 +113,27 @@ const user = store.getModule('user');
 })()
 
 ```
+
+- **设计思路：**`natur-immer`使用[中间件](/zh/natur/#中间件)，配合[immer](https://immerjs.github.io/immer/zh-CN/)的[patches](https://immerjs.github.io/immer/zh-CN/patches)功能，记录用户对`state`的操作历史，最后将此操作记录应用到**最新的state**上，如果你多次执行了`getState`并且在每个state上都进行了操作，那么`natur-immer`会将你本次action执行内的所有的`state`的操作记录，根据`state`获取顺序从前到后的将记录应用到最新的`state`上
+
+```ts
+
+const state = {
+    age: 0,
+}
+
+const demoActions = {
+    addAgeAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
+        const ns = getState();
+        ns.age = age; // 0 => age
+        const ns2 = getState();
+        ns2.age++; // age => 0 + 1 这是最终结果
+        ns.age++; // 因为ns2是在ns后面获取的，所以这个结果会被ns2的最终结果覆盖
+    },
+}
+
+```
+
 
 - `natur-immer`暂不支持浅拷贝immer drafted state, 因为执行完此次的action会释放immer draft对象，容易报错, 但是可以遵循旧的写法
 ```ts
