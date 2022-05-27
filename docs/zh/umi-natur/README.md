@@ -9,6 +9,7 @@ sidebarDepth: 3
 - 支持ssr场景
 - 支持自动扫描service代码，并自动配置，同样servcie也可以应用于ssr场景
 - 支持persist配置
+- 支持immer插件
 
 
 ## 安装
@@ -270,6 +271,18 @@ count2Service.getCount2State();
 - **类型：** `object`
 - 这个是持久化配置
 - 跟[natur-persist](/zh/natur-persist)配置一样
+
+## useImmer
+
+- **必填：** `false`
+- **类型：** `boolean`
+- 这是是否开启`natur-immer`插件
+- 使用详情请看[natur-immer](/zh/natur-immer/#使用)
+
+::: tip 最低版本要求
+umi-natur >= 1.1.7
+:::
+
 
 ## service
 

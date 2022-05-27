@@ -6,6 +6,7 @@
 - support ssr scene
 - support automatic scanning of service code and automatic configuration, the same servcie can also be applied to ssr scenarios
 - support persist configuration
+- support natur-immer
 ## install
 
 ```bash
@@ -270,6 +271,19 @@ count2Service.getCount2State();
 
 - This is the persistent configuration
 - Same as [natur-persist](/natur-persist) configuration
+
+
+## useImmer
+
+- **required:** `false`
+- **type:**`boolean`
+
+- This is the `natur-immer` configuration
+- you can visit [natur-immer](/natur-immer/#usage) for usage information
+
+::: tip minium version
+umi-natur >= 1.1.7
+:::
 
 ## service
 
