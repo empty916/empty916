@@ -21,6 +21,14 @@ $ yarn add umi-natur -D
 # or npm install natur -S
 $ yarn add natur
 ```
+
+## 版本对照
+
+|umi-natur | umi |
+|---|---|
+|1.x|3.x|
+|2.x|4.x|
+
 ## 普通使用方式
 
 1. 首先添加配置`.umirc.ts`,
