@@ -13,7 +13,6 @@ createStore(
   modules?: Modules,
   lazyModules: LazyStoreModules,
   options?: {
-    initStates?: States,
     middlewares?: Middleware[],
     interceptors?: Interceptor[],
   }

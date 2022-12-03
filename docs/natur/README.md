@@ -420,12 +420,12 @@ const app = {
 const store = createStore(
   { app }, 
   {},
-  { 
-    initStates: {
-      app: {name: 'jerry'} // Initialize the state of the app module
-    }
-  }
 );
+
+
+store.globalSetStates({
+  app: {name: 'jerry'} // apply the state of the app module
+})
 
 export default store;
 ```

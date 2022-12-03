@@ -30,12 +30,14 @@ const store = createStore(
   {},
   {}
   {
-    initStates: getData(), // get cached data in localStorage
     middlewares: [
       middleware, // use middleware to synchronize data to storage
     ]
   }
 );
+
+// apply cache data
+store.globalSetStates(getData())
 
 ```
 

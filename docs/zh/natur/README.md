@@ -428,12 +428,11 @@ const app = {
 const store = createStore(
   { app }, 
   {},
-  { 
-    initStates: {
-      app: {name: 'jerry'} // 初始化app 模块的state
-    }
-  }
 );
+
+store.globalSetStates({
+  app: {name: 'jerry'} // 设置app 模块的state
+})
 
 export default store;
 ```

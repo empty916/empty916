@@ -31,12 +31,13 @@ const store = createStore(
   {},
   {}
   {
-    initStates: getData(), // 获取localStorage中的缓存数据
     middlewares: [
       middleware, // 使用中间件, 同步数据到storage
     ]
   }
 );
+// 将缓存应用到store中
+store.globalSetStates(getData())
 
 ```
 
