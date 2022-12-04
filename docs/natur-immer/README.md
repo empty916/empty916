@@ -41,7 +41,7 @@ export const store = createStore({/* ... */}, {/* ... */}}, {
 
 `user-module.ts`
 ```ts
-import { ThunkParams } from 'natur/dist/middlewares';
+import { ImmerThunkParams } from 'natur-immer';
 
 // this is a mock function to fetch todo form service
 const mockFetchTodo = () => new Promise<{name: string; status: number}[]>(res => res([
@@ -72,24 +72,23 @@ type State = typeof state;
 
 const actions = {
     // update user age
-    updateAge: (age: number) => ({getState}: ThunkParams<State>) => {
-        const ns = getState();
-        ns.age = age;
-        return ns;
+    updateAge: (age: number) => ({setState}: ImmerThunkParams<State>) => {
+        // setState like produce in immer
+        return setState(state => state.age = age);
     },
     // update user todo，return state
-    fetchTodo: () => async ({getState}: ThunkParams<State>) => {
+    fetchTodo: () => async ({setState}: ImmerThunkParams<State>) => {
         const res = await mockFetchTodo();
-        const nowState = getState();
-        nowState.todo.push(...res); // modify directly
-        return nowState; // return new state(recommend return)
+        return setState(state => {
+            state.todo.push(...res); // modify directly
+        }); // return new state(recommend return)
     },
     // update user todo，without return state
-    fetchTodoWithoutReturn: () => async ({getState}: ThunkParams<State>) => {
-        const nowState = getState();
+    fetchTodoWithoutReturn: () => async ({setState}: ImmerThunkParams<State>) => {
         const res = await mockFetchTodo();
-        nowState.todo.push(...res); // modify directly
-        // without return state
+        setState(state => {
+            state.todo.push(...res); // modify directly
+        }); // without return state
     },
 }
 
@@ -114,49 +113,3 @@ const user = store.getModule('user');
 
 ```
 
-
-- **design ideas：**`natur-immer` use [middleware](/natur/#middleware), cooperate with [immer](https://immerjs.github.io/immer/)'s [patches](https://immerjs.github.io/immer/patches) function, record the user's operation history on the `state`, and finally apply this operation record to **the latest state**. If you execute `getState` multiple times and perform operations on each state, then `natur-immer` will record all `state` operations in your current action execution, and apply the records to the latest `state` according to the `getState` call order from front to back
-
-```ts
-
-const state = {
-    age: 0,
-}
-
-const demoActions = {
-    addAgeAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
-        const ns = getState();
-        ns.age = age; // 0 => age
-        const ns2 = getState();
-        ns2.age++; // age => 0 + 1 this is final result
-        ns.age++; // because ns2 is fetched after ns, this result will be overwritten by the final result of ns2
-    },
-}
-
-```
-
-- `natur-immer` shallow copy immer drafted state is not supported for now, because the immer draft object will be released after executing this action, which is easy to report errors, but you can follow the old writing method
-```ts
-
-const demoActions = {
-    // return immer draft
-    goodAction: (age: number) => ({getState, setState}: ThunkParams<State>) => {
-        const ns = getState();
-        return {
-            name: ns.name, // this is a value, not a draft object, so it works fine
-            age,
-        };
-    },
-    /**
-     * copy and return a new object x
-     * the immer object obtained by getState, but this object is proxied, so manual immutable writing is not recommended. In extreme cases, memory overflow may occur.
-     */
-    badAction: () => async ({getState}: ThunkParams<State>) => {
-        const ns = getState();
-        return {
-            ...ns, // this will contain the draft object. After the action runs, the draft will be released, causing an error to occur.
-            age,
-        }
-    },
-}
-```
