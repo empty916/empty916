@@ -7,11 +7,9 @@ sidebarDepth: 2
 
 1. 这是一个简洁、高效的react状态管理器
 1. 良好的typescript体验
-1. 浏览器兼容：IE8+
-1. 支持react, 以及anujs
 1. 单元测试覆盖率99％，放心使用
 1. 包体积，minizip 5k(uglify+gzip压缩后5k)
-
+1. 如果你的环境是react@17或者更低版本，你可以使用natur@2.1.x
 
 ## 起步
 
@@ -327,25 +325,13 @@ import { inject } from 'your-inject';
 let injector = inject(['app', {
   state: ['name'], // 也可以使用函数声明 state: [s => s.name]
 }]);
-// or
-injector = inject('app').watch('app', {
-  state: ['name'],
-});
-
 
 // 这里App组件只会监听app，maps中deepDep的变化，其他值的变化不会引起App组件的更新
 injector = inject(['app', {
   maps: ['deepDep'], 
 }]); 
-// or
-injector = inject('app').watch('app', {
-  maps: ['deepDep'], 
-}); 
-
 // 这里App组件不论app模块发生什么变化，都不会更新
 injector = inject(['app', {}]);
-// or 
-injector = inject('app').watch('app', {}); 
 
 
 // 因为actions在创建后会保持不变，所以你不必监听它的变化
@@ -365,10 +351,6 @@ let complexInjector = inject(
   ['app', {}],
   ['other', {state: [s => s.xxx], maps: ['xxx']}]
 );
-// or
-complexInjector = inject('app', 'other')
-  .watch('app', {})
-  .watch('other', {state: [s => s.xxx], maps: ['xxx']})
 ```  
 
 ---

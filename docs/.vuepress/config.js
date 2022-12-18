@@ -65,6 +65,15 @@ module.exports = {
           {
             text: 'GitHub',
             link: 'https://github.com/empty916',
+          },
+          {
+            text: 'Change Log',
+            items: [
+              {
+                text: "natur",
+                link: "/changelog/natur/",
+              },
+            ]
           }
         ],
       },
@@ -110,6 +119,15 @@ module.exports = {
           {
             text: 'GitHub',
             link: 'https://github.com/empty916',
+          },
+          {
+            text: '更新记录',
+            items: [
+              {
+                text: "natur",
+                link: "/zh/changelog/natur/",
+              },
+            ]
           }
         ],
       },

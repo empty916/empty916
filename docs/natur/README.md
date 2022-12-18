@@ -8,11 +8,9 @@ sidebarDepth: 3
 ## introduction
 1. This is a simple and efficient react state manager
 1. Good typescript experience
-1. Browser compatible: IE8+
-1. support react and anujs
 1. Unit test coverage rate of 99%, rest assured to use
 1. minizipped size 5k
-
+1. if your enviroment is react@17 or lower, you can use natur@2.1.x
 
 ## start
 
@@ -320,25 +318,14 @@ import { inject } from 'your-inject';
 let injector = inject(['app', {
   state: ['name'], // You can also use function declarations state: [s => s.name]
 }]);
-// or
-injector = inject('app').watch('app', {
-  state: ['name'],
-});
-
 
 // Here the App component only listens to changes in the app and the map's deepDep. Changes in other values will not cause updates to the App component
 injector = inject(['app', {
   maps: ['deepDep'], 
 }]); 
-// or
-injector = inject('app').watch('app', {
-  maps: ['deepDep'], 
-});  
 
 // Here the App component will not be updated regardless of any changes in the app module
 injector = inject(['app', {}]);
-// or 
-injector = inject('app').watch('app', {}); 
 
 // Because actions stay the same after they are created, you don't have to listen for changes
 const App = ({app}: typeof injector.type) => {
@@ -357,10 +344,6 @@ let complexInjector = inject(
   ['app', {}],
   ['other', {state: [s => s.xxx], maps: ['xxx']}]
 );
-// or
-complexInjector = inject('app', 'other')
-  .watch('app', {})
-  .watch('other', {state: [s => s.xxx], maps: ['xxx']})
 ```  
 
 ---

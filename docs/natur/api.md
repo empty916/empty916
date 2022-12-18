@@ -98,6 +98,27 @@ export interface Listener {
 store.subscribe('moduleName', listener: Listener) => Function;
 ```
 
+
+
+### subscribeAll <Badge text="2.2.0+" />
+
+listen all module change
+
+```typescript
+export type ModuleEvent = {
+  type: 'init' | 'update' | 'remove',
+  actionName?: string,
+  moduleName: string,
+};
+
+export interface AllListener {
+  (me: ModuleEvent): any;
+}
+
+store.subscribeAll(listener: AllListener) => Function;
+```
+
+
 ### getAllModuleName
 
 ```typescript
@@ -149,6 +170,26 @@ store.getAllStates();
 
 
 ## inject api
+
+### createUseInject <Badge text="2.2.0+" />
+
+```ts
+const useInject = createUseInject(() => Store);
+
+/**
+ * within react component
+ */
+const moduleA = useInject('moduleA');
+/**
+ * if you want listen partial state of a module
+ * it is like inject
+ */
+const moduleB = useInject('moduleB', {
+  state: ['b', s => s.xxx], // only changes to b and xxx properties in state will trigger an update
+  maps: ['aaa'] // only changes to the aaa property in maps will trigger an update!
+});
+
+```
 
 
 ### createInject

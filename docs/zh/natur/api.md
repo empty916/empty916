@@ -101,6 +101,23 @@ export interface Listener {
 store.subscribe('moduleName', listener: Listener) => Function;
 ```
 
+### subscribeAll <Badge text="2.2.0+" />
+订阅/监听所有模块
+
+```typescript
+export type ModuleEvent = {
+  type: 'init' | 'update' | 'remove',
+  actionName?: string,
+  moduleName: string,
+};
+
+export interface AllListener {
+  (me: ModuleEvent): any;
+}
+
+store.subscribeAll(listener: AllListener) => Function;
+```
+
 ### getAllModuleName 
 获取所有模块的模块名
 
@@ -160,6 +177,25 @@ store.getAllStates();
 
 ## inject api
 
+
+### createUseInject <Badge text="2.2.0+" />
+
+```ts
+const useInject = createUseInject(() => Store);
+
+/**
+ * 在组件内部
+ */
+const moduleA = useInject('moduleA');
+/**
+ * 如果你想监听模块的部分状态，用法类似inject
+ */
+const moduleB = useInject('moduleB', {
+  state: ['b', s => s.xxx], // 只有state中的b、xxx变动才会触发更新
+  maps: ['aaa'] // 只有maps中的aaa属性变动才会触发更新
+});
+
+```
 
 ### createInject
 
