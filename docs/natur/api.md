@@ -15,6 +15,35 @@ createStore(
 ```
 ## store api
 
+### NaturContext <Badge text="2.2.0+" />
+
+```tsx
+import {Provider} from 'natur';
+
+function App() {
+  return (
+    // this store will be apply first in inject/useInject/useStore
+    <Provider store={store}>
+      { /* other code */ }
+    </Provider>
+  )
+}
+
+```
+
+### createUseStore <Badge text="2.2.0+" />
+
+```typescript
+
+const useStore = createUseStore(() => store);
+
+// within component
+// You get the store in the Context first
+const store = useStore();
+// within component
+
+```
+
 ### getModule
 
 ```typescript

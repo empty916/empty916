@@ -20,6 +20,38 @@ createStore(
 ```
 ## store api
 
+
+
+### NaturContext <Badge text="2.2.0+" />
+
+```tsx
+import {Provider} from 'natur';
+
+function App() {
+  return (
+    // 这个store将被优先应用在 inject/useInject/useStore等API中
+    <Provider store={store}>
+      { /* other code */ }
+    </Provider>
+  )
+}
+
+```
+
+### createUseStore <Badge text="2.2.0+" />
+
+```typescript
+
+const useStore = createUseStore(() => store);
+
+// 在某个组件内
+// 优先从Context中获取store
+const store = useStore();
+// 在某个组件内
+
+```
+
+
 ### getModule 
 获取模块
 

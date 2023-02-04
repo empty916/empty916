@@ -1,7 +1,17 @@
 # Change Log
 
 
-## 2.2.0-beta2
+
+## 2.2.0-beta5 (2023-02-04)
+
+### Big Change
+
+- New `Provider` API, better support for SSR and more than one store case.
+- New `CreateUseStore` API.
+- New `getStore` Arguments of Middleware and Interceptor
+- Generics `Middleware`/`Interceptor` changed，They need 2 params(Modules and Lazy Modules, same as `Store`), and also have default params
+
+## 2.2.0-beta2 (2022-12-18)
 
 ### Big Change
 
