@@ -73,6 +73,10 @@ module.exports = {
                 text: "natur",
                 link: "/changelog/natur/",
               },
+              {
+                text: "natur-immer",
+                link: "/changelog/natur-immer/",
+              },
             ]
           }
         ],
@@ -126,6 +130,10 @@ module.exports = {
               {
                 text: "natur",
                 link: "/zh/changelog/natur/",
+              },
+              {
+                text: "natur-immer",
+                link: "/zh/changelog/natur-immer/",
               },
             ]
           }

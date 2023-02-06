@@ -1,6 +1,37 @@
 # 更新记录
 
 
+## 3.0.0-alpha2 (2023-02-06)
+
+### 重大更新
+
+- 将`natur-service`的功能移植到natur本身，变为新的 `watch` API，为了模块通讯以及更好的掌握业务
+    ```ts
+    import { ModuleEvent, AllModuleEvent, WatchAPI } from 'natur';
+    export const moduleA = {
+        state: {},
+        actions: {/* ... */},
+        watch: {
+            moduleB(event: ModuleEvent, api: WatchAPI) {
+                // any update of moduleB will trigger this function
+                // event have any data of this change
+                // api contain, getState, getMaps, localDispatch, getStore API etc.
+            }
+        }
+    }
+    export const moduleB = {
+        state: {},
+        actions: {/* ... */},
+        // watch also can be a function to watch all module of store
+        watch: (event: AllModuleEvent, api: WatchAPI) => { 
+            // any update of any module will trigger this function
+            // event have any data of this change
+            // api contain, getState, getMaps, localDispatch, getStore API etc.
+        }
+    }
+    ```
+- 即将废弃`thunkMiddleware`中的`dispatch` API, 由新的`localDispatch`API替代，`localDispatch`只能调用本模块的action
+- `subscribe` and `subscribeAll` API增强，提供更全面的事件信息，以及API入参来掌控业务
 
 ## 2.2.0-beta5 (2023-02-04)
 
