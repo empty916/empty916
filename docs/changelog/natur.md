@@ -1,6 +1,18 @@
 # Change Log
 
 
+
+## 2.2.0-beta7 (2023-02-10)
+
+### Big Change
+
+- Add `flat` option in `useInject` API
+
+### bug fix
+
+- type of createStore bug fix
+
+
 ## 3.0.0-alpha2 (2023-02-06)
 
 ### Big change

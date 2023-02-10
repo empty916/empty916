@@ -214,11 +214,18 @@ store.getAllStates();
 
 ```ts
 const useInject = createUseInject(() => Store);
+const useFlatInject = createUseInject(() => Store, {flat: true});
 
 /**
  * 在组件内部
  */
 const moduleA = useInject('moduleA');
+/**
+ * useFlatInject与useInject有所不同
+ * moduleA中的属性state/maps/actions的元素将会被放到同一个大的对象中，变成flatModuleA
+ */
+const [flatModuleA] = useFlatInject('moduleA');
+
 /**
  * 如果你想监听模块的部分状态，用法类似inject
  */

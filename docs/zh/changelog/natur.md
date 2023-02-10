@@ -1,6 +1,17 @@
 # 更新记录
 
 
+## 2.2.0-beta7 (2023-02-10)
+
+### Big Change
+
+- `useInject`API新增`flat`选项
+
+### bug fix
+
+- createStore类型bug fix
+
+
 ## 3.0.0-alpha2 (2023-02-06)
 
 ### 重大更新

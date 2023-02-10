@@ -204,16 +204,26 @@ store.getAllStates();
 
 ```ts
 const useInject = createUseInject(() => Store);
+const useFlatInject = createUseInject(() => Store, {flat: true});
+
 
 /**
  * within react component
  */
-const moduleA = useInject('moduleA');
+const [moduleA] = useInject('moduleA');
+
+/**
+ * useFlatInject is diffrent from useInject
+ * members in state/maps/actions of moduleA are been merged into a whole object, this object is flatModuleA below.
+ */
+const [flatModuleA] = useFlatInject('moduleA');
+
+
 /**
  * if you want listen partial state of a module
  * it is like inject
  */
-const moduleB = useInject('moduleB', {
+const [moduleB] = useInject('moduleB', {
   state: ['b', s => s.xxx], // only changes to b and xxx properties in state will trigger an update
   maps: ['aaa'] // only changes to the aaa property in maps will trigger an update!
 });
