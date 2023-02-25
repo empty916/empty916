@@ -27,7 +27,7 @@ $ yarn install natur-immer
 import { createStore } from 'natur';
 import { thunkMiddleware, withImmerAPIInterceptor } from 'natur-immer';
 
-export const store = createStore({/* ... */}, {/* ... */}}, {
+export const store = createStore({/* ... */}, {/* ... */}, {
   middlewares: [
       thunkMiddleware, // 使用natur-immer的thunkMiddleware中间件
   ],
