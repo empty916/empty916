@@ -60,18 +60,22 @@ const count = {
 ### create store and inject
 
 ```ts
-import { createStore, createInject } from 'natur';
+import { createStore, createUseInject } from 'natur';
 
 const store = createStore({count}, {});
-const inject = createInject({storeGetter: () => store});
+const useInject = createUseInject(() => store);
+const useFlatInject = createUseInject(() => store, {flat: true});
 ```
 ### use in React
 ```tsx
 // create an injector of count module
-const injector = inject('count');
 
 // declare props type
-const App = ({count}: typeof injector.type) => {
+const App = () => {
+  const [count] = useInject('count');
+  const [flatCount] = useFlatInject('count');
+  // The data in flatCount is flat, that is, the data in state, action, and maps are put into one object (state data will be overwritten by maps, please pay attention to naming)
+
   return (
     <>
       <button onClick={() => count.actions.dec(count.state.number)}>-</button>
@@ -82,11 +86,8 @@ const App = ({count}: typeof injector.type) => {
   )
 };
 
-// inject count module into App component by injector
-const IApp = injector(App);
-
 // render injected component
-ReactDOM.render(<IApp />, document.querySelector('#app'));
+ReactDOM.render(<App />, document.querySelector('#app'));
 ```
 
 
@@ -182,9 +183,12 @@ const demo = {
 
 ```ts
 // import your inject function you created. for details, please refer to the simple demo above
-import inject from 'your-inject';
+import useInject from 'your-use-inject';
 
-const injector = inject('module1', 'module2', /* ...more module name */)
+// in your component
+const [module1] = useInject('module1');
+const [module2] = useInject('module2');
+// ...
 
 ```
 
@@ -290,13 +294,12 @@ const state = {
 const actions = {
   loading: (loading: boolean) => ({loading}),
   // This is the action that calls loading
-  fetchData: (newName: string) => async ({dispatch}: ThunkParams) => {
+  fetchData: (newName: string) => async ({localDispatch}: ThunkParams) => {
     // call loading method
-    dispatch('loading', true);
+    localDispatch('loading', true);
     // you can also call actions of other modules, but it is not recommended to use them widely
-    // dispatch('otherModule/actions', /* ...arguments */);
     await new Promise(resolve => setTimeout(resolve, 3000));
-    dispatch('loading', false);
+    localDispatch('loading', false);
     return {name: newName};
   },
 }
@@ -312,25 +315,25 @@ const app = {
 
 ```tsx
 // import your inject function you created. for details, please refer to the simple demo above
-import { inject } from 'your-inject';
+import useInject from 'your-use-inject';
 
 // Here the App component will only listen to changes in the name of the app and state. Changes in other values will not cause updates to the App component
-let injector = inject(['app', {
+const [app] = useInject('app', {
   state: ['name'], // You can also use function declarations state: [s => s.name]
-}]);
+});
 
 // Here the App component only listens to changes in the app and the map's deepDep. Changes in other values will not cause updates to the App component
-injector = inject(['app', {
+const [app] = useInject('app', {
   maps: ['deepDep'], 
-}]); 
+}); 
 
 // Here the App component will not be updated regardless of any changes in the app module
-injector = inject(['app', {}]);
+const [app] = useInject('app', {});
 
 // Because actions stay the same after they are created, you don't have to listen for changes
-const App = ({app}: typeof injector.type) => {
+const App = () => {
   // get app module
-  const {state, actions, maps} = app;
+  const [app] = useInject('app');
   return (
     <input
       value={state.name} // state in app
@@ -339,11 +342,6 @@ const App = ({app}: typeof injector.type) => {
   )
 };
 
-// complex demo
-let complexInjector = inject(
-  ['app', {}],
-  ['other', {state: [s => s.xxx], maps: ['xxx']}]
-);
 ```  
 
 ---

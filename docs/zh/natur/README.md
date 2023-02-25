@@ -61,18 +61,23 @@ const count = {
 ### 创建store和inject
 
 ```ts
-import { createStore, createInject } from 'natur';
+import { createStore, createUseInject } from 'natur';
 
 const store = createStore({count}, {});
-const inject = createInject({storeGetter: () => store});
+const useInject = createUseInject(() => store);
+const useFlatInject = createUseInject(() => store, {flat: true});
+
 ```
 ### 在React中使用
 ```tsx
 // 创建一个count模块的注入器
-const injector = inject('count');
 
 // 声明props类型
-const App = ({count}: typeof injector.type) => {
+const App = () => {
+  const [count] = useInject('count');
+  const [flatCount] = useFlatInject('count');
+  // flatCount中的数据是扁平的，即state、action、maps中的数据被放到一个对象中(state数据会被maps覆盖，请注意命名)
+
   return (
     <>
       <button onClick={() => count.actions.dec(count.state.number)}>-</button>
@@ -83,11 +88,7 @@ const App = ({count}: typeof injector.type) => {
   )
 };
 
-// 使用注入器向组件中注入count
-const IApp = injector(App);
-
-// 渲染注入后的组件
-ReactDOM.render(<IApp />, document.querySelector('#app'));
+ReactDOM.render(<App />, document.querySelector('#app'));
 ```
 
 
@@ -190,9 +191,12 @@ const demo = {
 
 ```ts
 // 导入你之前创建的inject函数，详情请参考上面的简单例子
-import inject from 'your-inject';
+import useInject from 'your-use-inject';
 
-const injector = inject('module1', 'module2', /* ...其他更多的模块名 */)
+// 在你的组件中
+const [module1] = useInject('module1');
+const [module2] = useInject('module2');
+// ...
 
 ```
 
@@ -298,13 +302,11 @@ const state = {
 
 const actions = {
   loading: (loading: boolean) => ({loading}),
-  fetchData: (newName: string) => async ({dispatch}: ThunkParams) => {
+  fetchData: (newName: string) => async ({localDispatch}: ThunkParams) => {
     // 调用loading方法
-    dispatch('loading', true);
-    // 你也可以调用其他模块的actions，但不建议广泛使用
-    // dispatch('otherModule/actions', /* ...arguments */);
+    localDispatch('loading', true);
     await new Promise(resolve => setTimeout(resolve, 3000));
-    dispatch('loading', false);
+    localDispatch('loading', false);
     return {name: newName};
   },
 }
@@ -319,23 +321,24 @@ const app = {
 
 ```tsx
 // 导入你之前创建的inject函数，详情请参考上面的简单例子
-import { inject } from 'your-inject';
+import useInject from 'your-use-inject';
 
 // 这里App组件只会监听app，state中name的变化，其他值的变化不会引起App组件的更新
-let injector = inject(['app', {
+const [app] = useInject('app', {
   state: ['name'], // 也可以使用函数声明 state: [s => s.name]
-}]);
+});
 
 // 这里App组件只会监听app，maps中deepDep的变化，其他值的变化不会引起App组件的更新
-injector = inject(['app', {
+const [app] = useInject('app', {
   maps: ['deepDep'], 
-}]); 
+}); 
 // 这里App组件不论app模块发生什么变化，都不会更新
-injector = inject(['app', {}]);
+const [app] = useInject('app', {});
 
 
 // 因为actions在创建后会保持不变，所以你不必监听它的变化
-const App = ({app}: typeof injector.type) => {
+const App = () => {
+  const [app] = useInject('app');
   // 获取注入的app模块
   const {state, actions, maps} = app;
   return (
@@ -346,11 +349,6 @@ const App = ({app}: typeof injector.type) => {
   )
 };
 
-// 复杂的例子
-let complexInjector = inject(
-  ['app', {}],
-  ['other', {state: [s => s.xxx], maps: ['xxx']}]
-);
 ```  
 
 ---
@@ -429,20 +427,6 @@ export default store;
 > 在复杂的业务场景下，通常会存在多个模块之间相互监控，调用的场景，所以为了这种场景，可以使用[natur-service](/zh/natur-service/)无侵入性的解决方案，可以监听模块的任何变动，以及无侵入性的开发复杂的业务逻辑，同时保留每个模块的简洁和可维护性。
 
 
-### 加载时候的占位组件配置
-
-```tsx
-import { createInject } from 'natur';
-// 全局配置
-const inject = createInject({
-  storeGetter: () => store,
-  loadingComponent: () => <div>loading...</div>,
-})
-
-// 局部使用
-inject('app')(App, () => <div>loading</div>);
-```
-
 
 ### 在react之外使用natur
 
@@ -477,7 +461,6 @@ maps: {
   addName: lastName => state.name + lastName,
 }
 */
-
 
 
 /*

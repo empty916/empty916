@@ -23,13 +23,16 @@ $ yarn install natur-immer
 
 **将`natur`的`thunkMiddleware`替换为`natur-immer`的`thunkMiddleware`**
 
-```ts {2,6}
+```ts {2,6,9}
 import { createStore } from 'natur';
-import { thunkMiddleware } from 'natur-immer';
+import { thunkMiddleware, withImmerAPIInterceptor } from 'natur-immer';
 
 export const store = createStore({/* ... */}, {/* ... */}}, {
   middlewares: [
-      thunkMiddleware, // 使用natur-immer的thunkMiddleware中间件即可
+      thunkMiddleware, // 使用natur-immer的thunkMiddleware中间件
+  ],
+  interceptors: [
+    withImmerAPIInterceptor, // 使用natur-immer的withImmerAPIInterceptor中间件
   ]
 });
 ```
@@ -41,7 +44,7 @@ export const store = createStore({/* ... */}, {/* ... */}}, {
 `user-module.ts`
 
 ```ts
-import { ImmerThunkParams } from "natur-immer";
+import { ITP, withAPI, WIA } from 'natur-immer';
 
 // 这是mock从后端获取用户的待办事项方法
 const mockFetchTodo = () =>
@@ -74,12 +77,12 @@ type State = typeof state;
 
 const actions = {
   // 更新用户年龄
-  updateAge: (age: number) => ({ setState }: ImmerThunkParams<State>) => {
+  updateAge: (age: number) => ({ setState }: ITP<State>) => {
     // setState就像immer中的produce
-    return setState((state) => (state.age = age));
+    return setState((state) => {state.age = age});
   },
   // 更新用户todo，返回state
-  fetchTodo: () => async ({ setState }: ImmerThunkParams<State>) => {
+  fetchTodo: () => async ({ setState }: ITP<State>) => {
     const res = await mockFetchTodo();
     return setState((state) => {
       state.todo.push(...res); // 直接修改
@@ -88,13 +91,31 @@ const actions = {
   // 更新用户todo，不返回state
   fetchTodoWithoutReturn: () => async ({
     setState,
-  }: ImmerThunkParams<State>) => {
+  }: ITP<State>) => {
     const res = await mockFetchTodo();
     setState((state) => {
       // 或者不返回
       state.todo.push(...res);
     });
   },
+
+  // 你也可以使用withAPI的方式
+  updateAge: withAPI((age: number, {setState}: WIA<State>) => {
+    return setState(state => {state.age = age});
+  }),
+  fetchTodo: withAPI(async ({setState}: WIA<State>) => {
+    const res = await mockFetchTodo();
+    return setState(state => {
+        state.todo.push(...res);
+    });
+  }),
+  fetchTodoWithoutReturn: withAPI(async ({setState}: WIA<State>) => {
+    const res = await mockFetchTodo();
+    setState(state => {
+        state.todo.push(...res);
+    });
+  }),
+
 };
 
 export default {

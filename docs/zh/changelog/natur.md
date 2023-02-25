@@ -1,9 +1,43 @@
 # 更新记录
 
 
+
+## 3.0.0-beta1 (2023-02-25)
+
+### Big change
+
+- complete the refactoring of the typescript part
+
+## 2.2.0 (2023-02-25)
+
+### 重大更新
+
+- 重构inject HOC，从类组件改为函数式组件
+- 新增 `CreateUseInject` API. 现在更加推荐使用`useInject`的hook方式
+- 新增 `store.subscribeAll` API, 监听所有模块变动，无需指定模块监听
+- 新的 `Provider` API, 更好的支持SSR和多个store场景.
+- 新的 `CreateUseStore` API.
+- Middleware/Interceptor参数新增 `getStore` API，用来在Middleware/Interceptor中获取当前store的实例
+- `Middleware`/`Interceptor`范型调整，改为需要两个参数(Modules和Lazy Modules,就像`Store`一样), 并且有默认参数
+
+
+### 不兼容更新
+
+- 删除 `watch` API
+- 升级到React 18版本, 不再兼容React17以下版本
+    - 如果你想要在18版本以下升级natur, 你可以尝试使用 `use-sync-external-store`, 并在调用`createInject/createUseInject`之前将其放入React object中
+    ```ts
+    import {useSyncExternalStore} from 'use-sync-external-store/shim';
+    import React from 'react';
+    
+    React.useSyncExternalStore = useSyncExternalStore;
+    ```
+
+
+
 ## 2.2.0-beta7 (2023-02-10)
 
-### Big Change
+### 重大更新
 
 - `useInject`API新增`flat`选项
 

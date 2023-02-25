@@ -233,12 +233,32 @@ const [moduleB] = useInject('moduleB', {
 
 ### createInject
 
-```ts
-createInject({
-  storeGetter: () => Store,
-  loadingComponent: React.ComponentClass<{}> | React.FC<{}>
-})
+```tsx
+import { createStore, createInject } from 'natur';
 
+const store = createStore({count}, {});
+const inject = createInject({storeGetter: () => store});
+
+// create an injector of count module
+const injector = inject('count');
+
+// declare props type
+const App = ({count}: typeof injector.type) => {
+  return (
+    <>
+      <button onClick={() => count.actions.dec(count.state.number)}>-</button>
+      <span>{count.state.number}</span>
+      <button onClick={() => count.actions.inc(count.state.number)}>+</button>
+      <span>{count.maps.isEven}</span>
+    </>
+  )
+};
+
+// inject count module into App component by injector
+const IApp = injector(App);
+
+// render injected component
+ReactDOM.render(<IApp />, document.querySelector('#app'));
 ```
 
 

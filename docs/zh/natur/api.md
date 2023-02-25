@@ -238,12 +238,27 @@ const moduleB = useInject('moduleB', {
 
 ### createInject
 
-```typescript
-createInject({
-  storeGetter: () => Store,
-  loadingComponent: React.ComponentClass<{}> | React.FC<{}>
-})
+```tsx
+import { createStore, createInject } from 'natur';
 
+const store = createStore({moduleA}, {});
+const inject = createInject({storeGetter: () => store});
+
+// 创建一个moduleA模块的注入器
+const injector = inject('moduleA');
+
+// 声明props类型
+const App = ({moduleA}: typeof injector.type) => {
+  return (
+    <></>
+  )
+};
+
+// 使用注入器向组件中注入count
+const IApp = injector(App);
+
+// 渲染注入后的组件
+ReactDOM.render(<IApp />, document.querySelector('#app'));
 ```
 
 

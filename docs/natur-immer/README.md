@@ -24,13 +24,16 @@ $ yarn install natur-immer
 
 **replace`natur's thunkMiddleware`to`natur-immer's thunkMiddleware`**
 
-```ts {2,6}
+```ts {2,6,9}
 import { createStore } from 'natur';
-import { thunkMiddleware } from 'natur-immer';
+import { thunkMiddlewarem, withImmerAPIInterceptor } from 'natur-immer';
 
 export const store = createStore({/* ... */}, {/* ... */}}, {
   middlewares: [
-      thunkMiddleware, // use natur-immer's thunkMiddleware
+    thunkMiddleware, // use natur-immer's thunkMiddleware
+  ],
+  interceptors: [
+    withImmerAPIInterceptor, // use natur-immer's withImmerAPIInterceptor
   ]
 });
 ```
@@ -41,7 +44,7 @@ export const store = createStore({/* ... */}, {/* ... */}}, {
 
 `user-module.ts`
 ```ts
-import { ImmerThunkParams } from 'natur-immer';
+import { ITP, withAPI, WIA } from 'natur-immer';
 
 // this is a mock function to fetch todo form service
 const mockFetchTodo = () => new Promise<{name: string; status: number}[]>(res => res([
@@ -72,24 +75,43 @@ type State = typeof state;
 
 const actions = {
     // update user age
-    updateAge: (age: number) => ({setState}: ImmerThunkParams<State>) => {
+    updateAge: (age: number) => ({setState}: ITP<State>) => {
         // setState like produce in immer
-        return setState(state => state.age = age);
+        return setState(state => {state.age = age});
     },
     // update user todo，return state
-    fetchTodo: () => async ({setState}: ImmerThunkParams<State>) => {
+    fetchTodo: () => async ({setState}: ITP<State>) => {
         const res = await mockFetchTodo();
         return setState(state => {
             state.todo.push(...res); // modify directly
         }); // return new state(recommend return)
     },
     // update user todo，without return state
-    fetchTodoWithoutReturn: () => async ({setState}: ImmerThunkParams<State>) => {
+    fetchTodoWithoutReturn: () => async ({setState}: ITP<State>) => {
         const res = await mockFetchTodo();
         setState(state => {
             state.todo.push(...res); // modify directly
         }); // without return state
     },
+
+
+    // your can also use withAPI mode
+    updateAge: withAPI((age: number, {setState}: WIA<State>) => {
+        return setState(state => {state.age = age});
+    }),
+    fetchTodo: withAPI(async ({setState}: WIA<State>) => {
+        const res = await mockFetchTodo();
+        return setState(state => {
+            state.todo.push(...res);
+        });
+    }),
+    fetchTodoWithoutReturn: withAPI(async ({setState}: WIA<State>) => {
+        const res = await mockFetchTodo();
+        setState(state => {
+            state.todo.push(...res);
+        });
+    }),
+
 }
 
 export default {

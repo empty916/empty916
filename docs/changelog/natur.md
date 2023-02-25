@@ -1,6 +1,38 @@
 # Change Log
 
 
+## 3.0.0-beta1 (2023-02-25)
+
+### Big change
+
+- complete the refactoring of the typescript part
+
+## 2.2.0 (2023-02-25)
+
+### Big Change
+
+- Refactor inject from Class Component to Functional Component
+- New `CreateUseInject` API. `useInject` is recommended now.
+- New `store.subscribeAll` API, listen to all module changes, no need to specify a module to listen to
+- New `Provider` API, better support for SSR and more than one store case.
+- New `CreateUseStore` API.
+- New `getStore` Arguments of Middleware and Interceptor
+- Generics `Middleware`/`Interceptor` changed，They need 2 params(Modules and Lazy Modules, same as `Store`), and also have default params
+
+
+### Break Change
+
+- Remove `watch` API
+- Upgrade to React version 18, no longer compatible with React versions below 17
+    - if you want upgrade natur in react18-, you could try to use `use-sync-external-store`, and put it into React object, before calling createInject/createUseInject
+    ```ts
+    import {useSyncExternalStore} from 'use-sync-external-store/shim';
+    import React from 'react';
+    
+    React.useSyncExternalStore = useSyncExternalStore;
+    ```
+
+
 
 ## 2.2.0-beta7 (2023-02-10)
 
