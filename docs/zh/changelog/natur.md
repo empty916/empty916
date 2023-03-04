@@ -1,6 +1,37 @@
 # 更新记录
 
 
+## 3.0.0 (2023-03-04)
+
+- 将`natur-service`的功能移植到natur本身，变为新的 `watch` 属性，为了模块通讯以及更好的掌握业务
+    ```ts
+    import { ModuleEvent, AllModuleEvent, WatchAPI } from 'natur';
+    export const moduleA = {
+        state: {},
+        actions: {/* ... */},
+        watch: {
+            moduleB(event: ModuleEvent, api: WatchAPI) {
+                // 任何 moduleB 的变动都会触发这个函数，具体的变动信息在event参数获取
+                // api参数包含本模块的, getState, getMaps, localDispatch等API, 以及获取全局store的getStoreAPI.
+                // localDispatch是只能调用本模块的action，例如：localDispatch('actionNameA', ...actionAArgs);
+            }
+        }
+    }
+    export const moduleB = {
+        state: {},
+        actions: {/* ... */},
+        // watch也可以是一个函数用来监听所有模块的变动
+        watch: (event: AllModuleEvent, api: WatchAPI) => { 
+            // 任何模块的变动都会触发这个函数，具体的变动信息在event参数获取
+            // api参数包含本模块的, getState, getMaps, localDispatch等API, 以及获取全局store的getStoreAPI.
+            // localDispatch是只能调用本模块的action，例如：localDispatch('actionNameA', ...actionAArgs);
+        }
+    }
+    ```
+- 即将废弃`thunkMiddleware`中的`dispatch` API, 由新的`localDispatch`API替代，`localDispatch`只能调用本模块的action
+- `subscribe` and `subscribeAll` API增强，提供更全面的事件信息，以及API入参来掌控业务
+
+
 
 ## 3.0.0-beta1 (2023-02-25)
 

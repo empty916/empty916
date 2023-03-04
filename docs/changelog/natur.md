@@ -1,5 +1,35 @@
 # Change Log
 
+## 3.0.0 (2023-03-04)
+
+- now `natur-service` is deprecated, `watch` props of module is recommended.
+    ```ts
+    import { ModuleEvent, AllModuleEvent, WatchAPI } from 'natur';
+    export const moduleA = {
+        state: {},
+        actions: {/* ... */},
+        watch: {
+            moduleB(event: ModuleEvent, api: WatchAPI) {
+                // any update of moduleB will trigger this function
+                // event have any data of this change
+                // api contain, getState, getMaps, localDispatch, getStore API etc.
+            }
+        }
+    }
+    export const moduleB = {
+        state: {},
+        actions: {/* ... */},
+        // watch also can be a function to watch all module of store
+        watch: (event: AllModuleEvent, api: WatchAPI) => { 
+            // any update of any module will trigger this function
+            // event have any data of this change
+            // api contain, getState, getMaps, localDispatch, getStore API etc.
+        }
+    }
+    ```
+- The dispatch API in `thunkMiddleware` will soon be scrapped and replaced with a new `localDispatch` API that will only call actions from this module
+- The `subscribe` and `SubscribeAll` API is enhanced to provide more comprehensive event information, as well as API argument to control the business
+
 
 ## 3.0.0-beta1 (2023-02-25)
 

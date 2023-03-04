@@ -185,6 +185,51 @@ const demo = {
  */
 ```
 
+
+### watch — 监听模块变动
+
+- **必填：**`false`
+- **类型：**`{[moduleName: string]: (event: WatchEvent, api: WatchAPI) => void;} | (event: AllModuleEvent, api: WatchAPI) => void;`
+- watch可以监听某个模块的变动，也可以监听所有模块的变动
+- 在watch里面可以获取当前模块的state，maps，也可以调用localDispatch来调用本模块的action
+
+```ts
+const demo = {
+  state: {
+    number: 1,
+  },
+  actions: { 
+    inc: number => ({number: number + 1}),
+    dec: number => ({number: number - 1}),
+  },
+  watch: {
+    moduleA: (event: ModuleEvent, api: WatchAPI) => {
+      // 任何 moduleA 的变动都会触发这个函数，具体的变动信息在event参数获取
+      // 例如moduleA的初始化，更新state，销毁都可以监听到
+      // api参数包含demo模块的, getState, getMaps, localDispatch等API, 以及获取全局store的getStoreAPI.
+      // localDispatch只能调用本模块的action，例如：localDispatch('inc', 2);
+    }
+  }
+}
+
+const moduleA = {
+  state: {
+    number: 1,
+  },
+  actions: { 
+    inc1: number => ({number: number + 1}),
+    dec1: number => ({number: number - 1}),
+  },
+  // watch也可以是一个函数用来监听所有模块的变动
+  watch: (event: AllModuleEvent, api: WatchAPI) => { 
+      // 任何模块的变动都会触发这个函数，包括moduleA模块自己，具体的变动信息在event参数获取
+      // api参数包含moduleA模块的, getState, getMaps, localDispatch等API, 以及获取全局store的getStoreAPI.
+      // localDispatch是只能调用本模块的action，例如：localDispatch('inc1', 2);
+    }
+}
+
+```
+
 ## 应用场景
 
 ### 注入多个模块
@@ -424,9 +469,33 @@ export default store;
 ### 跨模块的交互的复杂业务场景
 
 
-> 在复杂的业务场景下，通常会存在多个模块之间相互监控，调用的场景，所以为了这种场景，可以使用[natur-service](/zh/natur-service/)无侵入性的解决方案，可以监听模块的任何变动，以及无侵入性的开发复杂的业务逻辑，同时保留每个模块的简洁和可维护性。
+> 你可以使用模块中的watch功能，他可以监听任何模块的任何变动，并且你可以发起你想要的dispatch
 
+```ts
+import { ModuleEvent, AllModuleEvent, WatchAPI } from 'natur';
 
+export const moduleA = {
+    state: {},
+    actions: {/* ... */},
+    watch: {
+        moduleB(event: ModuleEvent, api: WatchAPI) {
+          // 任何 moduleB 的变动都会触发这个函数，具体的变动信息在event参数获取
+          // api参数包含本模块的, getState, getMaps, localDispatch等API, 以及获取全局store的getStoreAPI.
+          // localDispatch是只能调用本模块的action，例如：localDispatch('actionNameA', ...actionAArgs);
+        }
+    }
+}
+export const moduleB = {
+    state: {},
+    actions: {/* ... */},
+    // watch也可以是一个函数用来监听所有模块的变动
+    watch: (event: AllModuleEvent, api: WatchAPI) => { 
+      // 任何模块的变动都会触发这个函数，具体的变动信息在event参数获取
+      // api参数包含本模块的, getState, getMaps, localDispatch等API, 以及获取全局store的getStoreAPI.
+      // localDispatch是只能调用本模块的action，例如：localDispatch('actionNameA', ...actionAArgs);
+    }
+}
+```
 
 ### 在react之外使用natur
 

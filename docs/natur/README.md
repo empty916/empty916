@@ -176,6 +176,51 @@ const demo = {
 ```
 
 
+### watch — watch any change of modules
+
+- **required:**`false`
+- **type:**`{[moduleName: string]: (event: WatchEvent, api: WatchAPI) => void;} | (event: AllModuleEvent, api: WatchAPI) => void;`
+- watch can monitor the changes of a certain module, or the changes of all modules
+- in the watch, you can get the state and maps of the current module, and you can also call localDispatch to call the action of this module
+
+```ts
+const demo = {
+  state: {
+    number: 1,
+  },
+  actions: { 
+    inc: number => ({number: number + 1}),
+    dec: number => ({number: number - 1}),
+  },
+  watch: {
+    moduleA: (event: ModuleEvent, api: WatchAPI) => {
+      // any change of moduleA will trigger this function, and the specific change information can be obtained in the event parameter
+      // for example, the initialization, state update, and destruction of moduleA can all be monitored
+      // the api parameter includes APIs such as getState, getMaps, localDispatch of the demo module, and getStoreAPI for obtaining the global store.
+      // localDispatch can only call the action of demo module, for example: localDispatch('inc', 2);
+    }
+  }
+}
+
+const moduleA = {
+  state: {
+    number: 1,
+  },
+  actions: { 
+    inc1: number => ({number: number + 1}),
+    dec1: number => ({number: number - 1}),
+  },
+  // watch can also be a function to monitor the changes of all modules
+  watch: (event: AllModuleEvent, api: WatchAPI) => { 
+      // any module change will trigger this function, including the moduleA module itself, and the specific change information can be obtained in the event parameter
+      // the api parameter includes APIs such as getState, getMaps, localDispatch of the moduleA module, and getStoreAPI for obtaining the global store.
+      // localDispatch can only call the action of moduleA module, for example: localDispatch('inc1', 2);
+    }
+}
+
+```
+
+
 ## usecase
 
 
@@ -415,8 +460,35 @@ export default store;
 
 ### complex business scenarios of cross-module interaction
 
-> In complex business scenarios, there are usually scenarios where multiple modules monitor and call each other, so for this scenario, you can use [natur-service](/natur-service/) Non-intrusive solution, you can monitor any changes in the module, and non-invasive development of complex business logic, while retaining the simplicity and maintainability of each module.
+> you can use watch prop of module, to listen any changes of other module, and dispatch any action you want
 
+```ts
+import { ModuleEvent, AllModuleEvent, WatchAPI } from 'natur';
+
+export const moduleA = {
+    state: {},
+    actions: {/* ... */},
+    watch: {
+        moduleB(event: ModuleEvent, api: WatchAPI) {
+          // any update of moduleB will trigger this function
+          // event have any data of this change
+          // api contain, getState, getMaps, localDispatch APIs of this module, and getStore API.
+          // localDispatch can only call action in this module, for example: localDispatch('actionNameA', ...actionAArgs);
+        }
+    }
+}
+export const moduleB = {
+    state: {},
+    actions: {/* ... */},
+    // watch also can be a function to watch all module of store
+    watch: (event: AllModuleEvent, api: WatchAPI) => { 
+      // any update of any module will trigger this function
+      // event have any data of this change
+      // api contain, getState, getMaps, localDispatch APIs of this module, and getStore API.
+      // localDispatch can only call action in this module, for example: localDispatch('actionNameA', ...actionAArgs);
+    }
+}
+```
 ---
 
 
