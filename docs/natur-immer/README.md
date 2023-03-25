@@ -122,6 +122,21 @@ export default {
 
 ## NOTE
 
+- withAPI will control the parameters passed in at runtime, if the number of parameters is the same as declared, withAPI will not change anything, if the number of parameters is not the same as declared, such as more or less, withAPI will remove the extra parameters or fill the same parameters with undefined as expected, **the withAPI operation cannot take optional parameters**, it would break the function length and cause an error
+
+```ts
+
+const actions = {
+    // optional arguments is forbidden in withAPI, it will cause error at runtime
+    getUserBadWithOptionalArg: withAPI((id: string = '', {setState}: WIA) => {
+        // ...
+    }),
+    getUserGoodWithOptionalArg: (id: string = '') => ({setState}: WIA) => {
+        // ...
+    }
+}
+```
+
 - from the test point of view, both returning state and not returning state can run normally, but no return action has no return value type where the action is called.
 ```ts
 import store from 'store';

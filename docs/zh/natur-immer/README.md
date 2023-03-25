@@ -126,6 +126,22 @@ export default {
 
 ## NOTE
 
+- withAPI会控制运行时传入的参数，如果参数个数和声明的一样，withAPI不会改变任何东西，如果参数个数和声明的不一样，比如多了或者少了，withAPI会去掉多余的参数或者使用undefined填充缺失的参数，**withAPI操作不能带可选参数**，它会破坏函数长度并导致错误
+
+
+```ts
+
+const actions = {
+    // withAPI禁止可选参数，会导致运行时出错
+    getUserBadWithOptionalArg: withAPI((id: string = '', {setState}: WIA) => {
+        // ...
+    }),
+    getUserGoodWithOptionalArg: (id: string = '') => ({setState}: WIA) => {
+        // ...
+    }
+}
+```
+
 - 返回 state 和不返回 state 均可以正常运行，但是无返回的 action 在调用 action 的地方是没有返回值类型的
 
 ```ts
