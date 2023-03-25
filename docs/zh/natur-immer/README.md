@@ -136,6 +136,7 @@ const actions = {
     getUserBadWithOptionalArg: withAPI((id: string = '', {setState}: WIA) => {
         // ...
     }),
+    // 如果你一定要用可选参数，那么thunk风格会比较适合这个场景
     getUserGoodWithOptionalArg: (id: string = '') => ({setState}: WIA) => {
         // ...
     }

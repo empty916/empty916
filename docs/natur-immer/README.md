@@ -131,6 +131,7 @@ const actions = {
     getUserBadWithOptionalArg: withAPI((id: string = '', {setState}: WIA) => {
         // ...
     }),
+    // if you have to use optional argument, thunk style will be a better choice
     getUserGoodWithOptionalArg: (id: string = '') => ({setState}: WIA) => {
         // ...
     }
