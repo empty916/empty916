@@ -24,16 +24,13 @@ $ yarn install natur-immer
 
 **replace`natur's thunkMiddleware`to`natur-immer's thunkMiddleware`**
 
-```ts {2,6,9}
+```ts {2,6}
 import { createStore } from 'natur';
-import { thunkMiddlewarem, withImmerAPIInterceptor } from 'natur-immer';
+import { thunkMiddlewarem } from 'natur-immer';
 
 export const store = createStore({/* ... */}, {/* ... */}, {
   middlewares: [
     thunkMiddleware, // use natur-immer's thunkMiddleware
-  ],
-  interceptors: [
-    withImmerAPIInterceptor, // use natur-immer's withImmerAPIInterceptor
   ]
 });
 ```
@@ -44,7 +41,7 @@ export const store = createStore({/* ... */}, {/* ... */}, {
 
 `user-module.ts`
 ```ts
-import { ITP, withAPI, WIA } from 'natur-immer';
+import { ITP } from 'natur-immer';
 
 // this is a mock function to fetch todo form service
 const mockFetchTodo = () => new Promise<{name: string; status: number}[]>(res => res([
@@ -95,23 +92,6 @@ const actions = {
     },
 
 
-    // your can also use withAPI mode
-    updateAge: withAPI((age: number, {setState}: WIA<State>) => {
-        return setState(state => {state.age = age});
-    }),
-    fetchTodo: withAPI(async ({setState}: WIA<State>) => {
-        const res = await mockFetchTodo();
-        return setState(state => {
-            state.todo.push(...res);
-        });
-    }),
-    fetchTodoWithoutReturn: withAPI(async ({setState}: WIA<State>) => {
-        const res = await mockFetchTodo();
-        setState(state => {
-            state.todo.push(...res);
-        });
-    }),
-
 }
 
 export default {
@@ -121,22 +101,6 @@ export default {
 ```
 
 ## NOTE
-
-- withAPI will control the parameters passed in at runtime, if the number of parameters is the same as declared, withAPI will not change anything, if the number of parameters is not the same as declared, such as more or less, withAPI will remove the extra parameters or fill the same parameters with undefined as expected, **the withAPI operation cannot take optional parameters**, it would break the function length and cause an error
-
-```ts
-
-const actions = {
-    // optional arguments is forbidden in withAPI, it will cause error at runtime
-    getUserBadWithOptionalArg: withAPI((id: string = '', {setState}: WIA) => {
-        // ...
-    }),
-    // if you have to use optional argument, thunk style will be a better choice
-    getUserGoodWithOptionalArg: (id: string = '') => ({setState}: WIA) => {
-        // ...
-    }
-}
-```
 
 - from the test point of view, both returning state and not returning state can run normally, but no return action has no return value type where the action is called.
 ```ts

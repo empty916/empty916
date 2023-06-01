@@ -23,16 +23,13 @@ $ yarn install natur-immer
 
 **将`natur`的`thunkMiddleware`替换为`natur-immer`的`thunkMiddleware`**
 
-```ts {2,6,9}
+```ts {2,6}
 import { createStore } from 'natur';
-import { thunkMiddleware, withImmerAPIInterceptor } from 'natur-immer';
+import { thunkMiddleware } from 'natur-immer';
 
 export const store = createStore({/* ... */}, {/* ... */}, {
   middlewares: [
       thunkMiddleware, // 使用natur-immer的thunkMiddleware中间件
-  ],
-  interceptors: [
-    withImmerAPIInterceptor, // 使用natur-immer的withImmerAPIInterceptor中间件
   ]
 });
 ```
@@ -44,7 +41,7 @@ export const store = createStore({/* ... */}, {/* ... */}, {
 `user-module.ts`
 
 ```ts
-import { ITP, withAPI, WIA } from 'natur-immer';
+import { ITP } from 'natur-immer';
 
 // 这是mock从后端获取用户的待办事项方法
 const mockFetchTodo = () =>
@@ -99,23 +96,6 @@ const actions = {
     });
   },
 
-  // 你也可以使用withAPI的方式
-  updateAge: withAPI((age: number, {setState}: WIA<State>) => {
-    return setState(state => {state.age = age});
-  }),
-  fetchTodo: withAPI(async ({setState}: WIA<State>) => {
-    const res = await mockFetchTodo();
-    return setState(state => {
-        state.todo.push(...res);
-    });
-  }),
-  fetchTodoWithoutReturn: withAPI(async ({setState}: WIA<State>) => {
-    const res = await mockFetchTodo();
-    setState(state => {
-        state.todo.push(...res);
-    });
-  }),
-
 };
 
 export default {
@@ -125,23 +105,6 @@ export default {
 ```
 
 ## NOTE
-
-- withAPI会控制运行时传入的参数，如果参数个数和声明的一样，withAPI不会改变任何东西，如果参数个数和声明的不一样，比如多了或者少了，withAPI会去掉多余的参数或者使用undefined填充缺失的参数，**withAPI操作不能带可选参数**，它会破坏函数长度并导致错误
-
-
-```ts
-
-const actions = {
-    // withAPI禁止可选参数，会导致运行时出错
-    getUserBadWithOptionalArg: withAPI((id: string = '', {setState}: WIA) => {
-        // ...
-    }),
-    // 如果你一定要用可选参数，那么thunk风格会比较适合这个场景
-    getUserGoodWithOptionalArg: (id: string = '') => ({setState}: WIA) => {
-        // ...
-    }
-}
-```
 
 - 返回 state 和不返回 state 均可以正常运行，但是无返回的 action 在调用 action 的地方是没有返回值类型的
 
