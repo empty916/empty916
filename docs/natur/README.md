@@ -945,9 +945,8 @@ type StoreInsType = Store<typeof allSyncModules, typeof allAsyncModules>;
 ### system design concept
 
 1. The original intention of `natur` is to manage all the business logic in the project in a simple and natural way. In this respect, it is different from [redux](https://redux.js.org/) or [mobx](https://mobx.js.org/README.html) such a state management library. `natur` can easily make all the business in the project and the `UI` layer loosely coupled, which can keep the `UI` sufficiently simple and pure, which is of great benefit to the maintainability of the project.
-1. There are two parts in `natur`, one is the module, the other is the communication and call between the modules, the recommended solution here is [natur-service](/natur-service)
 1. The `state` of the module contains the storage of business data. `maps` contains the logic of `state` derived data, and the design of the cache to ensure performance. It is worth mentioning that `maps` uses a manual method of declaring dependencies, which is also consistent with the consistent design style of `react` . The `action` contains the update of the `state` data and other business logic (such as an API call without a return value). `natur` recommends that the responsibility of the `action` design is clear, and an `action` only does one thing. If the execution of each `action` can have corresponding `state` changes, then this can make the entire project observable and traceable, and can better serve the communication between modules (observability and traceability can be passed through [interceptor](#interceptor) and [middleware](#middleware) to achieve).
-1. In the module communication, [natur-service](/natur-service) recommends using a class to manage a business module or a business process instead of a `natur` module corresponding to a [natur-service](/natur-service) class. In terms of the design specification of module communication, it is recommended to `watch` other modules in your own `service` instead of `dispatch` in other `service``action` in your own module, so as to ensure developers Responsibilities with business modules are clear. The design of the `service` class should be as simple as possible, and only include the `watch` and `dispatch` logic of the `natur` module. Richer logic is recommended to be maintained in the `natur` module to ensure the perfect function of the module.
+1. In module communication, [watch](/natur/#watch-watch-any-change-of-modules) can effectively monitor module actions and decouple dependencies between modules.
 1. In the design of the `natur` module, it is recommended that users subdivide the modules, clarify the boundaries and granularity of the modules to ensure the maintainability of the modules. Make sure that a `natur` module only deals with its own business, and does not need to care about other modules, and is not coupled with other modules.
 1. Because the creation and use of `natur` module is simple enough, so that the development can be as simple and natural as possible to write projects that conform to the design concept of `natur`. Of course, the most important thing is that developers need to understand `natur. `The design philosophy and follow it.
 
@@ -990,7 +989,6 @@ const App = inject('count', 'name')(_App);
 
 ## plugins
 
-- [natur-service: natur upper scheduling library](/natur-service)
 - [natur-persist: localStorage plugins](/natur-persist)
 - [natur-persist-async: async presit plugin](/natur-persist-async)
 - [natur-immer: immer middleware](/natur-immer)

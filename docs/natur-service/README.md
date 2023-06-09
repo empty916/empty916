@@ -5,6 +5,11 @@ sidebarDepth: 2
 # natur-service
 The call layer design of natur action is used to aggregate multiple actions into a certain business flow. It is suitable for complex business scenarios. The separation of advanced scenarios can better maintain a single action and expand business.
 
+
+::: danger
+This plugin is no longer recommended for use. Please use the "[watch](/natur/#watch-watch-any-change-of-modules)" option in the "natur" module as a replacement.
+:::
+
 ## associated natur version
 
 | natur | natur-service |

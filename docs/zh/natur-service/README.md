@@ -5,6 +5,11 @@ sidebarDepth: 2
 # natur-service
 natur action的调用层设计，用于聚合多个action成为一定的业务流，适用于复杂的业务场景，高级场景分离，可以更好的维护单个action，以及业务拓展
 
+::: danger
+此插件现在已不推荐使用，请使用natur模块中的[watch](/zh/natur/#watch-监听模块变动)选项替代
+:::
+
+
 ## natur-service关联的natur版本
 
 | natur | natur-service |
