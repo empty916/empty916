@@ -52,6 +52,7 @@ const actions = {
 };
 
 const count = {
+  // name: 'you-module-name', 你可以通过name来配置你模块的名字
   state,
   actions,
 };
@@ -123,48 +124,6 @@ App.getInitialProps = async ({store}: {store: Store}) => {
 export default injector(App);
 ```
 
-## 使用service
-
-
-1. 添加service配置
-`.umirc.ts`
-```ts {4}
-export default {
-  plugins: ['umi-natur'],
-  natur: {
-    service: { /* ... */ },
-  }
-}
-```
-2. 创建service模块
-`service/count2`
-```ts
-import { BaseService } from 'umi';
-
-// 这里表示count2模块会监听count的变动，然后同步count的state到自己的state
-// 类名必须是大写字母开头
-export default class Count2Service extends BaseService {
-    start() {
-        // 这里的代码是自动执行的， ssr模式下也是如此
-        this.watch('count', ({state, actionName}) => {
-            if (actionName === 'update' && state) {
-                this.dispatch('count2', 'update', state);
-            }
-        })
-    }
-    getCount2State = () => {
-      return this.store.getModule('count2').state;
-    }
-}
-```
-3. 使用service模块
-
-`some.ts`
-```ts
-// 实例是小写字母开头的
-import { count2Service } from '@@/service';
-count2Service.getCount2State();
-```
 
 # 参数
 ## natur
@@ -290,55 +249,6 @@ count2Service.getCount2State();
 ::: tip 最低版本要求
 umi-natur >= 1.1.7
 :::
-
-
-## service
-
-- **必填：** `false`
-- **类型：** `object`
-- 插件会扫描service文件夹下的代码，如果在这个文件夹下的文件，有Service类被默认导出, 那么Service实例化的代码会被自动生成在.umi/service下
-- demo
-
-  `src/service/demo.ts`
-  ```ts
-  import { BaseService } from 'umi';
-  export default class DemoService extends BaseService {
-    start() {
-      this.watch('other', () => {
-        this.dispath('demo', 'action');
-      })
-    }
-    getDemo() {
-      return this.store.getModule('demo');
-    }
-  }
-  ```
-  `use-service.ts`
-  ```ts
-  import { demoService } from '@@/service';
-
-  const demo = demoService.getDemo();
-  ```
-
-### dirName
-
-- **类型：**`string`
-- **默认值：**`'service'`
-- 插件会扫描service文件夹下的代码，如果在这个文件夹下的文件，有Service类被默认导出
-- 那么Service实例化的代码会被自动生成在.umi/service下
-
-### superClassName
-
-- **类型：**`string`
-- **默认值：**`'BaseService'`
-- 识别是否是Service class的关键是，如果类是集成于BaseService，才会被导出
-- 同样，如果你是自己定义了一个Service基类，那么你也可以修改这个扫描配置
-
-### ignore
-
-- **必填：** `false`
-- **类型：** `RegExp[]`
-- 如果你并不想让某些Service类被自动生成代码，那么你可以配置忽略的类名
 
 
 ## LICENSE

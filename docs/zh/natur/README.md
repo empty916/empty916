@@ -635,6 +635,71 @@ store.dispatch('count', 'inc', state.number);
 ```
 
 
+### 不想写那么多typescript代码？ (NaturBaseFactory)
+
+- 不想写maps那么多类型？
+  ```ts
+  import { NaturBaseFactory } from 'natur';
+
+  const state = {
+    count: 1,
+  };
+
+  const createMap = NaturBaseFactory.mapCreator(state);
+  const maps = {
+    isOdd: createMap(
+      // 这里的s无需手动声明类型
+      s => s.count,
+      // 这里的count无需手动声明类型，自动推导出前面的返回数据类型
+      count => count % 2 === 1
+    )
+  }
+  ```
+- 不想写actions类型？
+
+  **一般插件都建议重写此类方法，以符合插件的类型提示，例如natur-immer的NaturFactory.actionsCreator**
+  ```ts
+  import { NaturBaseFactory } from 'natur';
+
+  const state = {
+    count: 1,
+  };
+
+  const createMap = NaturBaseFactory.mapCreator(state);
+
+  const maps = {
+    isOdd: createMap(
+      s => s.count,
+      count => count % 2 === 1
+    )
+  }
+
+  // 第二个参数是可选的，没有maps可以不用传
+  const createActions = NaturBaseFactory.actionsCreator(state, maps);
+
+  const actions = createActions({
+    // 这里的api类型会自动提示，不需要再手动声明
+    updateCount: (count: number) => api => {
+      api.setState(count)
+    }
+  })
+  ```
+
+- 不想写watch
+  ```ts
+  import { NaturBaseFactory } from 'natur';
+  /**
+   * 第一个参数是你想
+   */
+  const createWatch = NaturBaseFactory.watchCreator(module1, state, maps);
+  const watch = createWatch({
+    // event和api的类型都会自动推导出，无需手动声明
+    module1Name: (event, api) => {
+      // xxx
+    }
+  })
+  ```
+
 
 ## 拦截器
 

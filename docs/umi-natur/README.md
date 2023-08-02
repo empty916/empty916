@@ -49,6 +49,7 @@ const actions = {
 };
 
 const count = {
+  // name: 'you-module-name', you can custom you module name by name option
   state,
   actions,
 };
@@ -118,51 +119,6 @@ App.getInitialProps = async ({store}: {store: Store}) => {
 
 export default injector(App);
 ```
-
-
-## use service
-
-
-1. add service config
-`.umirc.ts`
-```ts {4}
-export default {
-  plugins: ['umi-natur'],
-  natur: {
-    service: { /* ... */ },
-  }
-}
-```
-2. create service module
-`service/count2`
-```ts
-import { BaseService } from 'umi';
-
-// This means that the count2 module will monitor the changes of count, and then synchronize the state of count to its own state
-// The class name must start with uppercase
-export default class Count2Service extends BaseService {
-    start() {
-        // The code here is executed automatically，ssr mode also
-        this.watch('count', ({state, actionName}) => {
-            if (actionName === 'update' && state) {
-                this.dispatch('count2', 'update', state);
-            }
-        })
-    }
-    getCount2State = () => {
-      return this.store.getModule('count2').state;
-    }
-}
-```
-3. Use the service module
-
-`some.ts`
-```ts
-// Class instances start with a lowercase letter
-import { count2Service } from '@@/service';
-count2Service.getCount2State();
-```
-
 
 
 
@@ -291,55 +247,6 @@ count2Service.getCount2State();
 ::: tip minium version
 umi-natur >= 1.1.7
 :::
-
-## service
-
-- **required:** `false`
-- **type:**`object`
-- The plugin will scan the code in the service folder. If there are Service classes in the files in this folder that are exported by default, then the code for Service instantiation will be automatically generated under .umi/service
-- demo
-
-  `src/service/demo.ts`
-  ```ts
-  import { BaseService } from 'umi';
-  export default class DemoService extends BaseService {
-    start() {
-      this.watch('other', () => {
-        this.dispath('demo', 'action');
-      })
-    }
-    getDemo() {
-      return this.store.getModule('demo');
-    }
-  }
-  ```
-  `use-service.ts`
-  ```ts
-  import { demoService } from '@@/service';
-
-  const demo = demoService.getDemo();
-  ```
-
-
-### dirName
-
-- **type:**`string`
-- **default:**`'service'`
-- The plug-in scans the code in the service folder. If there are files in this folder, Service classes are exported by default
-- Then the code for Service instantiation will be automatically generated under .umi/service
-
-### superClassName
-
-- **type:**`string`
-- **default:**`'BaseService'`
-- The key to identifying whether it is a Service class is that if the class is integrated in BaseService, it will be exported
-- Similarly, if you define a Service base class yourself, then you can also modify the scan configuration
-
-### ignore
-
-- **required:** `false`
-- **type:** `RegExp[]`
-- If you do not want some Service classes to be automatically generated code, then you can configure the ignored class name
 
 
 ## LICENSE
