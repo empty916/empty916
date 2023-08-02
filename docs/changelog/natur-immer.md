@@ -2,6 +2,14 @@
 
 
 
+## 1.0.12 (2023-08-2)
+
+### Improvements
+
+
+- Add the `NaturFactory` utility class to enhance the user development experience.
+
+
 ## 1.0.8 (2023-02-25)
 
 ### Big change

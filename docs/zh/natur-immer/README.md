@@ -104,6 +104,35 @@ export default {
 };
 ```
 
+## NaturFactory
+
+- NaturFactory继承NaturBaseFactory，重写了actionsCreator
+  ```ts
+  import { NaturFactory } from 'natur-immer';
+
+  const state = {
+    count: 1,
+  };
+  
+  const createMap = NaturFactory.mapCreator(state);
+
+  const maps = {
+    isOdd: createMap(
+      s => s.count,
+      count => count % 2 === 1
+    )
+  }
+  // The second parameter is optional; if you don't have maps, you don't need to pass it
+  const createActions = NaturFactory.actionsCreator(state, maps);
+  
+  const actions = createActions({
+    // The type of 'api' here will be automatically suggested, no need to manually declare
+    updateCount: (count: number) => api => {
+      api.setState(count)
+    }
+  })
+  ```
+
 ## NOTE
 
 - 返回 state 和不返回 state 均可以正常运行，但是无返回的 action 在调用 action 的地方是没有返回值类型的

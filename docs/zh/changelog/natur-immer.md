@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.0.12 (2023-08-2)
+
+### Improvements
+
+
+- 新增NaturFactory工具类，用于提高用户开发体验
+
+
+
 ## 1.0.8 (2023-02-25)
 
 ### Big change

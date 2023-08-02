@@ -1,5 +1,22 @@
 # Change Log
 
+
+
+
+## 3.0.1 (2023-08-2)
+
+
+### Bug Fix
+
+- Resolving the error `Error: Missing getServerSnapshot, which is required for server-rendered content. Will revert to client rendering.` in the SSR (Server-Side Rendering) scenario for Natur.
+
+### Improvements
+
+
+- Introducing the `NaturBaseFactory` utility class to enhance the user development experience.
+
+
+
 ## 3.0.0 (2023-03-04)
 
 - now `natur-service` is deprecated, `watch` props of module is recommended.

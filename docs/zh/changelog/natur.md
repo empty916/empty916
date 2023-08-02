@@ -1,6 +1,22 @@
 # 更新记录
 
 
+
+## 3.0.1 (2023-08-2)
+
+
+### Bug Fix
+
+- 解决Natur在SSR场景的报错`Error: Missing getServerSnapshot, which is required for server-rendered content. Will revert to client rendering.`
+
+### Improvements
+
+
+- 新增NaturBaseFactory工具类，用于提高用户开发体验
+
+
+
+
 ## 3.0.0 (2023-03-04)
 
 - 将`natur-service`的功能移植到natur本身，变为新的 `watch` 属性，为了模块通讯以及更好的掌握业务

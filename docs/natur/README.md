@@ -631,6 +631,74 @@ const lazyLoadView = () => {
 ```
 
 
+### Don't want to write so much TypeScript code? (NaturBaseFactory)
+
+- Don't want to write so many map types?
+
+  ```ts
+  import { NaturBaseFactory } from 'natur';
+
+  const state = {
+    count: 1,
+  };
+
+  const createMap = NaturBaseFactory.mapCreator(state);
+  const maps = {
+    isOdd: createMap(
+      // The type of 's' here doesn't need to be manually declared
+      s => s.count,
+      // The type of 'count' here doesn't need to be manually declared, it is automatically inferred from the preceding return data type
+      count => count % 2 === 1
+    )
+  }
+
+  ```
+
+- Don't want to write action types?
+
+**Most plugins recommend overriding such methods to conform to the plugin's type prompts, e.g., NaturFactory.actionsCreator in natur-immer.**
+  ```ts
+  import { NaturBaseFactory } from 'natur';
+
+  const state = {
+    count: 1,
+  };
+
+  const maps = {
+    isOdd: createMap(
+      s => s.count,
+      count => count % 2 === 1
+    )
+  }
+  // The second parameter is optional; if you don't have maps, you don't need to pass it
+  const createActions = NaturBaseFactory.actionsCreator(state, maps);
+  const actions = createActions({
+    // The type of 'api' here will be automatically suggested, no need to manually declare
+    updateCount: (count: number) => api => {
+      api.setState(count)
+    }
+  })
+
+  ```
+
+- Don't want to write watch?
+
+  ```ts
+  import { NaturBaseFactory } from 'natur';
+  /**
+  * The first parameter is what you want...
+  */
+  const createWatch = NaturBaseFactory.watchCreator(module1, state, maps);
+  const watch = createWatch({
+    // The types of 'event' and 'api' will be automatically inferred, no need to manually declare
+    module1Name: (event, api) => {
+      // xxx
+    }
+  })
+
+  ```
+
+
 
 ## interceptor
 
